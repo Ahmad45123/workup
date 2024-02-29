@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "JobsApplication",
+            "request": "launch",
+            "mainClass": "com.workup.jobs.JobsApplication",
+            "projectName": "jobs"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SharedApplication<shared>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.workup.shared.SharedApplication",
+            "projectName": "shared",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
