@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.workup.shared.commands.CommandRequest;
 
-public class CreateProposalRequest implements CommandRequest {
+public class CreateProposalRequest extends CommandRequest {
     public String freelancerId;
     public String coverLetter;
 
