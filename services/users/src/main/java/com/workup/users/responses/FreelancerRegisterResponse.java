@@ -1,9 +1,10 @@
 package com.workup.users.responses;
 
 import com.workup.shared.commands.CommandResponse;
-import lombok.NonNull;
+import lombok.Builder;
 
+@Builder
 public class FreelancerRegisterResponse extends CommandResponse {
-    @NonNull boolean success;
+    boolean success;
     String authToken;
 }
