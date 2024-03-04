@@ -5,7 +5,6 @@ import com.workup.shared.commands.CommandResponse;
 import lombok.Builder;
 import lombok.Getter;
 
-
 @Getter
 @Builder(setterPrefix = "with")
 @JsonDeserialize(builder = GetWalletResponse.GetWalletResponseBuilder.class)
