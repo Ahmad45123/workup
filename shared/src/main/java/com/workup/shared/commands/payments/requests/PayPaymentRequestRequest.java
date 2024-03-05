@@ -9,5 +9,5 @@ import lombok.Getter;
 @Builder(setterPrefix = "with")
 @JsonDeserialize(builder = PayPaymentRequestRequest.PayPaymentRequestRequestBuilder.class)
 public class PayPaymentRequestRequest extends CommandRequest {
-    private final String payment_request_id;
+    private final String paymentRequestId;
 }
