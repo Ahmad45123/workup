@@ -1,6 +1,6 @@
 package com.workup.jobs;
 
-import com.workup.shared.commands.jobs.proposals.CreateProposalRequest;
+import com.workup.shared.commands.jobs.proposals.createProposal.CreateProposalRequest;
 import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalAttachment;
 import com.workup.shared.commands.jobs.proposals.ProposalMilestone;
@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Bean;
 import com.workup.shared.commands.jobs.CreateJobRequest;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.util.ArrayList;
 
 @SpringBootApplication

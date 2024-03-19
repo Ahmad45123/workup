@@ -1,9 +1,7 @@
-package com.workup.shared.commands.jobs.proposals;
+package com.workup.shared.commands.jobs.proposals.createProposal;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.ArrayList;
 
 public class CreateProposalResponse {
     public String id;

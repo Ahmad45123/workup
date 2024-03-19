@@ -1,6 +1,6 @@
 package com.workup.jobs;
 
-import com.workup.shared.commands.jobs.proposals.CreateProposalRequest;
+import com.workup.shared.commands.jobs.proposals.createProposal.CreateProposalRequest;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,11 @@
-package com.workup.shared.commands.jobs.proposals;
+package com.workup.shared.commands.jobs.proposals.createProposal;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.workup.shared.commands.CommandRequest;
+import com.workup.shared.commands.jobs.proposals.JobDuration;
+import com.workup.shared.commands.jobs.proposals.ProposalAttachment;
+import com.workup.shared.commands.jobs.proposals.ProposalMilestone;
 
 import java.util.ArrayList;
 
