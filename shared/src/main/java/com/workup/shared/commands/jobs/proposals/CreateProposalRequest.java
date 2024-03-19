@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class CreateProposalRequest extends CommandRequest {
     public String freelancerId;
     public String coverLetter;
+    public String jobId;
     public JobDuration jobDuration;
 
     public ArrayList<ProposalAttachment> attachments;
@@ -17,11 +18,13 @@ public class CreateProposalRequest extends CommandRequest {
 
     @JsonCreator
     public CreateProposalRequest(@JsonProperty("freelancerId") String freelancerId,
+                                 @JsonProperty("jobId") String jobId,
                                  @JsonProperty("coverLetter") String coverLetter,
                                  @JsonProperty("duration") JobDuration jobDuration,
                                  @JsonProperty("attachments") ArrayList<ProposalAttachment> attachments,
                                  @JsonProperty("milestones") ArrayList<ProposalMilestone> milestones) {
         this.freelancerId = freelancerId;
+        this.jobId = jobId;
         this.coverLetter = coverLetter;
         this.jobDuration = jobDuration;
         this.attachments = attachments;

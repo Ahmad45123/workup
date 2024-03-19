@@ -35,7 +35,7 @@ public class JobsApplication {
             milestones.add(new ProposalMilestone("Milestone 1", 100, new Timestamp(System.currentTimeMillis())));
             ArrayList<ProposalAttachment> attachments = new ArrayList<>();
             attachments.add(new ProposalAttachment("placeholder", "https://picsum.photos/200/300"));
-            CreateProposalRequest request2 = new CreateProposalRequest("123", "Shimaa was here", JobDuration.LESS_THAN_A_MONTH, attachments, milestones);
+            CreateProposalRequest request2 = new CreateProposalRequest("123", "456", "Shimaa was here", JobDuration.LESS_THAN_A_MONTH, attachments, milestones);
 
             template.convertAndSend("jobsqueue", request);
             template.convertAndSend("jobsqueue", request2);
