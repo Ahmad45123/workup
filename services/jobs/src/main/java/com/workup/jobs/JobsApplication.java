@@ -9,10 +9,13 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.cassandra.core.CassandraTemplate;
+import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 
 import java.util.ArrayList;
@@ -21,7 +24,10 @@ import java.util.Date;
 import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 
 @SpringBootApplication
+@EnableCassandraRepositories
 public class JobsApplication {
+    @Autowired 
+    CassandraTemplate cassandraTemplate;
 
     public static void main(String[] args) {
         SpringApplication.run(JobsApplication.class, args);
