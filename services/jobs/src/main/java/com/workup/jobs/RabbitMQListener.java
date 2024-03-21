@@ -5,7 +5,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.workup.jobs.commands.CommandMap;
+import com.workup.jobs.commands.JobCommandMap;
 import com.workup.shared.commands.jobs.CreateJobRequest;
 import com.workup.shared.commands.jobs.CreateProposalRequest;
 
@@ -14,11 +14,11 @@ import com.workup.shared.commands.jobs.CreateProposalRequest;
 public class RabbitMQListener {
 
     @Autowired
-    public CommandMap commandMap;
+    public JobCommandMap commandMap;
 
     @RabbitHandler
     public void receive(CreateJobRequest in) throws Exception {
-        commandMap.GetCommand("CreateJob").Run(in);
+        commandMap.getCommand("CreateJob").Run(in);
     }
 
     @RabbitHandler
