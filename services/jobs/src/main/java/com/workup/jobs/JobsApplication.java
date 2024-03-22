@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Bean;
 
 import com.workup.shared.commands.jobs.CreateJobRequest;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 @SpringBootApplication
 public class JobsApplication {
@@ -31,7 +31,7 @@ public class JobsApplication {
         return args -> {
             CreateJobRequest request = new CreateJobRequest("123", "Ahmed was here", "Asdsdf");
             ArrayList<ProposalMilestone> milestones = new ArrayList<>();
-            milestones.add(new ProposalMilestone("Milestone 1", 100, new Timestamp(System.currentTimeMillis())));
+            milestones.add(new ProposalMilestone("Milestone 1", 100, new Date(System.currentTimeMillis())));
             ArrayList<ProposalAttachment> attachments = new ArrayList<>();
             attachments.add(new ProposalAttachment("placeholder", "https://picsum.photos/200/300"));
             CreateProposalRequest request2 = new CreateProposalRequest("123", "456", "Shimaa was here", JobDuration.LESS_THAN_A_MONTH, attachments, milestones);
