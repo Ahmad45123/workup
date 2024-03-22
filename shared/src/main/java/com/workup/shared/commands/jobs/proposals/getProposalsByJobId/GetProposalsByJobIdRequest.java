@@ -10,7 +10,7 @@ public class GetProposalsByJobIdRequest extends CommandRequest {
 
     @JsonCreator
     public GetProposalsByJobIdRequest(
-            @JsonProperty("jobId") String jobId
+            @JsonProperty("job_id") String jobId
     ) {
         this.jobId = jobId;
     }

@@ -22,12 +22,12 @@ public class ProposalModel {
     @JsonCreator
     public ProposalModel(
             @JsonProperty("id") String id,
-            @JsonProperty("jobId") String jobId,
-            @JsonProperty("freelancerId") String freelancerId,
-            @JsonProperty("coverLetter") String coverLetter,
+            @JsonProperty("job_id") String jobId,
+            @JsonProperty("freelancer_id") String freelancerId,
+            @JsonProperty("cover_letter") String coverLetter,
             @JsonProperty("status") ProposalStatus status,
-            @JsonProperty("createdAt") Date createdAt,
-            @JsonProperty("modifiedAt") Date modifiedAt,
+            @JsonProperty("created_at") Date createdAt,
+            @JsonProperty("modified_at") Date modifiedAt,
             @JsonProperty("duration") JobDuration jobDuration,
             @JsonProperty("attachments") ArrayList<ProposalAttachment> attachments,
             @JsonProperty("milestones") ArrayList<ProposalMilestone> milestones) {

@@ -20,9 +20,9 @@ public class CreateProposalRequest extends CommandRequest {
 
 
     @JsonCreator
-    public CreateProposalRequest(@JsonProperty("freelancerId") String freelancerId,
-                                 @JsonProperty("jobId") String jobId,
-                                 @JsonProperty("coverLetter") String coverLetter,
+    public CreateProposalRequest(@JsonProperty("freelancer_id") String freelancerId,
+                                 @JsonProperty("job_id") String jobId,
+                                 @JsonProperty("cover_letter") String coverLetter,
                                  @JsonProperty("duration") JobDuration jobDuration,
                                  @JsonProperty("attachments") ArrayList<ProposalAttachment> attachments,
                                  @JsonProperty("milestones") ArrayList<ProposalMilestone> milestones) {
