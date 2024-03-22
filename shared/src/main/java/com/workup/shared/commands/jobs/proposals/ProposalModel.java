@@ -1,16 +1,12 @@
-package com.workup.shared.commands.jobs.proposals.getProposalsByJobId;
+package com.workup.shared.commands.jobs.proposals;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.workup.shared.commands.jobs.proposals.JobDuration;
-import com.workup.shared.commands.jobs.proposals.ProposalAttachment;
-import com.workup.shared.commands.jobs.proposals.ProposalMilestone;
-import com.workup.shared.commands.jobs.proposals.ProposalStatus;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ProposalByJobId {
+public class ProposalModel {
 
     public String id;
     public String jobId;
@@ -24,7 +20,7 @@ public class ProposalByJobId {
     public ArrayList<ProposalMilestone> milestones;
 
     @JsonCreator
-    public ProposalByJobId(
+    public ProposalModel(
             @JsonProperty("id") String id,
             @JsonProperty("jobId") String jobId,
             @JsonProperty("freelancerId") String freelancerId,
