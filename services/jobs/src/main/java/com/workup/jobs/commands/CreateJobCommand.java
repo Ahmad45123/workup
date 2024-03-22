@@ -7,7 +7,7 @@ public class CreateJobCommand implements Command<CreateJobRequest> {
 
     @Override
     public void Run(CreateJobRequest request) {
-        System.out.println(" [x] Received In Command: '" + request.title + "'");
+        System.out.println(" [x] Received In Command: '" + request.getTitle() + "'");
     }
     
 }
