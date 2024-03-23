@@ -11,7 +11,7 @@ import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
 
 @Component
-public class JobCommandMap extends CommandMap<Command<?>> {
+public class JobCommandMap extends CommandMap<JobCommand<?>> {
 
 
     public void registerCommands() {
@@ -19,7 +19,7 @@ public class JobCommandMap extends CommandMap<Command<?>> {
     }
 
     @Override
-    public void setupCommand(Command<?> command) {
+    public void setupCommand(JobCommand<?> command) {
 
     }
 }

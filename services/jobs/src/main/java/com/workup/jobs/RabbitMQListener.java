@@ -19,7 +19,7 @@ public class RabbitMQListener {
 
     @RabbitHandler
     public void receive(CreateJobRequest in) throws Exception {
-        ((CreateJobCommand) commandMap.getCommand("CreateJob")).Run(in);
+        ((CreateJobCommand)commandMap.getCommand("CreateJob")).Run(in);
     }
 
     @RabbitHandler
