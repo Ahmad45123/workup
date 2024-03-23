@@ -11,8 +11,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.workup.shared.commands.jobs.CreateJobRequest;
 import com.workup.shared.commands.jobs.CreateProposalRequest;
+import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 
 @SpringBootApplication
 public class JobsApplication {
@@ -25,7 +25,11 @@ public class JobsApplication {
 	@Bean
     public ApplicationRunner runner(AmqpTemplate template) {
         return args -> {
-			CreateJobRequest request = new CreateJobRequest("123", "Ahmed was here", "Asdsdf");
+			CreateJobRequest request = CreateJobRequest.builder()
+                                                       .withBudget(0)
+                                                       .withClientId("123")
+                                                       .withTitle("title")
+                                                       .build();
             CreateProposalRequest request2 = new CreateProposalRequest("123", "Shimaa was here");
                 
 			template.convertAndSend("jobsqueue", request);
