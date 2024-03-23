@@ -14,10 +14,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.workup.shared.commands.jobs.CreateJobRequest;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 
 @SpringBootApplication
 public class JobsApplication {
@@ -30,7 +31,6 @@ public class JobsApplication {
     @Bean
     public ApplicationRunner runner(AmqpTemplate template) {
         return args -> {
-            CreateJobRequest request = new CreateJobRequest("123", "Ahmed was here", "Asdsdf");
             ArrayList<ProposalMilestone> milestones = new ArrayList<>();
             milestones.add(ProposalMilestone
                     .builder()
@@ -72,7 +72,12 @@ public class JobsApplication {
                     "}";
             ObjectMapper mapper = new ObjectMapper();
             CreateProposalRequest requestFromJson = mapper.readValue(proposalJson, CreateProposalRequest.class);
-            template.convertAndSend("jobsqueue", request);
+            CreateJobRequest createJobRequest = CreateJobRequest.builder()
+                    .withBudget(0)
+                    .withClientId("123")
+                    .withTitle("title")
+                    .build();
+            template.convertAndSend("jobsqueue", createJobRequest);
             template.convertAndSend("jobsqueue", requestFromJson);
         };
     }

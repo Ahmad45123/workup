@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.workup.jobs.commands.JobCommandMap;
-import com.workup.shared.commands.jobs.CreateJobRequest;
+import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 
 @Service
 @RabbitListener(queues = "jobsqueue")
