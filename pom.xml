@@ -20,7 +20,6 @@
             <plugin>
             <groupId>com.hubspot.maven.plugins</groupId>
             <artifactId>prettier-maven-plugin</artifactId>
-            <version>0.16</version>
             <configuration>
                 <prettierJavaVersion>2.0.0</prettierJavaVersion>
                 <printWidth>90</printWidth>
