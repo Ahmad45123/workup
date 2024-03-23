@@ -1,5 +1,6 @@
 package com.workup.jobs;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
 import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalAttachment;
@@ -50,8 +51,29 @@ public class JobsApplication {
                     .withAttachments(attachments)
                     .withMilestones(milestones)
                     .build();
+            String proposalJson = "{\n" +
+                    "  \"freelancerId\": \"123\",\n" +
+                    "  \"coverLetter\": \"Shimaa was here from json\",\n" +
+                    "  \"jobId\": \"456\",\n" +
+                    "  \"jobDuration\": \"LESS_THAN_A_MONTH\",\n" +
+                    "  \"attachments\": [\n" +
+                    "    {\n" +
+                    "      \"name\": \"placeholder\",\n" +
+                    "      \"url\": \"https://picsum.photos/200/300\"\n" +
+                    "    }\n" +
+                    "  ],\n" +
+                    "  \"milestones\": [\n" +
+                    "    {\n" +
+                    "      \"amount\": 100,\n" +
+                    "      \"description\": \"Milestone 1\",\n" +
+                    "      \"dueDate\": 1619827200000\n" +
+                    "    }\n" +
+                    "  ]\n" +
+                    "}";
+            ObjectMapper mapper = new ObjectMapper();
+            CreateProposalRequest requestFromJson = mapper.readValue(proposalJson, CreateProposalRequest.class);
             template.convertAndSend("jobsqueue", request);
-            template.convertAndSend("jobsqueue", request2);
+            template.convertAndSend("jobsqueue", requestFromJson);
         };
     }
 

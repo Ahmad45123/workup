@@ -1,5 +1,6 @@
 package com.workup.jobs;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workup.jobs.commands.CreateJobCommand;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -19,11 +20,18 @@ public class RabbitMQListener {
 
     @RabbitHandler
     public void receive(CreateJobRequest in) throws Exception {
-        ((CreateJobCommand)commandMap.getCommand("CreateJob")).Run(in);
+        ((CreateJobCommand) commandMap.getCommand("CreateJob")).Run(in);
     }
 
     @RabbitHandler
     public void receive(CreateProposalRequest in) {
         System.out.println(" [x] Int Received '" + in.getCoverLetter() + "'");
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String json = mapper.writeValueAsString(in);
+            System.out.println(" [x] Received '" + json + "'");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
