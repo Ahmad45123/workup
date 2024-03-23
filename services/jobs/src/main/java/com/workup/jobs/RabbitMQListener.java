@@ -23,6 +23,6 @@ public class RabbitMQListener {
 
     @RabbitHandler
     public void receive(CreateProposalRequest in) {
-        System.out.println(" [x] Int Received '" + in.coverLetter + "'");
+        System.out.println(" [x] Int Received '" + in.getCoverLetter() + "'");
     }
 }

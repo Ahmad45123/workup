@@ -1,16 +1,14 @@
 package com.workup.shared.commands.jobs.proposals.acceptProposal;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandRequest;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
+@Builder(setterPrefix = "with")
+@JsonDeserialize(builder = AcceptProposalRequest.AcceptProposalRequestBuilder.class)
 public class AcceptProposalRequest extends CommandRequest {
-    String jobId;
-    String proposalId;
-
-    @JsonCreator
-    public AcceptProposalRequest(@JsonProperty("job_id") String jobId, @JsonProperty("proposal_id") String proposalId) {
-        this.jobId = jobId;
-        this.proposalId = proposalId;
-    }
+    private final String jobId;
+    private final String proposalId;
 }

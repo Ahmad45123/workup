@@ -1,17 +1,17 @@
 package com.workup.shared.commands.jobs.proposals;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.Date;
 
-public record ProposalMilestone(String description, double amount, Date dueDate) {
-    @JsonCreator
-    public ProposalMilestone(@JsonProperty("description") String description,
-                             @JsonProperty("amount") double amount,
-                             @JsonProperty("dueDate") Date dueDate) {
-        this.description = description;
-        this.amount = amount;
-        this.dueDate = dueDate;
-    }
+@Getter
+@Builder(setterPrefix = "with")
+@JsonDeserialize(builder = ProposalMilestone.ProposalMilestoneBuilder.class)
+public class ProposalMilestone {
+    private final String description;
+    private final double amount;
+    private final Date dueDate;
 }

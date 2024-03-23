@@ -1,14 +1,14 @@
 package com.workup.shared.commands.jobs.proposals.createProposal;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandResponse;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
+@Builder(setterPrefix = "with")
+@JsonDeserialize(builder = CreateProposalResponse.CreateProposalResponseBuilder.class)
 public class CreateProposalResponse extends CommandResponse {
-    public String id;
-
-    @JsonCreator
-    public CreateProposalResponse(@JsonProperty("id") String id) {
-        this.id = id;
-    }
+    private final String id;
 }

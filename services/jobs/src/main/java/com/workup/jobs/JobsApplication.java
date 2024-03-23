@@ -31,11 +31,25 @@ public class JobsApplication {
         return args -> {
             CreateJobRequest request = new CreateJobRequest("123", "Ahmed was here", "Asdsdf");
             ArrayList<ProposalMilestone> milestones = new ArrayList<>();
-            milestones.add(new ProposalMilestone("Milestone 1", 100, new Date(System.currentTimeMillis())));
+            milestones.add(ProposalMilestone
+                    .builder()
+                    .withAmount(100)
+                    .withDescription("Milestone 1")
+                    .withDueDate(new Date(System.currentTimeMillis())).build());
             ArrayList<ProposalAttachment> attachments = new ArrayList<>();
-            attachments.add(new ProposalAttachment("placeholder", "https://picsum.photos/200/300"));
-            CreateProposalRequest request2 = new CreateProposalRequest("123", "456", "Shimaa was here", JobDuration.LESS_THAN_A_MONTH, attachments, milestones);
-
+            attachments.add(ProposalAttachment
+                    .builder()
+                    .withUrl("https://picsum.photos/200/300")
+                    .withName("placeholder").build());
+            CreateProposalRequest request2 = CreateProposalRequest
+                    .builder()
+                    .withFreelancerId("123")
+                    .withCoverLetter("Shimaa was here")
+                    .withJobId("456")
+                    .withJobDuration(JobDuration.LESS_THAN_A_MONTH)
+                    .withAttachments(attachments)
+                    .withMilestones(milestones)
+                    .build();
             template.convertAndSend("jobsqueue", request);
             template.convertAndSend("jobsqueue", request2);
         };

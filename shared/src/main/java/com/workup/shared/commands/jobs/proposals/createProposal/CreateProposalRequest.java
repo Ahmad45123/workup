@@ -1,36 +1,24 @@
 package com.workup.shared.commands.jobs.proposals.createProposal;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalAttachment;
 import com.workup.shared.commands.jobs.proposals.ProposalMilestone;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.ArrayList;
 
+@Getter
+@Builder(setterPrefix = "with")
+@JsonDeserialize(builder = CreateProposalRequest.CreateProposalRequestBuilder.class)
 public class CreateProposalRequest extends CommandRequest {
-    public String freelancerId;
-    public String coverLetter;
-    public String jobId;
-    public JobDuration jobDuration;
-
-    public ArrayList<ProposalAttachment> attachments;
-    public ArrayList<ProposalMilestone> milestones;
-
-
-    @JsonCreator
-    public CreateProposalRequest(@JsonProperty("freelancer_id") String freelancerId,
-                                 @JsonProperty("job_id") String jobId,
-                                 @JsonProperty("cover_letter") String coverLetter,
-                                 @JsonProperty("duration") JobDuration jobDuration,
-                                 @JsonProperty("attachments") ArrayList<ProposalAttachment> attachments,
-                                 @JsonProperty("milestones") ArrayList<ProposalMilestone> milestones) {
-        this.freelancerId = freelancerId;
-        this.jobId = jobId;
-        this.coverLetter = coverLetter;
-        this.jobDuration = jobDuration;
-        this.attachments = attachments;
-        this.milestones = milestones;
-    }
+    private final String freelancerId;
+    private final String coverLetter;
+    private final String jobId;
+    private final JobDuration jobDuration;
+    private final ArrayList<ProposalAttachment> attachments;
+    private final ArrayList<ProposalMilestone> milestones;
 }

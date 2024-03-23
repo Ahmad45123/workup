@@ -1,12 +1,13 @@
 package com.workup.shared.commands.jobs.proposals;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Builder;
+import lombok.Getter;
 
-public record ProposalAttachment(String name, String url) {
-    @JsonCreator
-    public ProposalAttachment(@JsonProperty("name") String name, @JsonProperty("url") String url) {
-        this.name = name;
-        this.url = url;
-    }
+@Getter
+@Builder(setterPrefix = "with")
+@JsonDeserialize(builder = ProposalAttachment.ProposalAttachmentBuilder.class)
+public class ProposalAttachment {
+    private final String name;
+    private final String url;
 }
