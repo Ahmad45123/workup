@@ -2,6 +2,7 @@ package com.workup.jobs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
+import com.workup.shared.Enums.Jobs.Experience;
 import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalAttachment;
 import com.workup.shared.commands.jobs.proposals.ProposalMilestone;
@@ -80,6 +81,7 @@ public class JobsApplication {
                     .withBudget(0)
                     .withClientId("123")
                     .withTitle("title")
+                    .withExperience(Experience.INTERMEDIATE)
                     .build();
             template.convertAndSend("jobsqueue", createJobRequest);
             template.convertAndSend("jobsqueue", requestFromJson);

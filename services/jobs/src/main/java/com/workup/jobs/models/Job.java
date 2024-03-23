@@ -7,6 +7,8 @@ import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import com.workup.shared.Enums.Jobs.Experience;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -25,7 +27,7 @@ public class Job {
 
     @CassandraType(type = CassandraType.Name.LIST, typeArguments = CassandraType.Name.TEXT)
     private String[] skills;
-    private ExperienceLevel experienceLevel;
+    private Experience experienceLevel;
     private boolean isActive;
     private String clientId;
     private Date createdAt;

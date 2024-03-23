@@ -14,6 +14,7 @@ public class CreateJobCommand extends JobCommand<CreateJobRequest> {
                 .withId(UUID.randomUUID())
                 .withTitle(request.getTitle())
                 .withDescription(request.getDescription())
+                .withExperienceLevel(request.getExperience())
                 .build();
         try{
         Job savedJob = jobRepository.save(job);
