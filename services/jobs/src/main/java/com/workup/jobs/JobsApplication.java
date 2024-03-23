@@ -24,10 +24,8 @@ import java.util.Date;
 import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 
 @SpringBootApplication
-@EnableCassandraRepositories
 public class JobsApplication {
-    @Autowired 
-    CassandraTemplate cassandraTemplate;
+
 
     public static void main(String[] args) {
         SpringApplication.run(JobsApplication.class, args);
