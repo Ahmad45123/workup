@@ -1,5 +1,6 @@
 package com.workup.jobs;
 
+import com.workup.jobs.commands.CreateJobCommand;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -18,7 +19,7 @@ public class RabbitMQListener {
 
     @RabbitHandler
     public void receive(CreateJobRequest in) throws Exception {
-        commandMap.getCommand("CreateJob").Run(in);
+        ((CreateJobCommand) commandMap.getCommand("CreateJob")).Run(in);
     }
 
     @RabbitHandler
