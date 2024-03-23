@@ -9,11 +9,59 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging> 
 
-    
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <plugin.prettier.goal>write</plugin.prettier.goal>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+            <groupId>com.hubspot.maven.plugins</groupId>
+            <artifactId>prettier-maven-plugin</artifactId>
+            <version>0.16</version>
+            <configuration>
+                <prettierJavaVersion>2.0.0</prettierJavaVersion>
+                <printWidth>90</printWidth>
+                <tabWidth>2</tabWidth>
+                <useTabs>false</useTabs>
+                <generateDiff>true</generateDiff>
+                <ignoreConfigFile>true</ignoreConfigFile>
+                <ignoreEditorConfig>true</ignoreEditorConfig>
+                <!-- Use <inputGlobs> to override the default input patterns -->
+                <inputGlobs>
+                    <!-- These are the default patterns, you can omit <inputGlobs> entirely unless you want to override them -->
+                    <inputGlob>src/main/java/**/*.java</inputGlob>
+                    <inputGlob>src/test/java/**/*.java</inputGlob>
+                </inputGlobs>
+            </configuration>
+            <executions>
+                <execution>
+                <phase>validate</phase>
+                <goals>
+                    <goal>${plugin.prettier.goal}</goal>
+                </goals>
+                </execution>
+            </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>github_action</id>
+            <activation>
+                <property>
+                    <name>env.GITHUB_ACTIONS</name>
+                </property>
+            </activation>
+            <properties>
+                <!-- But in our CI environment we want to validate that code is formatted -->
+                <plugin.prettier.goal>check</plugin.prettier.goal>
+            </properties>
+        </profile>
+    </profiles>
 
     <modules>
         <module>shared</module>
