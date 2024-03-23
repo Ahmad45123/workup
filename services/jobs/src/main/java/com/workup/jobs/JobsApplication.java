@@ -1,6 +1,6 @@
 package com.workup.jobs;
 
-import com.workup.shared.commands.jobs.proposals.createProposal.CreateProposalRequest;
+import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
 import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalAttachment;
 import com.workup.shared.commands.jobs.proposals.ProposalMilestone;

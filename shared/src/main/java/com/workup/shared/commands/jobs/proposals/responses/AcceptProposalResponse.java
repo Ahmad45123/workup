@@ -1,4 +1,4 @@
-package com.workup.shared.commands.jobs.proposals.acceptProposal;
+package com.workup.shared.commands.jobs.proposals.responses;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandResponse;
