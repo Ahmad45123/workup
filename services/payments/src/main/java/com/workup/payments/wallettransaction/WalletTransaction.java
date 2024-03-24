@@ -1,4 +1,4 @@
-package com.workup.payments.wallet;
+package com.workup.payments.wallettransaction;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -34,9 +34,9 @@ public class WalletTransaction {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Column(name = "transaction_type")
-    private String transactionType;
+    private WalletTransactionType transactionType;
 
-    public WalletTransaction(String walletId, double amount, String paymentTransactionId, String description, String transactionType) {
+    public WalletTransaction(String walletId, double amount, String paymentTransactionId, String description, WalletTransactionType transactionType) {
         this.walletId = walletId;
         this.amount = amount;
         this.paymentTransactionId = paymentTransactionId;

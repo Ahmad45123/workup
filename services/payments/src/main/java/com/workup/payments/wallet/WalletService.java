@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.workup.payments.wallettransaction.WalletTransaction;
+import com.workup.payments.wallettransaction.WalletTransactionType;
 @Service
 @AllArgsConstructor
 public class WalletService {
@@ -34,7 +35,7 @@ public class WalletService {
         wallet.setBalance(wallet.getBalance() - amount);
         walletRepository.save(wallet);
         
-        WalletTransaction walletTransaction = new WalletTransaction(freelancerId, amount, null, "Withdraw", "DEBIT");
+        WalletTransaction walletTransaction = new WalletTransaction(freelancerId, amount, null, "Withdraw", WalletTransactionType.DEBIT);
         walletTransactionRepository.save(walletTransaction);
 
     }

@@ -14,9 +14,6 @@ public class WalletTransactionService {
     
 
     public void createWalletTransaction(WalletTransaction walletTransaction) {
-        if (walletRepository.existsById(walletTransaction.getFreelancerId())) {
-            throw new IllegalStateException("Wallet already exists");
-        }
         walletRepository.save(walletTransaction); 
     }
 
@@ -24,7 +21,7 @@ public class WalletTransactionService {
         return walletTransactionRepository.findAllByWalletId(walletId);
     }
 
-
+ 
 
     
 
