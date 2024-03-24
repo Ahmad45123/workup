@@ -4,7 +4,7 @@ package com.workup.shared.commands.jobs.responses;
 import java.sql.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.workup.shared.Enums.Jobs.Experience;
+import com.workup.shared.enums.jobs.Experience;
 
 import lombok.Builder;
 import lombok.Getter;

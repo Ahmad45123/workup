@@ -2,7 +2,6 @@ package com.workup.jobs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
-import com.workup.shared.Enums.Jobs.Experience;
 import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalAttachment;
 import com.workup.shared.commands.jobs.proposals.ProposalMilestone;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.workup.shared.commands.jobs.requests.CreateJobRequest;
+import com.workup.shared.enums.jobs.Experience;
 
 @SpringBootApplication
 public class JobsApplication {

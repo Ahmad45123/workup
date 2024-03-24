@@ -1,8 +1,8 @@
 package com.workup.shared.commands.jobs.requests;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.workup.shared.Enums.Jobs.Experience;
 import com.workup.shared.commands.CommandRequest;
+import com.workup.shared.enums.jobs.Experience;
 
 import lombok.Builder;
 import lombok.Getter;

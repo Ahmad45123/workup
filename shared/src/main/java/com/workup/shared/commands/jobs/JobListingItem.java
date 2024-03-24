@@ -1,7 +1,7 @@
 package com.workup.shared.commands.jobs;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.workup.shared.Enums.Jobs.Experience;
+import com.workup.shared.enums.jobs.Experience;
 
 import lombok.Builder;
 
