@@ -2,6 +2,7 @@ package com.workup.jobs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
+import com.workup.shared.Enums.Jobs.Experience;
 import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalAttachment;
 import com.workup.shared.commands.jobs.proposals.ProposalMilestone;
@@ -9,10 +10,13 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.cassandra.core.CassandraTemplate;
+import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 
 import java.util.ArrayList;
@@ -22,6 +26,7 @@ import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 
 @SpringBootApplication
 public class JobsApplication {
+
 
     public static void main(String[] args) {
         SpringApplication.run(JobsApplication.class, args);
@@ -76,6 +81,7 @@ public class JobsApplication {
                     .withBudget(0)
                     .withClientId("123")
                     .withTitle("title")
+                    .withExperience(Experience.INTERMEDIATE)
                     .build();
             template.convertAndSend("jobsqueue", createJobRequest);
             template.convertAndSend("jobsqueue", requestFromJson);
