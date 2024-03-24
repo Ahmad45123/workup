@@ -3,11 +3,12 @@ package com.workup.payments.wallet;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.workup.payments.wallettransaction.WalletTransaction;
 @Service
 @AllArgsConstructor
 public class WalletService {
     private final WalletRepository walletRepository;
+    private final WalletTransactionRepository walletTransactionRepository;
 
     public Wallet getWallet(String freelancerId) {
         return walletRepository.findById(freelancerId).orElse(null);
@@ -32,7 +33,10 @@ public class WalletService {
         }
         wallet.setBalance(wallet.getBalance() - amount);
         walletRepository.save(wallet);
-        // TODO: add transaction record to WalletTransaction table
+        
+        WalletTransaction walletTransaction = new WalletTransaction(freelancerId, amount, null, "Withdraw", "DEBIT");
+        walletTransactionRepository.save(walletTransaction);
+
     }
 
 }
