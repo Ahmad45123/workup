@@ -51,10 +51,17 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Extract metadata for Jobs Image
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: workup/jobs
+
     - name: Build and push Jobs Image
       uses: docker/build-push-action@v5
       with:
         context: ./services/jobs
-        tags: workup/jobs:latest
         push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
 
