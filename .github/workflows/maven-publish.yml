@@ -12,13 +12,20 @@ on:
   push:
     branches: [ "fix-pom" ] # shall be changed
 
+env:
+  REGISTRY: ghcr.io
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
@@ -32,19 +39,26 @@ jobs:
       name: Upload JAR artifacts
       with:
         name: jarfiles
-        path: '**/*.jar'
-
-    - name: Submit Dependency Snapshot
-      uses: advanced-security/maven-dependency-submission-action@v3
-
-  publish:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/download-artifact@v4
-      with:
-        name: jarfiles
-        path: '**/*.jar'
+        path: '**/target/*.jar'
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to the Container registry
+      uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Jobs Docker Image
+      run: cd services/jobs && docker build -t workup/jobs .
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+      with:
+        context: ./services/jobs
+        tags: workup/jobs:latest
+        push: true
+
+        
