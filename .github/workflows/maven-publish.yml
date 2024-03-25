@@ -29,7 +29,7 @@ jobs:
       run: mvn -DskipTests -B package --file pom.xml
 
     - name: Upload JAR artifacts
-    - uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4
       with:
         name: jarfiles
         path: '**/*.jar'
