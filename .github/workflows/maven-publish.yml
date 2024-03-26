@@ -51,6 +51,5 @@ jobs:
     - name: Build and push Jobs Image
       run: |
         docker build ./services/jobs --tag ghcr.io/workup/services/jobs:latest
-        docker run ghcr.io/workup/services/jobs:latest
         docker push ghcr.io/workup/services/jobs:latest
 
