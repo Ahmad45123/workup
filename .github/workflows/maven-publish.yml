@@ -55,7 +55,7 @@ jobs:
       id: jobs_meta
       uses: docker/metadata-action@v3
       with:
-        images: ghcr.io/Ahmad45123/workup/jobs
+        images: ${{ env.REGISTRY }}/Ahmad45123/workup_service_jobs
 
     - name: Build and push Jobs Image
       uses: docker/build-push-action@v5
