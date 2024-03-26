@@ -55,7 +55,7 @@ jobs:
       id: jobs_meta
       uses: docker/metadata-action@v3
       with:
-        images: Ahmad45123/workup/jobs
+        images: Ahmad45123/workup-jobs
 
     - name: Build and push Jobs Image
       uses: docker/build-push-action@v5
