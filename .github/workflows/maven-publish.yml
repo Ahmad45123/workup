@@ -49,7 +49,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and push Jobs Image
-      run:
+      run: |
         docker build ./services/jobs --tag ghcr.io/workup/services/jobs:latest
         docker run ghcr.io/workup/services/jobs:latest
         docker push ghcr.io/workup/services/jobs:latest
