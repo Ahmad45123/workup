@@ -48,16 +48,17 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Extract metadata for Jobs Image
-      id: jobs_meta
-      uses: docker/metadata-action@v3
-      with:
-        images: ${{ env.REGISTRY }}/Ahmad45123/service_jobs
-
     - name: Build and push Jobs Image
-      uses: docker/build-push-action@v5
-      with:
-        context: ./services/jobs
-        push: true
-        tags: ${{ steps.jobs_meta.outputs.tags }}
-        labels: ${{ steps.jobs_meta.outputs.labels }}
+      run: |
+        docker build ./services/jobs --tag ${{ env.REGISTRY }}/Ahmad45123/service_jobs:latest
+        docker push ${{ env.REGISTRY }}/Ahmad45123/service_jobs:latest
+
+    - name: Build and push Payments Image
+      run: |
+        docker build ./services/payments --tag ${{ env.REGISTRY }}/Ahmad45123/service_payments:latest
+        docker push ${{ env.REGISTRY }}/Ahmad45123/service_payments:latest
+    
+    - name: Build and push Users Image
+      run: |
+        docker build ./services/users --tag ${{ env.REGISTRY }}/Ahmad45123/service_users:latest
+        docker push ${{ env.REGISTRY }}/Ahmad45123/service_users:latest
