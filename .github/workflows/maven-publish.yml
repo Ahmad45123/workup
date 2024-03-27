@@ -10,7 +10,7 @@ name: Publish Docker Packeges
 
 on:
   push:
-    branches: [ "fix-pom" ] # shall be changed
+    branches: [ "main" ]
 
 env:
   REGISTRY: ghcr.io
