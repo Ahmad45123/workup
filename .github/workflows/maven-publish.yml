@@ -50,15 +50,15 @@ jobs:
 
     - name: Build and push Jobs Image
       run: |
-        docker build ./services/jobs --tag ${{ env.REGISTRY }}/Ahmad45123/service_jobs:latest
-        docker push ${{ env.REGISTRY }}/Ahmad45123/service_jobs:latest
+        docker build ./services/jobs --tag ${{ env.REGISTRY }}/ahmad45123/service_jobs:latest
+        docker push ${{ env.REGISTRY }}/ahmad45123/service_jobs:latest
 
     - name: Build and push Payments Image
       run: |
-        docker build ./services/payments --tag ${{ env.REGISTRY }}/Ahmad45123/service_payments:latest
-        docker push ${{ env.REGISTRY }}/Ahmad45123/service_payments:latest
+        docker build ./services/payments --tag ${{ env.REGISTRY }}/ahmad45123/service_payments:latest
+        docker push ${{ env.REGISTRY }}/ahmad45123/service_payments:latest
     
     - name: Build and push Users Image
       run: |
-        docker build ./services/users --tag ${{ env.REGISTRY }}/Ahmad45123/service_users:latest
-        docker push ${{ env.REGISTRY }}/Ahmad45123/service_users:latest
+        docker build ./services/users --tag ${{ env.REGISTRY }}/ahmad45123/service_users:latest
+        docker push ${{ env.REGISTRY }}/ahmad45123/service_users:latest
