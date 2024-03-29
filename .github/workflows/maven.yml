@@ -10,7 +10,6 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -28,7 +27,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -DskipTests -B package --file pom.xml
+      run: mvn -DskipTests -B compile --file pom.xml
 
     - name: Submit Dependency Snapshot
       uses: advanced-security/maven-dependency-submission-action@v3
