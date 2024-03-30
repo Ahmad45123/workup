@@ -40,14 +40,16 @@ public class PaymentTransactionController {
 
     // List all payment transactions for a client
     @GetMapping("/client/{client_id}")
-    public List<PaymentTransaction> findAllByClientId(@PathVariable("client_id") String clientId) {
-        return paymentTransactionService.findAllByClientId(clientId);
+    public ResponseEntity<List<PaymentTransaction>> findAllByClientId(@PathVariable("client_id") String clientId) {
+        List<PaymentTransaction> transactions = paymentTransactionService.findAllByClientId(clientId);
+        return ResponseEntity.ok(transactions);
     }
 
     // List all payment transactions for a freelancer
     @GetMapping("/freelancer/{freelancer_id}")
-    public List<PaymentTransaction> findAllByFreelancerId(@PathVariable("freelancer_id") String freelancerId) {
-        return paymentTransactionService.findAllByFreelancerId(freelancerId);
+    public ResponseEntity<List<PaymentTransaction>> findAllByFreelancerId(@PathVariable("freelancer_id") String freelancerId) {
+        List<PaymentTransaction> transactions = paymentTransactionService.findAllByFreelancerId(freelancerId);
+        return ResponseEntity.ok(transactions);
     }
 
 
