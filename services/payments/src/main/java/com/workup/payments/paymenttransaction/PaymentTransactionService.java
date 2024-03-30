@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -14,19 +15,19 @@ public class PaymentTransactionService {
 
     private final PaymentTransactionRepository paymentTransactionRepository;
 
-    public PaymentTransaction get(String paymentTransactionId) {
-        return paymentTransactionRepository.findById(paymentTransactionId).orElse(null);
+    public Optional<PaymentTransaction> get(String paymentTransactionId) {
+        return paymentTransactionRepository.findById(paymentTransactionId);
     }
 
     public PaymentTransaction create(PaymentTransaction paymentTransaction) {
         return paymentTransactionRepository.save(paymentTransaction);
     }
 
-    public List<PaymentTransaction> findByClientId(String clientId) {
+    public List<PaymentTransaction> findAllByClientId(String clientId) {
         return paymentTransactionRepository.findAllByClientId(clientId);
     }
 
-    public List<PaymentTransaction> findByFreelancerId(String freelancerId) {
+    public List<PaymentTransaction> findAllByFreelancerId(String freelancerId) {
         return paymentTransactionRepository.findAllByFreelancerId(freelancerId);
     }
 
