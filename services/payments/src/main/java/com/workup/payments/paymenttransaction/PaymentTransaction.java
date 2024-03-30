@@ -4,6 +4,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.workup.payments.paymenttransaction.enums.PaymentTransactionStatus;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,8 +28,8 @@ public class PaymentTransaction {
     @Column(name = "id", updatable = false, nullable = false)
     private String id;
 
-    @Column(name = "payment_request_id")
-    private String paymentRequestId;
+    @Column(name = "payment_transaction_id")
+    private String paymentTransactionId;
 
     @Column(name = "amount", nullable = false, precision = 10, scale = 2)
     @DecimalMin(value = "0.00", message = "Amount must be greater than 0.00")
@@ -56,11 +58,4 @@ public class PaymentTransaction {
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PENDING'")
     private PaymentTransactionStatus status;
 
-
-    // Enum for payment transaction status
-    public enum PaymentTransactionStatus {
-        PENDING,
-        COMPLETED,
-        FAILED 
-    }
 }
