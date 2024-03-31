@@ -1,7 +1,8 @@
 package com.workup.shared.commands.jobs.responses;
 
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandResponse;
