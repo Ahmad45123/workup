@@ -56,7 +56,7 @@ public class DbConfig extends AbstractCassandraConfiguration {
 
     @Override
     protected String getLocalDataCenter() {
-        return "datacenter1";
+        return localDataCenter;
     }
 
     @Override

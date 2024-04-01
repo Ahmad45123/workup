@@ -5,7 +5,7 @@ import com.workup.shared.enums.contracts.ContractState;
 import lombok.Builder;
 
 @Builder(setterPrefix = "with")
-@JsonDeserialize
+@JsonDeserialize(builder = com.workup.shared.commands.contracts.Contract.class)
 public class Contract {
     private final String contractId;
 
