@@ -3,7 +3,6 @@ package com.workup.jobs.commands;
 import java.util.UUID;
 
 import com.workup.jobs.models.Job;
-import com.workup.shared.commands.*;
 import com.workup.shared.commands.jobs.requests.CreateJobRequest;;
 
 public class CreateJobCommand extends JobCommand<CreateJobRequest> {    
@@ -22,6 +21,7 @@ public class CreateJobCommand extends JobCommand<CreateJobRequest> {
         }catch(Exception e){
             e.printStackTrace();
         }
+   
     }
     
 }
