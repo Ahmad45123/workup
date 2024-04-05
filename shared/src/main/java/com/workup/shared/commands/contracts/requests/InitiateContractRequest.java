@@ -2,6 +2,7 @@ package com.workup.shared.commands.contracts.requests;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandRequest;
+import com.workup.shared.commands.contracts.Milestone;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,7 +14,11 @@ import lombok.Getter;
 @Builder(setterPrefix = "with")
 @JsonDeserialize(builder = com.workup.shared.commands.contracts.requests.InitiateContractRequest.class)
 public class InitiateContractRequest extends CommandRequest {
-    private final String clientId;
-    private final String freelancerId;
+    private final String jobId;
     private final String proposalId;
+
+    private final String freelancerId;
+    private final String clientId;
+
+    private final Milestone[] jobMilestones;
 }

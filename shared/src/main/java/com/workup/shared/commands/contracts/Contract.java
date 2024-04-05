@@ -15,7 +15,7 @@ public class Contract {
     private final String freelancerId;
     private final String clientId;
 
-    private final String[] milestones;
+    private final String[] milestonesIds;
     private final ContractState status;
 
 }
