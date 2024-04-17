@@ -7,6 +7,7 @@ import lombok.Builder;
 @Builder(setterPrefix = "with")
 @JsonDeserialize(builder = com.workup.shared.commands.contracts.Milestone.class)
 public class Milestone {
+
     private final String milestoneId;
     private final String contractId;
 
@@ -14,5 +15,4 @@ public class Milestone {
     private final String dueDate;
     private final String amount;
     private final MilestoneState status;
-
 }

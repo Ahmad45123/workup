@@ -23,7 +23,7 @@ public class RabbitMQListener {
     }
 
     @RabbitHandler
-    public void receive(CreateProposalRequest in) {
+    public void receive(InitiateContractRequest in) {
         System.out.println(" [x] Int Received '" + in.getCoverLetter() + "'");
         ObjectMapper mapper = new ObjectMapper();
         try {
