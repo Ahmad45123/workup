@@ -9,6 +9,6 @@ public abstract class ContractCommand<T extends CommandRequest> implements Comma
 
 
     public void setJobRepository(ContractRepository jobRepository) {
-        this.contractepository = jobRepository;
+        this.contractRepository = jobRepository;
     }
 }
