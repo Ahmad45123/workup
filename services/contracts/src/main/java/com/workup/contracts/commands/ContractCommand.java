@@ -5,7 +5,7 @@ import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandRequest;
 
 public abstract class ContractCommand<T extends CommandRequest> implements Command<T>{
-    ContractRepository contractepository;
+    private ContractRepository contractRepository;
 
 
     public void setJobRepository(ContractRepository jobRepository) {
