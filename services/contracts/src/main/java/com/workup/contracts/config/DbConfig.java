@@ -1,8 +1,6 @@
 package com.workup.contracts.config;
 
-import java.util.Arrays;
-import java.util.List;
-
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
@@ -11,8 +9,10 @@ import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecif
 import org.springframework.data.cassandra.core.cql.keyspace.KeyspaceOption;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
+import java.util.List;
+
 @Configuration
-@EnableCassandraRepositories(basePackages = "com.contract.models")
+@EnableCassandraRepositories(basePackages = "com.workup.contracts.models")
 public class DbConfig extends AbstractCassandraConfiguration {
 
 
@@ -29,28 +29,28 @@ public class DbConfig extends AbstractCassandraConfiguration {
     private SchemaAction schemaAction;
 
     @Override
-    protected String getKeyspaceName() {
+    protected @NonNull String getKeyspaceName() {
         return keyspaceName;
     }
 
 
     @Override
-    protected String getContactPoints() {
+    protected @NonNull String getContactPoints() {
         return contactPoints;
     }
 
     @Override
-    protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
+    protected @NonNull List<CreateKeyspaceSpecification> getKeyspaceCreations() {
         CreateKeyspaceSpecification specification = CreateKeyspaceSpecification
                 .createKeyspace(keyspaceName)
                 .ifNotExists()
                 .with(KeyspaceOption.DURABLE_WRITES, true)
                 .withSimpleReplication();
-        return Arrays.asList(specification);
+        return List.of(specification);
     }
 
     @Override
-    public String[] getEntityBasePackages() {
+    public String @NonNull [] getEntityBasePackages() {
         return new String[] { "com.contract.models" };
     }
 
@@ -60,7 +60,7 @@ public class DbConfig extends AbstractCassandraConfiguration {
     }
 
     @Override
-    public SchemaAction getSchemaAction() {
+    public @NonNull SchemaAction getSchemaAction() {
         return schemaAction; // Enable automatic schema creation
     }
 

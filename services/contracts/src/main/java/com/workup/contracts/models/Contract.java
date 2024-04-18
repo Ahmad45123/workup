@@ -1,16 +1,12 @@
 package com.workup.contracts.models;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.enums.contracts.ContractState;
 import lombok.Builder;
-
-import java.util.Date;
-import java.util.UUID;
-
 import lombok.Getter;
-import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
+
+import java.util.UUID;
 
 @Getter
 @Builder(setterPrefix = "with")

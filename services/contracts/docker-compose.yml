@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  db:
+    image: "cassandra:latest"
+    ports:
+        - "9042:9042"
+    volumes:
+        - ./data:/var/lib/cassandra
+#        - ./etc/cassandra:/etc/cassandra
+    healthcheck:
+      test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+    environment:
+      CASSANDRA_USE_ASTRA: "false"
+      CASSANDRA_USER: "cassandra"
+      CASSANDRA_PASSWORD: "cassandra"
+      CASSANDRA_LOCAL_DC: "datacenter1"
+      CASSANDRA_CONTACT_POINTS: "db:9042"
+      CASSANDRA_KEYSPACE_CQL: "CREATE KEYSPACE test_keyspace WITH REPLICATION = {'class':'SimpleStrategy','replication_factor':1};"
+      MONITORING_PROMETHEUS: "false"
+      MONITORING_GRAFANA: "false"
+      DISTRIBUTED_TRACING_ENABLED: "false"
+
+  ## RUN ON HOST FOR NOW ##########
+#  contracts:
+#    depends_on:
+#      - db
+#      - rabbitmq
+#    build:
+#      context: .
+#      dockerfile: ./Dockerfile
+#    container_name: "workup_contracts_spring"
+#    volumes:
+#      - .:/app:z
+#    ports:
+#      - "8000:8080"
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./data/:/var/lib/rabbitmq/
+      - ./data:/var/log/rabbitmq

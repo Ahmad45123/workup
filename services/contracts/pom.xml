@@ -8,13 +8,15 @@
         <version>3.2.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com</groupId>
-    <artifactId>contract</artifactId>
+    <groupId>com.workup</groupId>
+    <artifactId>contracts</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>contract</name>
-    <description>contract</description>
+    <name>contracts</name>
+    <description>contracts</description>
     <properties>
         <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
@@ -47,10 +49,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>annotationProcessor</scope>
+            <scope>provided</scope>
         </dependency>
-
-
     </dependencies>
 
     <build>
@@ -61,5 +61,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

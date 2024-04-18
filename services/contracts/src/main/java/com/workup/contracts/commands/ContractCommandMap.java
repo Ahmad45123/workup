@@ -1,13 +1,9 @@
 package com.workup.contracts.commands;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.workup.contracts.repositories.ContractRepository;
-import org.springframework.stereotype.Component;
-
-import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandMap;
-import com.workup.shared.commands.CommandRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ContractCommandMap extends CommandMap<ContractCommand<?>> {
