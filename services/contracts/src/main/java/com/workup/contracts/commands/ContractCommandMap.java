@@ -12,7 +12,7 @@ public class ContractCommandMap extends CommandMap<ContractCommand<?>> {
 
 
     public void registerCommands() {
-        commands.put("CreateContract", InitiateContractCommand.class);
+        commands.put("InitiateContract", InitiateContractCommand.class);
     }
 
     @Override
