@@ -4,16 +4,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 @Getter
 @JsonSerialize
-@Builder(setterPrefix = "with")
-@JsonDeserialize(builder = ProposalModel.ProposalModelBuilder.class)
+@SuperBuilder(setterPrefix = "with")
+@Jacksonized
 public class ProposalModel {
 
     private final String id;
