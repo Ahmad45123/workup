@@ -8,11 +8,13 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandResponse;
 import com.workup.shared.enums.jobs.Experience;
 
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
+import lombok.experimental.SuperBuilder;
 @Getter
-@Builder(setterPrefix = "with")
-@JsonDeserialize(builder = GetJobByIdResponse.GetJobByIdResponseBuilder.class)
+@SuperBuilder(setterPrefix = "with")
+@Jacksonized
 public class GetJobByIdResponse extends CommandResponse {
     private final String id;
     private final String title;
