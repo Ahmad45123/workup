@@ -4,9 +4,9 @@ import java.util.Date;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 
-@Builder(setterPrefix = "with")
+@SuperBuilder(setterPrefix = "with")
 @JsonDeserialize
 public class WalletTransaction {
     private String id;

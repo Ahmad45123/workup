@@ -44,6 +44,7 @@ public class Proposal {
 
     @PrimaryKeyClass
     @Builder(setterPrefix="with")
+    @Getter
     public static class ProposalPrimaryKey {
         @PrimaryKeyColumn(name = "job_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
         private String jobId;

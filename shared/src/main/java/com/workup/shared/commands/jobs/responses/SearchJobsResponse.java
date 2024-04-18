@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandResponse;
 import com.workup.shared.commands.jobs.JobListingItem;
 
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder(setterPrefix = "with")
-@JsonDeserialize(builder = SearchJobsResponse.SearchJobsResponseBuilder.class)
+@SuperBuilder(setterPrefix = "with")
+@Jacksonized
 public class SearchJobsResponse extends CommandResponse {
     private final JobListingItem[] jobIds;
     private final int totalJobs;

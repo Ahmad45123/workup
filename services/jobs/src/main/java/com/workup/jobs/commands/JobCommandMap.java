@@ -13,9 +13,10 @@ import org.springframework.stereotype.Component;
 import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
+import com.workup.shared.commands.CommandResponse;
 
 @Component
-public class JobCommandMap extends CommandMap<JobCommand<?>> {
+public class JobCommandMap extends CommandMap<JobCommand<? extends CommandRequest, ? extends CommandResponse>> {
     @Autowired
     JobRepository jobRepository;
     @Autowired 
@@ -28,7 +29,7 @@ public class JobCommandMap extends CommandMap<JobCommand<?>> {
     }
 
     @Override
-    public void setupCommand(JobCommand<?> command) {
+    public void setupCommand(JobCommand<? extends CommandRequest, ? extends CommandResponse> command) {
         command.setJobRepository(jobRepository);
         command.setProposalRepository(proposalRepository);
     }

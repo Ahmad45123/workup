@@ -3,12 +3,13 @@ package com.workup.shared.commands.jobs.requests;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandRequest;
 
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
-@Builder(setterPrefix = "with")
-@JsonDeserialize(builder = SearchJobsRequest.SearchJobsRequestBuilder.class)
+@SuperBuilder(setterPrefix = "with")
+@Jacksonized
 public class SearchJobsRequest extends CommandRequest {
     private final int page;
     private final int pageSize;

@@ -1,9 +1,9 @@
 package com.workup.shared.commands.payments;
 
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-@Builder(setterPrefix = "with")
+@SuperBuilder(setterPrefix = "with")
 @JsonDeserialize
 public class PaymentTransaction {
     private String id;
