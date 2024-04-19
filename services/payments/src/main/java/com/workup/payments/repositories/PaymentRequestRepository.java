@@ -1,5 +1,6 @@
-package com.workup.payments.paymentrequest;
+package com.workup.payments.repositories;
 
+import com.workup.payments.models.PaymentRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

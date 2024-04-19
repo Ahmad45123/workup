@@ -1,9 +1,9 @@
-package com.workup.shared.commands.payments.responses;
+package com.workup.shared.commands.payments.paymentrequest.responses;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandResponse;
-import lombok.experimental.SuperBuilder;
+import com.workup.shared.enums.payments.PaymentTransactionStatus;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
 @Getter
@@ -11,5 +11,5 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class PayPaymentRequestResponse extends CommandResponse {
     private final String transactionId;
-    private final String transactionStatus;
+    private final PaymentTransactionStatus transactionStatus;
 }

@@ -1,9 +1,9 @@
-package com.workup.payments.paymentrequest;
+package com.workup.payments.models;
 
-import com.workup.payments.paymentrequest.enums.PaymentRequestStatus;
+import com.workup.shared.enums.payments.PaymentRequestStatus;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,7 +13,8 @@ import java.util.Date;
 
 @Entity
 @Data
-@NoArgsConstructor
+@Builder(setterPrefix = "with")
+//@NoArgsConstructor
 //@EnableJpaAuditing
 public class PaymentRequest {
     @Id

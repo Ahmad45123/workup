@@ -1,4 +1,4 @@
-package com.workup.payments.paymentrequest.enums;
+package com.workup.shared.enums.payments;
 
 public enum PaymentRequestStatus {
     PENDING, PAID, CANCELLED
