@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandRequest;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 // PURPOSE: The purpose of this request is for the client or the freelancer
 // to request terminating the contract, incase the contract was finished or if
@@ -13,8 +15,8 @@ import lombok.Getter;
 // Incase all the milestones are completed the state of the contract is then changed to
 // COMPLETED. Otherwise it is changed to TERMINATED instead.
 @Getter
-@Builder(setterPrefix = "with")
-@JsonDeserialize(builder = com.workup.shared.commands.contracts.requests.ContractTerminationRequest.class)
+@SuperBuilder(setterPrefix = "with")
+@Jacksonized
 public class ContractTerminationRequest extends CommandRequest {
     private final String userId;
     private final String contractId;
