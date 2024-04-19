@@ -31,8 +31,8 @@ services:
       - ./services/jobs/cassandra-config/cassandra.yaml:/etc/cassandra/cassandra.yaml
     healthcheck:
       test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
-      interval: 5s
-      timeout: 5s
+      interval: 20s
+      timeout: 10s
       retries: 60
     ports:
       - "9042:9042"

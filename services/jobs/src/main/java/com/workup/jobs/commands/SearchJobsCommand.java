@@ -11,16 +11,22 @@ public class SearchJobsCommand extends JobCommand<SearchJobsRequest, SearchJobsR
 
     @Override
     public SearchJobsResponse Run(SearchJobsRequest request) {
-        List<Job> result = jobRepository.searchForJob(request.getQuery());
-        return SearchJobsResponse.builder().withJobs(result.stream().map((Job job) -> {
-            return JobListingItem.builder()
-                .withDescription(job.getDescription())
-                .withExperience(job.getExperienceLevel())
-                .withId(job.getId().toString())
-                .withSkills(job.getSkills())
-                .withTitle(job.getTitle())
-                .build();
-        }).toArray(JobListingItem[]::new)).build();
+        try {
+            List<Job> result = jobRepository.searchForJob("%" + request.getQuery() + "%");
+            return SearchJobsResponse.builder().withJobs(result.stream().map((Job job) -> {
+                return JobListingItem.builder()
+                    .withDescription(job.getDescription())
+                    .withExperience(job.getExperienceLevel())
+                    .withId(job.getId().toString())
+                    .withSkills(job.getSkills())
+                    .withTitle(job.getTitle())
+                    .build();
+            }).toArray(JobListingItem[]::new)).build();
+        } catch(Exception e) {
+            System.err.println("ERROR: " + e.getMessage());
+            System.err.println("ERROR: " + e.getStackTrace());
+            return SearchJobsResponse.builder().withErrorMessage(e.getMessage()).build();
+        }
     }
     
 }

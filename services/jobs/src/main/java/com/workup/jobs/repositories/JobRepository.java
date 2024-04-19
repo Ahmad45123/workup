@@ -12,6 +12,6 @@ import com.workup.jobs.models.Job;
 
 public interface JobRepository extends CassandraRepository<Job, UUID>{
     
-    @Query("SELECT * FROM jobs_data.jobs WHERE title LIKE ?0 OR description LIKE ?0")
+    @Query("SELECT * FROM jobs_data.jobs WHERE title LIKE ?0")
     public List<Job> searchForJob(String searchTerm);
 }

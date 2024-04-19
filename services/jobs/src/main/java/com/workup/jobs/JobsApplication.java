@@ -40,37 +40,33 @@ public class JobsApplication {
     @Bean
     public ApplicationRunner runner(AmqpTemplate template) {
         return args -> {
-            try {
-                CreateJobRequest createJobRequest = CreateJobRequest.builder()
-                        .withTitle("Convert")
-                        .withDescription("dfsdf")
-                        // .withSkills(new String[] {"HTML",
-                        //     "CSS",
-                        //     "JavaScript",
-                        //     "React"})
-                        .build();
-                var res1 = (CreateJobResponse)template.convertSendAndReceive("jobsqueue", createJobRequest);
-            } catch(Exception ex) {
-                System.out.println("Error: " + ex.getMessage());
-            }
+            CreateJobRequest createJobRequest = CreateJobRequest.builder()
+                    .withTitle("Convert HTML Template to React")
+                    .withDescription("I have an HTML template that I have purchased and own the rights to. I would like it converted into a React application.")
+                    .withSkills(new String[] {"HTML",
+                        "CSS",
+                        "JavaScript",
+                        "React"})
+                    .build();
+            template.convertSendAndReceive("jobsqueue", createJobRequest);
 
-            // createJobRequest = CreateJobRequest.builder()
-            //         .withTitle("Create an interactive web platform where users can create profiles, view them as nodes in a graph")
-            //         .withDescription("Create an interactive web platform where users can create couch profiles (how do you describe yourself as a couch), view them as nodes in a graph, and interact with others.")
-            //         .withSkills(new String[] {
-            //             "Nodejs",
-            //             "Neo4j",
-            //             "Javascript"})
-            //         .build();
-            // var res2 = (CreateJobResponse)template.convertSendAndReceive("jobsqueue", createJobRequest);
+            createJobRequest = CreateJobRequest.builder()
+                    .withTitle("Create an interactive web platform where users can create profiles, view them as nodes in a graph")
+                    .withDescription("Create an interactive web platform where users can create couch profiles (how do you describe yourself as a couch), view them as nodes in a graph, and interact with others.")
+                    .withSkills(new String[] {
+                        "Nodejs",
+                        "Neo4j",
+                        "Javascript"})
+                    .build();
+            template.convertSendAndReceive("jobsqueue", createJobRequest);
             
-            // SearchJobsRequest searchJobsCommand = SearchJobsRequest.builder().withQuery("html").build();
-            // SearchJobsResponse resp = (SearchJobsResponse)template.convertSendAndReceive("jobsqueue", searchJobsCommand);
+            SearchJobsRequest searchJobsCommand = SearchJobsRequest.builder().withQuery("Convert HTML Template to React").build();
+            SearchJobsResponse resp = (SearchJobsResponse)template.convertSendAndReceive("jobsqueue", searchJobsCommand);
             
-            // System.out.println("Search results: " + resp.getJobs().length);
-            // for (int i = 0; i < resp.getJobs().length; i++) {
-            //     System.out.println("Job: " + resp.getJobs()[i].getTitle());
-            // }
+            System.out.println("Search results: " + resp.getJobs().length);
+            for (int i = 0; i < resp.getJobs().length; i++) {
+                System.out.println("Job: " + resp.getJobs()[i].getTitle());
+            }
         };
     }
 
