@@ -45,7 +45,6 @@ public class JobsApplication {
                     .build();
             CreateJobResponse resp = (CreateJobResponse)template.convertSendAndReceive("jobsqueue", createJobRequest);
             
-            System.out.println(resp.success);
             System.out.println(resp.getJobId());
         };
     }
