@@ -1,6 +1,7 @@
 package com.workup.jobs.commands;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,7 @@ import com.workup.jobs.models.Milestone;
 import com.workup.jobs.models.Proposal;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
 import com.workup.shared.commands.jobs.proposals.responses.CreateProposalResponse;
+import com.workup.shared.enums.HttpStatusCode;
 
 public class CreateProposalCommand extends JobCommand<CreateProposalRequest, CreateProposalResponse> {
 
@@ -30,19 +32,22 @@ public class CreateProposalCommand extends JobCommand<CreateProposalRequest, Cre
                 .withDescription(milestone.getDescription())
                 .withDueDate(milestone.getDueDate())
                 .build()).collect(Collectors.toCollection(ArrayList::new)))
+                .withCreatedAt(new Date())
+                .withUpdatedAt(new Date())
                 .build();
         try{
             Proposal savedProposal = proposalRepository.save(proposal);
             System.out.println(" [x] Saved Proposal '" + savedProposal.getCoverLetter()) ;
             return CreateProposalResponse.builder()
-                    .withSuccess(true)
+                    .withStatusCode(HttpStatusCode.CREATED)
                     .withId(savedProposal.getPrimaryKey().getId().toString())
                     .build();
         }
         catch(Exception e){
             e.printStackTrace();
             return CreateProposalResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                    .withErrorMessage("An error occurred while saving proposal")
                     .withId(null)
                     .build();
         }
