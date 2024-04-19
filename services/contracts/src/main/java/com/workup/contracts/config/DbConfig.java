@@ -51,7 +51,7 @@ public class DbConfig extends AbstractCassandraConfiguration {
 
     @Override
     public String @NonNull [] getEntityBasePackages() {
-        return new String[] { "com.contract.models" };
+        return new String[] { "com.workup.contracts.models" };
     }
 
     @Override

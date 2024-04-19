@@ -3,6 +3,8 @@ package com.workup.contracts;
 import com.workup.contracts.commands.ContractCommandMap;
 import com.workup.contracts.commands.InitiateContractCommand;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
+import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
+import com.workup.shared.commands.jobs.responses.CreateJobResponse;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +18,11 @@ public class RabbitMQListener {
     public ContractCommandMap commandMap;
 
     @RabbitHandler
-    public void receive(InitiateContractRequest in) throws Exception {
-        ((InitiateContractCommand) commandMap.getCommand("CreateJob")).Run(in);
+    public InitiateContractResponse receive(InitiateContractRequest in) throws Exception {
+        InitiateContractResponse response = ((InitiateContractCommand) commandMap.getCommand("InitiateContract")).Run(in);
+        return response;
     }
 
-//    @RabbitHandler
-//    public void receive(CreateProposalRequest in) {
-//        System.out.println(" [x] Int Received '" + in.getCoverLetter() + "'");
-//        ObjectMapper mapper = new ObjectMapper();
-//        try {
-//            String json = mapper.writeValueAsString(in);
-//            System.out.println(" [x] Received '" + json + "'");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    // NEW_COMMAND_BOILERPLATE
+
 }

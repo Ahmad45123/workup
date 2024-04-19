@@ -16,6 +16,7 @@ public class Contract {
     @PrimaryKey
     private UUID contractId;
 
+    private String jobTitle;
     private String jobId;
     private String proposalId;
 
