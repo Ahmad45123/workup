@@ -20,4 +20,5 @@ import lombok.extern.jackson.Jacksonized;
 public class ContractTerminationRequest extends CommandRequest {
     private final String userId;
     private final String contractId;
+    private final String reason;
 }
