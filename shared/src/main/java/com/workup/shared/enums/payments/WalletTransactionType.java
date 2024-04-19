@@ -1,4 +1,4 @@
-package com.workup.payments.wallettransaction.enums;
+package com.workup.shared.enums.payments;
 
 public enum WalletTransactionType {
     DEBIT, CREDIT

@@ -1,17 +1,19 @@
-package com.workup.payments.wallettransaction;
+package com.workup.payments.models;
 
+import com.workup.shared.enums.payments.WalletTransactionType;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.validation.constraints.DecimalMin;
 import java.util.Date;
 
 @Entity
 @Data
-@NoArgsConstructor
+@Builder(setterPrefix = "with")
+//@NoArgsConstructor
 public class WalletTransaction {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -42,6 +44,5 @@ public class WalletTransaction {
         this.paymentTransactionId = paymentTransactionId;
         this.description = description;
         this.transactionType = transactionType;
-        
     }
 }
