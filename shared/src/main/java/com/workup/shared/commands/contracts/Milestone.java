@@ -2,10 +2,11 @@ package com.workup.shared.commands.contracts;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.enums.contracts.MilestoneState;
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
-@Builder(setterPrefix = "with")
-@JsonDeserialize(builder = com.workup.shared.commands.contracts.Milestone.class)
+@SuperBuilder(setterPrefix = "with")
+@Jacksonized
 public class Milestone {
 
     private final String milestoneId;

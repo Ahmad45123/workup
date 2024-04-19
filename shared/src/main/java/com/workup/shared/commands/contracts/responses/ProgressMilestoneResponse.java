@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandResponse;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
-@Builder(setterPrefix = "with")
-@JsonDeserialize(builder = com.workup.shared.commands.contracts.responses.ProgressMilestoneResponse.class)
+@SuperBuilder(setterPrefix = "with")
+@Jacksonized
 public class ProgressMilestoneResponse extends CommandResponse {
 }
