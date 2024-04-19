@@ -1,4 +1,4 @@
-package com.workup.shared.Enums.Jobs;
+package com.workup.shared.enums.jobs;
 
 public enum Experience {
     ENTRY_LEVEL,INTERMEDIATE,EXPERT

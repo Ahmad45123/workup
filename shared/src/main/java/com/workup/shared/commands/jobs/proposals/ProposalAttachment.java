@@ -2,13 +2,14 @@ package com.workup.shared.commands.jobs.proposals;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
 @JsonSerialize
-@Builder(setterPrefix = "with")
-@JsonDeserialize(builder = ProposalAttachment.ProposalAttachmentBuilder.class)
+@SuperBuilder(setterPrefix = "with")
+@Jacksonized
 public class ProposalAttachment {
     private final String name;
     private final String url;

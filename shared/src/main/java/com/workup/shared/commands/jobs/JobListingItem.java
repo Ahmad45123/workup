@@ -1,11 +1,11 @@
 package com.workup.shared.commands.jobs;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.workup.shared.Enums.Jobs.Experience;
+import com.workup.shared.enums.jobs.Experience;
 
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 
-@Builder(setterPrefix = "with")
+@SuperBuilder(setterPrefix = "with")
 @JsonDeserialize
 public class JobListingItem {
     private final String id;
