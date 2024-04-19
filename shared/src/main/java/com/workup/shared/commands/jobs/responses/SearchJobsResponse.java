@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class SearchJobsResponse extends CommandResponse {
-    private final JobListingItem[] jobIds;
+    private final JobListingItem[] jobs;
     private final int totalJobs;
     private final int page;
     private final int pageSize;

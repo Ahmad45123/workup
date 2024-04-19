@@ -27,6 +27,8 @@ services:
     image: cassandra:4.0.7
     networks:
       - jobs # only accessible by the jobs service
+    volumes:
+      - ./services/jobs/cassandra-config/cassandra.yaml:/etc/cassandra/cassandra.yaml
     healthcheck:
       test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
       interval: 5s

@@ -13,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.workup.jobs.commands.JobCommandMap;
+import com.workup.jobs.commands.SearchJobsCommand;
 import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 import com.workup.shared.commands.jobs.requests.GetJobByIdRequest;
+import com.workup.shared.commands.jobs.requests.SearchJobsRequest;
 import com.workup.shared.commands.jobs.responses.CreateJobResponse;
 import com.workup.shared.commands.jobs.responses.GetJobByIdResponse;
+import com.workup.shared.commands.jobs.responses.SearchJobsResponse;
 
 @Service
 @RabbitListener(queues = "jobsqueue")
@@ -40,6 +43,12 @@ public class RabbitMQListener {
     @RabbitHandler
     public GetJobByIdResponse receive(GetJobByIdRequest request) throws Exception{
         GetJobByIdResponse response = ((GetJobByIdCommand)commandMap.getCommand("GetJobById")).Run(request);
+        return response;
+    }
+
+    @RabbitHandler
+    public SearchJobsResponse receive(SearchJobsRequest request) throws Exception{
+        SearchJobsResponse response = ((SearchJobsCommand)commandMap.getCommand("SearchJobs")).Run(request);
         return response;
     }
 }

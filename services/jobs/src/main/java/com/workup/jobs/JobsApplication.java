@@ -2,6 +2,7 @@ package com.workup.jobs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
+import com.workup.jobs.commands.SearchJobsCommand;
 import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalAttachment;
 import com.workup.shared.commands.jobs.proposals.ProposalMilestone;
@@ -22,7 +23,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.workup.shared.commands.jobs.requests.CreateJobRequest;
+import com.workup.shared.commands.jobs.requests.SearchJobsRequest;
 import com.workup.shared.commands.jobs.responses.CreateJobResponse;
+import com.workup.shared.commands.jobs.responses.SearchJobsResponse;
 import com.workup.shared.enums.jobs.Experience;
 
 @SpringBootApplication
@@ -37,15 +40,37 @@ public class JobsApplication {
     @Bean
     public ApplicationRunner runner(AmqpTemplate template) {
         return args -> {
-            CreateJobRequest createJobRequest = CreateJobRequest.builder()
-                    .withBudget(0)
-                    .withClientId("123")
-                    .withTitle("title")
-                    .withExperience(Experience.INTERMEDIATE)
-                    .build();
-            CreateJobResponse resp = (CreateJobResponse)template.convertSendAndReceive("jobsqueue", createJobRequest);
+            try {
+                CreateJobRequest createJobRequest = CreateJobRequest.builder()
+                        .withTitle("Convert")
+                        .withDescription("dfsdf")
+                        // .withSkills(new String[] {"HTML",
+                        //     "CSS",
+                        //     "JavaScript",
+                        //     "React"})
+                        .build();
+                var res1 = (CreateJobResponse)template.convertSendAndReceive("jobsqueue", createJobRequest);
+            } catch(Exception ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+
+            // createJobRequest = CreateJobRequest.builder()
+            //         .withTitle("Create an interactive web platform where users can create profiles, view them as nodes in a graph")
+            //         .withDescription("Create an interactive web platform where users can create couch profiles (how do you describe yourself as a couch), view them as nodes in a graph, and interact with others.")
+            //         .withSkills(new String[] {
+            //             "Nodejs",
+            //             "Neo4j",
+            //             "Javascript"})
+            //         .build();
+            // var res2 = (CreateJobResponse)template.convertSendAndReceive("jobsqueue", createJobRequest);
             
-            System.out.println(resp.getJobId());
+            // SearchJobsRequest searchJobsCommand = SearchJobsRequest.builder().withQuery("html").build();
+            // SearchJobsResponse resp = (SearchJobsResponse)template.convertSendAndReceive("jobsqueue", searchJobsCommand);
+            
+            // System.out.println("Search results: " + resp.getJobs().length);
+            // for (int i = 0; i < resp.getJobs().length; i++) {
+            //     System.out.println("Job: " + resp.getJobs()[i].getTitle());
+            // }
         };
     }
 

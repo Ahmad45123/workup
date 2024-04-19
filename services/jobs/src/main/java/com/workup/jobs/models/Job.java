@@ -5,7 +5,9 @@ import java.util.UUID;
 
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.SASI;
 import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.data.cassandra.core.mapping.SASI.IndexMode;
 
 import com.workup.shared.enums.jobs.Experience;
 
@@ -20,8 +22,12 @@ public class Job {
     @PrimaryKey
     private UUID id;
     
+    @SASI(indexMode = IndexMode.CONTAINS)
     private String title;
+    
+    @SASI(indexMode = IndexMode.CONTAINS)
     private String description;
+    
     private String location;
     private double budget;
 
