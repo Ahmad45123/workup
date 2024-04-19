@@ -2,6 +2,7 @@ package com.workup.payments.models;
 
 import com.workup.shared.enums.payments.WalletTransactionType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,7 +14,7 @@ import java.util.Date;
 @Entity
 @Data
 @Builder(setterPrefix = "with")
-//@NoArgsConstructor
+@AllArgsConstructor
 public class WalletTransaction {
     @Id
     @GeneratedValue(generator = "UUID")
