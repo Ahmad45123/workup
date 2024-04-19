@@ -15,6 +15,7 @@ public class TerminationRequest {
 
     @PrimaryKey
     private UUID requestId;
+    private String contractId;
     private String requesterId;
     private String reason;
     private TerminationRequestStatus status;
