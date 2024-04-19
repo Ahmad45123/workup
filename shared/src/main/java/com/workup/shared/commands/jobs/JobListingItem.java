@@ -5,10 +5,11 @@ import com.workup.shared.enums.jobs.Experience;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 @SuperBuilder(setterPrefix = "with")
 @Getter
-@JsonDeserialize
+@Jacksonized
 public class JobListingItem {
     private final String id;
     private final String title;

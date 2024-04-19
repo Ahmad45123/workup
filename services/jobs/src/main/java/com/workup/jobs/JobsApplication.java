@@ -60,7 +60,7 @@ public class JobsApplication {
                     .build();
             template.convertSendAndReceive("jobsqueue", createJobRequest);
             
-            SearchJobsRequest searchJobsCommand = SearchJobsRequest.builder().withQuery("Convert HTML Template to React").build();
+            SearchJobsRequest searchJobsCommand = SearchJobsRequest.builder().withQuery("HTML").build();
             SearchJobsResponse resp = (SearchJobsResponse)template.convertSendAndReceive("jobsqueue", searchJobsCommand);
             
             System.out.println("Search results: " + resp.getJobs().length);
