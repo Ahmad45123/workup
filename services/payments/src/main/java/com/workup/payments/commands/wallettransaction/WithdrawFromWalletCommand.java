@@ -18,6 +18,7 @@ public class WithdrawFromWalletCommand extends PaymentCommand<WithdrawFromWallet
     public WithdrawFromWalletResponse Run(WithdrawFromWalletRequest request) {
         String freelancerId = request.getFreelancerId();
         double amount = request.getAmount();
+        String paymentTransactionId = request.getPaymentTransactionId();
         String description = request.getDescription();
 
         Optional<Wallet> wallet = getWalletRepository().findById(request.getFreelancerId());
@@ -35,6 +36,7 @@ public class WithdrawFromWalletCommand extends PaymentCommand<WithdrawFromWallet
             WalletTransaction walletTransaction = WalletTransaction.builder()
                     .withWalletId(freelancerId)
                     .withAmount(amount)
+                    .withPaymentTransactionId(paymentTransactionId)
                     .withDescription(description)
                     .withTransactionType(WalletTransactionType.DEBIT)
                     .build();
