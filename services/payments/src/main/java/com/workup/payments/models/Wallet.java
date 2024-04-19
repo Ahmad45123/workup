@@ -1,8 +1,8 @@
-package com.workup.payments.wallet;
+package com.workup.payments.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,7 +11,8 @@ import java.util.Date;
 
 @Entity
 @Data
-@NoArgsConstructor
+//@NoArgsConstructor
+@Builder(setterPrefix = "with")
 public class Wallet {
     @Id
     private String freelancerId;

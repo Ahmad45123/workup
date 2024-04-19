@@ -1,9 +1,8 @@
-package com.workup.shared.commands.payments.responses;
+package com.workup.shared.commands.payments.wallet.responses;
 
 import com.workup.shared.commands.CommandResponse;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.experimental.SuperBuilder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
 @Getter
