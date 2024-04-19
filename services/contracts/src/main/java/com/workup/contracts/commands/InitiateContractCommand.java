@@ -1,25 +1,81 @@
 package com.workup.contracts.commands;
 
+import com.workup.contracts.models.Contract;
+import com.workup.contracts.models.ContractMilestone;
+import com.workup.shared.commands.contracts.Milestone;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
+import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
+import com.workup.shared.enums.contracts.ContractState;
+import com.workup.shared.enums.contracts.MilestoneState;
 
-public class InitiateContractCommand extends ContractCommand<InitiateContractRequest> {
+import java.util.ArrayList;
+import java.util.UUID;
+
+public class InitiateContractCommand extends ContractCommand<InitiateContractRequest, InitiateContractResponse> {
 
     @Override
-    public void Run(InitiateContractRequest request) {
-//        Contract contract = Contract.builder()
-//                .withContractId()Id(UUID.randomUUID())
-//                .withTitle(request.getTitle())
-//                .withDescription(request.getDescription())
-//                .withExperienceLevel(request.getExperience())
-//                .build();
-//        try{
-//            Contract savedJob = jobRepository.save(job);
-//            System.out.println(" [x] Saved Job '" + savedJob.getTitle()) ;
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }
+    public InitiateContractResponse Run(InitiateContractRequest request) {
 
-        System.out.println("Empty command for now");
+        // First we will get the milestones and add them to the database first,
+        // This will allow us to have their IDs for when we insert the contract.
+        int milestonesCount = request.getJobMilestones().length;
+        ArrayList<ContractMilestone> milestonesToAdd = new ArrayList<>();
+        String[] milestoneIds = new String[milestonesCount];
+
+        final UUID contractId = UUID.randomUUID();
+
+        int index = 0;
+        for(Milestone m : request.getJobMilestones()){
+
+            UUID currentContractMilestoneId = UUID.randomUUID();
+
+            ContractMilestone contractMilestone =
+                    ContractMilestone
+                            .builder()
+                            .withMilestoneId(currentContractMilestoneId)
+                            .withAmount(m.getAmount())
+                            .withDescription(m.getDescription())
+                            .withContractId(contractId.toString())
+                            .withDueDate(m.getDueDate())
+                            .withStatus(MilestoneState.OPEN)
+                            .build();
+
+            milestoneIds[index] = currentContractMilestoneId.toString();
+            milestonesToAdd.add(contractMilestone);
+            index++;
+        }
+
+        // Then we will add the contract to the database
+        Contract contract = Contract.builder()
+                .withContractId(contractId)
+                .withJobId(request.getJobId())
+                .withClientId(request.getClientId())
+                .withFreelancerId(request.getFreelancerId())
+                .withMilestonesIds(milestoneIds)
+                .withProposalId(request.getProposalId())
+                .withStatus(ContractState.ACTIVE)
+                .build();
+        try{
+            Contract savedContract = contractRepository.save(contract);
+
+            System.out.println(" [x] Saved Contract '" + savedContract.getJobTitle()) ;
+
+            contractMilestoneRepository.saveAll(milestonesToAdd);
+
+            System.out.println(" [x] Saved All Milestones '" + savedContract.getJobTitle()) ;
+
+            return InitiateContractResponse.builder()
+                    .withSuccess(true)
+                    .build();
+        }catch(Exception e){
+            e.printStackTrace();
+            return InitiateContractResponse.builder()
+                    .withSuccess(false)
+                    .build();
+        }
+
     }
 
 }
+
+

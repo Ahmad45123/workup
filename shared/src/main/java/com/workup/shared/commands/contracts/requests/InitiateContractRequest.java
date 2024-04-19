@@ -16,6 +16,7 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class InitiateContractRequest extends CommandRequest {
+    private final String jobTitle;
     private final String jobId;
     private final String proposalId;
 
