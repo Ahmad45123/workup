@@ -34,7 +34,7 @@ public class RequestContractTerminationCommand extends ContractCommand<ContractT
         try{
             TerminationRequest savedRequest = terminationRequestRepository.save(terminationRequest);
 
-            System.out.println(" [x] Saved Termination Request '" + savedRequest.toString()) ;
+            System.out.println(" [x] Saved Termination Request '" + savedRequest) ;
 
             return ContractTerminationResponse.builder()
                     .withRequestStatus(savedRequest.getStatus())
