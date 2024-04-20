@@ -18,6 +18,8 @@
     <modules>
         <module>shared</module>
         <module>services/jobs</module>
+        <module>services/payments</module>
+        <module>services/users</module>
     </modules>
 
 </project>
