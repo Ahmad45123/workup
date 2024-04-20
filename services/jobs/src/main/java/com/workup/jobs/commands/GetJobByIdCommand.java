@@ -12,10 +12,10 @@ public class GetJobByIdCommand extends JobCommand<GetJobByIdRequest,GetJobByIdRe
 
     @Override
     public GetJobByIdResponse Run(GetJobByIdRequest request) {
-        UUID jobId = UUID.fromString(request.getJobId());
+        try {
+            UUID jobId = UUID.fromString(request.getJobId());
 
-        try{
-        Optional<Job> job = jobRepository.findById(jobId);
+            Optional<Job> job = jobRepository.findById(jobId);
             if (job.isPresent()) {
                 return GetJobByIdResponse.builder()
                     .withId(job.get().getId().toString())

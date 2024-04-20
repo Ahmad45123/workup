@@ -12,8 +12,8 @@ public class GetMyJobsCommand extends JobCommand<GetMyJobsRequest, GetMyJobsResp
 
     @Override
     public GetMyJobsResponse Run(GetMyJobsRequest request) {
+        try {
         String clientId = request.getUserId();
-        try{
             List<Job> jobs = jobRepository.getJobsByClientId(clientId);
             return GetMyJobsResponse.builder()
                 .withJobs(jobs.stream().map(job -> JobListingItem.builder()

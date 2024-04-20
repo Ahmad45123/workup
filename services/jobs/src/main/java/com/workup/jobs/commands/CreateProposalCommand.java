@@ -18,7 +18,8 @@ public class CreateProposalCommand extends JobCommand<CreateProposalRequest, Cre
 
     @Override
     public CreateProposalResponse Run(CreateProposalRequest request) {     
-        Proposal proposal = Proposal.builder()
+        try{
+            Proposal proposal = Proposal.builder()
                 .withPrimaryKey(Proposal.ProposalPrimaryKey.builder().withJobId(request.getJobId())
                 .withId(UUID.randomUUID()).build())
                 .withFreelancerId(request.getFreelancerId())
@@ -35,7 +36,6 @@ public class CreateProposalCommand extends JobCommand<CreateProposalRequest, Cre
                 .withCreatedAt(new Date())
                 .withUpdatedAt(new Date())
                 .build();
-        try{
             Proposal savedProposal = proposalRepository.save(proposal);
             System.out.println(" [x] Saved Proposal '" + savedProposal.getCoverLetter()) ;
             return CreateProposalResponse.builder()

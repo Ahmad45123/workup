@@ -12,7 +12,7 @@ import com.workup.jobs.models.Job;
 
 public interface JobRepository extends CassandraRepository<Job, UUID>{
     
-    @Query("SELECT * FROM jobs_data.jobs WHERE title LIKE ?0")
+    @Query("SELECT * FROM jobs_data.jobs WHERE search_index LIKE ?0")
     public Slice<Job> searchForJob(String searchTerm, Pageable pg);
 
     @Query("SELECT * FROM jobs_data.jobs WHERE client_id = ?0")

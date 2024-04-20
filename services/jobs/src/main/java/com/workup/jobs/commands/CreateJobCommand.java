@@ -12,7 +12,8 @@ public class CreateJobCommand extends JobCommand<CreateJobRequest, CreateJobResp
 
     @Override
     public CreateJobResponse Run(CreateJobRequest request) {
-        Job job = Job.builder()
+        try {
+            Job job = Job.builder()
                 .withId(UUID.randomUUID())
                 .withTitle(request.getTitle())
                 .withDescription(request.getDescription())
@@ -25,7 +26,6 @@ public class CreateJobCommand extends JobCommand<CreateJobRequest, CreateJobResp
                 .withCreatedAt(new Date())
                 .withUpdatedAt(new Date())
                 .build();
-        try{
             Job savedJob = jobRepository.save(job);
             System.out.println(" [x] Saved Job '" + savedJob.getTitle()) ;
             return CreateJobResponse.builder()

@@ -23,15 +23,14 @@ public class Job {
 
     @PrimaryKey
     private UUID id;
-    
-    @SASI(indexMode = IndexMode.CONTAINS)
     private String title;
-    
-    @SASI(indexMode = IndexMode.CONTAINS)
     private String description;
-    
     private String location;
     private double budget;
+
+    @SASI(indexMode = IndexMode.CONTAINS)
+    @Column("search_index")
+    private String searchIndex;
 
     @CassandraType(type = CassandraType.Name.LIST, typeArguments = CassandraType.Name.TEXT)
     private String[] skills;
@@ -43,5 +42,27 @@ public class Job {
     private Date createdAt;
     private Date updatedAt;
     
+    public static class JobBuilder {
+        public JobBuilder withTitle(String title) {
+            this.title = title;
+            updateSearchIndex();
+            return this;
+        }
+        public JobBuilder withDescription(String desc) {
+            this.description = desc;
+            updateSearchIndex();
+            return this;
+        }
+        public JobBuilder withSkills(String[] skills) {
+            this.skills = skills;
+            updateSearchIndex();
+            return this;
+        }
+
+        private void updateSearchIndex() {
+            String skills_with_commas = this.skills != null ? String.join(",", this.skills) : "";
+            this.searchIndex = String.join(",", this.title, this.description, skills_with_commas);
+        }
+    }
 }
 
