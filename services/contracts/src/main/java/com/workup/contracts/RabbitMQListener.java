@@ -1,8 +1,14 @@
 package com.workup.contracts;
 
 import com.workup.contracts.commands.ContractCommandMap;
+import com.workup.contracts.commands.HandleTerminationRequestCommand;
 import com.workup.contracts.commands.InitiateContractCommand;
+import com.workup.contracts.commands.RequestContractTerminationCommand;
+import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
+import com.workup.shared.commands.contracts.requests.HandleTerminationRequest;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
+import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
+import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
 import com.workup.shared.commands.jobs.responses.CreateJobResponse;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -23,6 +29,15 @@ public class RabbitMQListener {
         return response;
     }
 
+    @RabbitHandler
+    public ContractTerminationResponse receive(ContractTerminationRequest in) throws Exception {
+        return ((RequestContractTerminationCommand) commandMap.getCommand("RequestContractTermination")).Run(in);
+    }
+
+    @RabbitHandler
+    public HandleTerminationResponse receive(HandleTerminationRequest in) throws Exception {
+        return ((HandleTerminationRequestCommand) commandMap.getCommand("HandleTerminationRequest")).Run(in);
+    }
     // NEW_COMMAND_BOILERPLATE
 
 }
