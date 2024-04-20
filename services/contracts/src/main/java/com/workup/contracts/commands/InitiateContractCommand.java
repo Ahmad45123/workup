@@ -9,6 +9,7 @@ import com.workup.shared.enums.contracts.ContractState;
 import com.workup.shared.enums.contracts.MilestoneState;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class InitiateContractCommand extends ContractCommand<InitiateContractRequest, InitiateContractResponse> {
@@ -20,7 +21,7 @@ public class InitiateContractCommand extends ContractCommand<InitiateContractReq
         // This will allow us to have their IDs for when we insert the contract.
         int milestonesCount = request.getJobMilestones().length;
         ArrayList<ContractMilestone> milestonesToAdd = new ArrayList<>();
-        String[] milestoneIds = new String[milestonesCount];
+        List<String> milestoneIds = new ArrayList<>();
 
         final UUID contractId = UUID.randomUUID();
 
@@ -40,7 +41,7 @@ public class InitiateContractCommand extends ContractCommand<InitiateContractReq
                             .withStatus(MilestoneState.OPEN)
                             .build();
 
-            milestoneIds[index] = currentContractMilestoneId.toString();
+            milestoneIds.add(currentContractMilestoneId.toString());
             milestonesToAdd.add(contractMilestone);
             index++;
         }
