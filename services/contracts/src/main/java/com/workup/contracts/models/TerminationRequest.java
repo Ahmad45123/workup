@@ -22,6 +22,5 @@ public class TerminationRequest {
     private String reason;
     @Setter
     private TerminationRequestStatus status;
-    private Date date;
 
 }

@@ -17,10 +17,6 @@ import java.util.Date;
 // Incase all the milestones are completed the state of the contract is then changed to
 // COMPLETED. Otherwise it is changed to TERMINATED instead.
 
-/*
-    I think we better keep the termination logic completely for the `termination` (meaning one side doesn't like to continue the contract)
-    and all the termination requests are to be reviewed by the admin, and then the amdin makes the decision about acc/rej these termination requests
- */
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
@@ -28,5 +24,4 @@ public class ContractTerminationRequest extends CommandRequest {
     private final String userId;
     private final String contractId;
     private final String reason;
-    private final Date date;
 }
