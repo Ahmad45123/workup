@@ -15,12 +15,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.cassandra.core.CassandraTemplate;
-import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
-
-
-import java.util.ArrayList;
-import java.util.Date;
 
 import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 import com.workup.shared.commands.jobs.requests.SearchJobsRequest;
@@ -41,7 +35,7 @@ public class JobsApplication {
     public ApplicationRunner runner(AmqpTemplate template) {
         return args -> {
             CreateJobRequest createJobRequest = CreateJobRequest.builder()
-                    .withTitle("Convert HTML Template to React")
+                    .withTitle("Convert HTML Template to React 3")
                     .withDescription("I have an HTML template that I have purchased and own the rights to. I would like it converted into a React application.")
                     .withSkills(new String[] {"HTML",
                         "CSS",
@@ -60,10 +54,21 @@ public class JobsApplication {
                     .build();
             template.convertSendAndReceive("jobsqueue", createJobRequest);
             
-            SearchJobsRequest searchJobsCommand = SearchJobsRequest.builder().withQuery("HTML").build();
+            SearchJobsRequest searchJobsCommand = SearchJobsRequest.builder().withPageLimit(5).withQuery("HTML").build();
             SearchJobsResponse resp = (SearchJobsResponse)template.convertSendAndReceive("jobsqueue", searchJobsCommand);
             
             System.out.println("Search results: " + resp.getJobs().length);
+            for (int i = 0; i < resp.getJobs().length; i++) {
+                System.out.println("Job: " + resp.getJobs()[i].getTitle());
+            }
+            System.out.println(resp.getPagingState());
+
+            System.out.println("*****");
+
+            searchJobsCommand = SearchJobsRequest.builder().withPagingState(resp.getPagingState()).withPageLimit(5).withQuery("HTML").build();
+            resp = (SearchJobsResponse)template.convertSendAndReceive("jobsqueue", searchJobsCommand);
+            
+            System.out.println("Search results 2: " + resp.getJobs().length);
             for (int i = 0; i < resp.getJobs().length; i++) {
                 System.out.println("Job: " + resp.getJobs()[i].getTitle());
             }

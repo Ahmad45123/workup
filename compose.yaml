@@ -5,6 +5,11 @@ services:
   # ----- GENERAL SERVICES -------
   service_mq:
     image: rabbitmq:3.13-management
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
     networks:
       - microservices
     ports:
@@ -18,7 +23,7 @@ services:
       jobs_db:
         condition: service_healthy
       service_mq:
-        condition: service_started
+        condition: service_healthy
     networks:
       - microservices
       - jobs
