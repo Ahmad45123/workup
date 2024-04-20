@@ -18,7 +18,7 @@ public class CreateJobCommand extends JobCommand<CreateJobRequest, CreateJobResp
                 .withDescription(request.getDescription())
                 .withLocation(request.getLocation())
                 .withBudget(request.getBudget())
-                .withClientId(request.getClientId())
+                .withClientId(request.getUserId())
                 .withSkills(request.getSkills())
                 .withIsActive(true)
                 .withExperienceLevel(request.getExperience())

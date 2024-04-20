@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.data.cassandra.core.mapping.CassandraType;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.Indexed;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.SASI;
 import org.springframework.data.cassandra.core.mapping.Table;
@@ -35,6 +37,8 @@ public class Job {
     private String[] skills;
     private Experience experienceLevel;
     private boolean isActive;
+    @Indexed
+    @Column("client_id")
     private String clientId;
     private Date createdAt;
     private Date updatedAt;

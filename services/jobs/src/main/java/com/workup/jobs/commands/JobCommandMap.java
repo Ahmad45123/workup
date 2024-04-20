@@ -28,6 +28,7 @@ public class JobCommandMap extends CommandMap<JobCommand<? extends CommandReques
         commands.put("CreateProposal", CreateProposalCommand.class);
         commands.put("GetJobById", GetJobByIdCommand.class);
         commands.put("SearchJobs", SearchJobsCommand.class);
+        commands.put("GetMyJobs", GetMyJobsCommand.class);
     }
 
     @Override
