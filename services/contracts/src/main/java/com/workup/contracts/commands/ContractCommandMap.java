@@ -2,6 +2,7 @@ package com.workup.contracts.commands;
 
 import com.workup.contracts.repositories.ContractRepository;
 import com.workup.contracts.repositories.ContractMilestoneRepository;
+import com.workup.contracts.repositories.TerminationRequestRepository;
 import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
@@ -12,12 +13,16 @@ import org.springframework.stereotype.Component;
 public class ContractCommandMap extends CommandMap<ContractCommand<? extends CommandRequest, ? extends CommandResponse>> {
     @Autowired
     ContractRepository contractRepository;
+    @Autowired
     ContractMilestoneRepository contractMilestoneRepository;
+    @Autowired
+    TerminationRequestRepository terminationRequestRepository;
 
 
     public void registerCommands() {
 
         commands.put("InitiateContract", InitiateContractCommand.class);
+        commands.put("RequestContractTermination", RequestContractTerminationCommand.class);
         // NEW_COMMAND_BOILERPLATE
     }
 
@@ -25,5 +30,6 @@ public class ContractCommandMap extends CommandMap<ContractCommand<? extends Com
     public void setupCommand(ContractCommand<? extends CommandRequest, ? extends CommandResponse> command) {
         command.setContractRepository(contractRepository);
         command.setContractMilestoneRepository(contractMilestoneRepository);
+        command.setTerminationRequestRepository(terminationRequestRepository);
     }
 }
