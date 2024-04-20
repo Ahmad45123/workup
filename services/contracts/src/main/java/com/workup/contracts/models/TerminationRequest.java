@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -19,5 +20,6 @@ public class TerminationRequest {
     private String requesterId;
     private String reason;
     private TerminationRequestStatus status;
+    private Date date;
 
 }

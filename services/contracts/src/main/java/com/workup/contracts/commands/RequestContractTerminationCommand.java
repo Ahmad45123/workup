@@ -5,6 +5,7 @@ import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +30,7 @@ public class RequestContractTerminationCommand extends ContractCommand<ContractT
                 .withRequesterId(request.getUserId())
                 .withReason(request.getReason())
                 .withStatus(TerminationRequestStatus.PENDING)
+                .withDate(new Date())
                 .build();
 
         try{
