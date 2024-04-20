@@ -23,6 +23,7 @@ public class ContractCommandMap extends CommandMap<ContractCommand<? extends Com
 
         commands.put("InitiateContract", InitiateContractCommand.class);
         commands.put("RequestContractTermination", RequestContractTerminationCommand.class);
+        commands.put("HandleTerminationRequest", HandleTerminationRequestCommand.class);
         // NEW_COMMAND_BOILERPLATE
     }
 
