@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
+import java.util.List;
+
 // PURPOSE: The purpose of this request is to initialize the creation of a contract from
 // a proposal that is present in the jobs service. Since a contract IS the proposal made manifest,
 // this endpoint will create a new Contract object in the database which contains all the
@@ -23,5 +25,5 @@ public class InitiateContractRequest extends CommandRequest {
     private final String freelancerId;
     private final String clientId;
 
-    private final Milestone[] jobMilestones;
+    private final List<Milestone> jobMilestones;
 }
