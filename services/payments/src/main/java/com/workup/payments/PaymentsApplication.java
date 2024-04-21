@@ -12,24 +12,24 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class PaymentsApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(PaymentsApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(PaymentsApplication.class, args);
+  }
 
-    @Bean
-    public ApplicationRunner runner(AmqpTemplate template) {
-        return args -> {
-            // TODO: Test each command
-        };
-    }
+  @Bean
+  public ApplicationRunner runner(AmqpTemplate template) {
+    return args -> {
+      // TODO: Test each command
+    };
+  }
 
-    @Bean
-    public Queue myQueue() {
-        return new Queue("paymentsqueue");
-    }
+  @Bean
+  public Queue myQueue() {
+    return new Queue("paymentsqueue");
+  }
 
-    @Bean
-    public MessageConverter messageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
+  @Bean
+  public MessageConverter messageConverter() {
+    return new Jackson2JsonMessageConverter();
+  }
 }

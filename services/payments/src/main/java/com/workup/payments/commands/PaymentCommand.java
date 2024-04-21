@@ -11,10 +11,10 @@ import lombok.Data;
 
 @Data
 public abstract class PaymentCommand<T extends CommandRequest, Q extends CommandResponse>
-        implements Command<T, Q> {
+  implements Command<T, Q> {
 
-    private PaymentRequestRepository paymentRequestRepository;
-    private PaymentTransactionRepository paymentTransactionRepository;
-    private WalletRepository walletRepository;
-    private WalletTransactionRepository walletTransactionRepository;
+  private PaymentRequestRepository paymentRequestRepository;
+  private PaymentTransactionRepository paymentTransactionRepository;
+  private WalletRepository walletRepository;
+  private WalletTransactionRepository walletTransactionRepository;
 }
