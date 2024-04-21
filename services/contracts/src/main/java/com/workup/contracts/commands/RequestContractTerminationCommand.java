@@ -14,7 +14,6 @@ import java.util.UUID;
 public class RequestContractTerminationCommand extends ContractCommand<ContractTerminationRequest, ContractTerminationResponse> {
 
     private boolean isValidRequest(ContractTerminationRequest request) {
-        //check if the contract id is a valid contract
         Optional<Contract> contract = contractRepository.findById(UUID.fromString(request.getContractId()));
         if (contract.isEmpty()) {
             return false;
