@@ -71,7 +71,7 @@ public class InitiateContractCommand extends ContractCommand<InitiateContractReq
         }catch(Exception e){
             e.printStackTrace();
             return InitiateContractResponse.builder()
-                    .withStatusCode(HttpStatusCode.BAD_REQUEST)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                     .withErrorMessage(e.getMessage())
                     .build();
         }

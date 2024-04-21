@@ -4,6 +4,7 @@ import com.workup.contracts.models.TerminationRequest;
 import com.workup.shared.commands.contracts.requests.HandleTerminationRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
 
 import java.util.Optional;
@@ -15,7 +16,7 @@ public class HandleTerminationRequestCommand extends ContractCommand<HandleTermi
     public HandleTerminationResponse Run(HandleTerminationRequest request) {
         Optional<TerminationRequest> terminationRequest = terminationRequestRepository.findById(UUID.fromString(request.getContractTerminationRequestId()));
         if (terminationRequest.isEmpty()) {
-            return HandleTerminationResponse.builder().withSuccess(false).build();
+            return HandleTerminationResponse.builder().withStatusCode(HttpStatusCode.BAD_REQUEST).withErrorMessage("No Termination Requests Found").build();
         }
 
         return handleTerminationRequest(terminationRequest.get(), request.getChosenStatus());
@@ -29,10 +30,10 @@ public class HandleTerminationRequestCommand extends ContractCommand<HandleTermi
 
             System.out.println(" [x] Updated Termination Request " + updatedRequest);
 
-            return HandleTerminationResponse.builder().withRequestStatus(updatedRequest.getStatus()).withSuccess(true).build();
+            return HandleTerminationResponse.builder().withRequestStatus(updatedRequest.getStatus()).withStatusCode(HttpStatusCode.ACCEPTED).withErrorMessage("").build();
         } catch (Exception e) {
             e.printStackTrace();
-            return HandleTerminationResponse.builder().withSuccess(false).build();
+            return HandleTerminationResponse.builder().withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR).withErrorMessage(e.getMessage()).build();
         }
     }
 

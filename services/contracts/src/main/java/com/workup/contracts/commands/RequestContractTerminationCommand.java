@@ -4,6 +4,7 @@ import com.workup.contracts.models.Contract;
 import com.workup.contracts.models.TerminationRequest;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
 
 import java.util.Date;
@@ -29,7 +30,7 @@ public class RequestContractTerminationCommand extends ContractCommand<ContractT
     @Override
     public ContractTerminationResponse Run(ContractTerminationRequest request) {
         if (!isValidRequest(request)) {
-            return ContractTerminationResponse.builder().withSuccess(false).build();
+            return ContractTerminationResponse.builder().withStatusCode(HttpStatusCode.BAD_REQUEST).withErrorMessage("Invalid Request").build();
         }
 
         //Check if there is a termination request pending for this user on that contract
@@ -38,7 +39,8 @@ public class RequestContractTerminationCommand extends ContractCommand<ContractT
             return ContractTerminationResponse
                     .builder()
                     .withRequestStatus(existedRequests.getFirst().getStatus())
-                    .withSuccess(true)
+                    .withStatusCode(HttpStatusCode.BAD_REQUEST)
+                    .withErrorMessage("Termination Request already exists")
                     .build();
         //create the request
         TerminationRequest terminationRequest = TerminationRequest
@@ -57,12 +59,14 @@ public class RequestContractTerminationCommand extends ContractCommand<ContractT
 
             return ContractTerminationResponse.builder()
                     .withRequestStatus(savedRequest.getStatus())
-                    .withSuccess(true)
+                    .withStatusCode(HttpStatusCode.CREATED)
+                    .withErrorMessage("")
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
             return ContractTerminationResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                    .withErrorMessage(e.getMessage())
                     .build();
         }
     }
