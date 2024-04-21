@@ -8,5 +8,5 @@ import java.util.List;
 public interface WalletTransactionRepository extends JpaRepository<WalletTransaction, String> {
 
     WalletTransaction findByWalletId(String walletId);
-    List<WalletTransaction> findAllByFreelancerId(String freelancerId);
+    List<WalletTransaction> findAllByWalletId(String walletId);
 }

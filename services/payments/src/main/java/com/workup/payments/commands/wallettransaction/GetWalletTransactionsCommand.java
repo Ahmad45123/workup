@@ -14,7 +14,7 @@ public class GetWalletTransactionsCommand extends PaymentCommand<GetWalletTransa
     @Override
     public GetWalletTransactionsResponse Run(GetWalletTransactionsRequest request) {
         List<WalletTransaction> savedTransactions = getWalletTransactionRepository()
-                .findAllByFreelancerId(request.getFreelancerId());
+                .findAllByWalletId(request.getFreelancerId());
         List<WalletTransactionDTO> walletTransactionDTOS = WalletTransactionMapper.mapToWalletTransactionDTOs(savedTransactions);
 
         System.out.println("[x] Wallet transactions fetched : " + walletTransactionDTOS);
