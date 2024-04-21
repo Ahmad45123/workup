@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
+import java.util.Date;
+
 // PURPOSE: The purpose of this request is for the client or the freelancer
 // to request terminating the contract, incase the contract was finished or if
 // one of them does not wish to continue for any reason. This request will return a response
@@ -14,6 +16,7 @@ import lombok.extern.jackson.Jacksonized;
 // milestones are finished or if the contract was established during the previous 3 days).
 // Incase all the milestones are completed the state of the contract is then changed to
 // COMPLETED. Otherwise it is changed to TERMINATED instead.
+
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized

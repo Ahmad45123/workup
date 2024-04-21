@@ -8,9 +8,11 @@ import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
+import java.util.List;
+
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class ViewContractMilestonesResponse extends CommandResponse {
-    private final Milestone[] contractMilestones;
+    private final List<Milestone> contractMilestones;
 }

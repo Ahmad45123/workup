@@ -9,6 +9,7 @@ import com.workup.shared.enums.contracts.ContractState;
 import com.workup.shared.enums.contracts.MilestoneState;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class InitiateContractCommand extends ContractCommand<InitiateContractRequest, InitiateContractResponse> {
@@ -18,13 +19,11 @@ public class InitiateContractCommand extends ContractCommand<InitiateContractReq
 
         // First we will get the milestones and add them to the database first,
         // This will allow us to have their IDs for when we insert the contract.
-        int milestonesCount = request.getJobMilestones().length;
+        int milestonesCount = request.getJobMilestones().size();
         ArrayList<ContractMilestone> milestonesToAdd = new ArrayList<>();
-        String[] milestoneIds = new String[milestonesCount];
+        List<String> milestoneIds = new ArrayList<>();
 
         final UUID contractId = UUID.randomUUID();
-
-        int index = 0;
         for(Milestone m : request.getJobMilestones()){
 
             UUID currentContractMilestoneId = UUID.randomUUID();
@@ -40,15 +39,15 @@ public class InitiateContractCommand extends ContractCommand<InitiateContractReq
                             .withStatus(MilestoneState.OPEN)
                             .build();
 
-            milestoneIds[index] = currentContractMilestoneId.toString();
+            milestoneIds.add(currentContractMilestoneId.toString());
             milestonesToAdd.add(contractMilestone);
-            index++;
         }
 
         // Then we will add the contract to the database
         Contract contract = Contract.builder()
                 .withContractId(contractId)
                 .withJobId(request.getJobId())
+                .withJobTitle(request.getJobTitle())
                 .withClientId(request.getClientId())
                 .withFreelancerId(request.getFreelancerId())
                 .withMilestonesIds(milestoneIds)
