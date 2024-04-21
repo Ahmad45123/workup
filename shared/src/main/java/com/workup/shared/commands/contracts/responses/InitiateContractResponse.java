@@ -11,5 +11,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class InitiateContractResponse extends CommandResponse {
-    private final String contractId;
+
+  private final String contractId;
 }

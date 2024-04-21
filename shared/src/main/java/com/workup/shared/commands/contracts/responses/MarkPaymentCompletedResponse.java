@@ -10,5 +10,4 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
-public class MarkPaymentCompletedResponse extends CommandResponse {
-}
+public class MarkPaymentCompletedResponse extends CommandResponse {}

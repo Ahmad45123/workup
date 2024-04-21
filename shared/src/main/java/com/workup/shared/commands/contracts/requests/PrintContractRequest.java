@@ -14,5 +14,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class PrintContractRequest extends CommandRequest {
-    private final String contractId;
+
+  private final String contractId;
 }

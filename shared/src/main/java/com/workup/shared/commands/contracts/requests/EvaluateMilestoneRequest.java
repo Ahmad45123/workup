@@ -19,7 +19,8 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class EvaluateMilestoneRequest extends CommandRequest {
-    private final String clientId;
-    private final String milestoneId;
-    private final MilestoneState evaluatedState;
+
+  private final String clientId;
+  private final String milestoneId;
+  private final MilestoneState evaluatedState;
 }

@@ -12,5 +12,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class ContractTerminationResponse extends CommandResponse {
-    private final TerminationRequestStatus requestStatus;
+
+  private final TerminationRequestStatus requestStatus;
 }

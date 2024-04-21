@@ -11,5 +11,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class PrintContractResponse extends CommandResponse {
-    private final String contractFileLink;
+
+  private final String contractFileLink;
 }

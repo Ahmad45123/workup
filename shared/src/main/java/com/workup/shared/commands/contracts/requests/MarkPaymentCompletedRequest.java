@@ -14,5 +14,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class MarkPaymentCompletedRequest extends CommandRequest {
-    private final String milestoneId;
+
+  private final String milestoneId;
 }

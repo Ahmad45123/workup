@@ -1,6 +1,5 @@
 package com.workup.shared.commands.contracts.requests;
 
-
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
 import lombok.Getter;
@@ -13,7 +12,6 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class HandleTerminationRequest extends CommandRequest {
 
-    private final String contractTerminationRequestId;
-    private final TerminationRequestStatus chosenStatus;
-
+  private final String contractTerminationRequestId;
+  private final TerminationRequestStatus chosenStatus;
 }

@@ -11,11 +11,11 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class Milestone {
 
-    private final String milestoneId; // Not Needed when initiating contract, make it null
-    private final String contractId; // Not needed when initiating contract, make it null
+  private final String milestoneId; // Not Needed when initiating contract, make it null
+  private final String contractId; // Not needed when initiating contract, make it null
 
-    private final String description;
-    private final String dueDate;
-    private final String amount;
-    private final MilestoneState status; // Not needed with initiating contract, make it null
+  private final String description;
+  private final String dueDate;
+  private final String amount;
+  private final MilestoneState status; // Not needed with initiating contract, make it null
 }
