@@ -1,5 +1,6 @@
 package com.workup.payments;
 
+import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -19,7 +20,14 @@ public class PaymentsApplication {
   @Bean
   public ApplicationRunner runner(AmqpTemplate template) {
     return args -> {
-      // TODO: Test each command
+      CreatePaymentRequestRequest createPaymentRequest = CreatePaymentRequestRequest
+        .builder()
+        .withAmount(1200)
+        .withDescription("Payment for services rendered")
+        .withClientId("3")
+        .withFreelancerId("4")
+        .build();
+      template.convertSendAndReceive("paymentsqueue", createPaymentRequest);
     };
   }
 

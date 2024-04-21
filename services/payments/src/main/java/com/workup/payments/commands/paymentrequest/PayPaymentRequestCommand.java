@@ -50,31 +50,30 @@ public class PayPaymentRequestCommand
 
       Optional<Wallet> freelancerWallet = getWalletRepository()
         .findById(paymentRequest.get().getFreelancerId());
-      if (freelancerWallet.isPresent()) {
-        freelancerWallet
-          .get()
-          .setBalance(
-            freelancerWallet.get().getBalance() + paymentRequest.get().getAmount()
-          );
-        Wallet savedWallet = getWalletRepository().save(freelancerWallet.get());
-
-        System.out.println("[x] Wallet updated : " + savedWallet);
-
-        WalletTransaction walletTransaction = WalletTransaction
-          .builder()
-          .withWalletId(paymentRequest.get().getFreelancerId())
-          .withAmount(paymentRequest.get().getAmount())
-          .withPaymentTransactionId(savedPaymentTransaction.getId())
-          .withDescription(paymentRequest.get().getDescription())
-          .withTransactionType(WalletTransactionType.CREDIT)
-          .build();
-        WalletTransaction savedWalletTransaction = getWalletTransactionRepository()
-          .save(walletTransaction);
-
-        System.out.println("[x] Wallet transaction saved : " + savedWalletTransaction);
-      } else {
-        // TODO: Handle freelancer wallet not found
+      if (freelancerWallet.isEmpty()) {
+        throw new IllegalStateException("Freelancer wallet not found");
       }
+      freelancerWallet
+        .get()
+        .setBalance(
+          freelancerWallet.get().getBalance() + paymentRequest.get().getAmount()
+        );
+      Wallet savedWallet = getWalletRepository().save(freelancerWallet.get());
+
+      System.out.println("[x] Wallet updated : " + savedWallet);
+
+      WalletTransaction walletTransaction = WalletTransaction
+        .builder()
+        .withWalletId(paymentRequest.get().getFreelancerId())
+        .withAmount(paymentRequest.get().getAmount())
+        .withPaymentTransactionId(savedPaymentTransaction.getId())
+        .withDescription(paymentRequest.get().getDescription())
+        .withTransactionType(WalletTransactionType.CREDIT)
+        .build();
+      WalletTransaction savedWalletTransaction = getWalletTransactionRepository()
+        .save(walletTransaction);
+
+      System.out.println("[x] Wallet transaction saved : " + savedWalletTransaction);
       return PayPaymentRequestResponse
         .builder()
         .withStatusCode(HttpStatusCode.OK)

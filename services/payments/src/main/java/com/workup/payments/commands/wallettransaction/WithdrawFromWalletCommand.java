@@ -21,7 +21,7 @@ public class WithdrawFromWalletCommand
     String paymentTransactionId = request.getPaymentTransactionId();
     String description = request.getDescription();
 
-    Optional<Wallet> wallet = getWalletRepository().findById(request.getFreelancerId());
+    Optional<Wallet> wallet = getWalletRepository().findById(freelancerId);
     if (wallet.isEmpty()) {
       return WithdrawFromWalletResponse
         .builder()

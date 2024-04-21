@@ -4,6 +4,7 @@ import com.workup.shared.enums.payments.PaymentRequestStatus;
 import jakarta.persistence.*;
 import java.util.Date;
 import javax.validation.constraints.DecimalMin;
+
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,8 +14,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Data
 @Builder(setterPrefix = "with")
-//@NoArgsConstructor
-//@EnableJpaAuditing
 public class PaymentRequest {
 
   @Id
@@ -38,7 +37,7 @@ public class PaymentRequest {
 
   @Column(name = "status", nullable = false)
   @Enumerated(EnumType.STRING)
-  private PaymentRequestStatus status = PaymentRequestStatus.PENDING;
+  private PaymentRequestStatus status;
 
   @CreationTimestamp
   @Temporal(TemporalType.TIMESTAMP)
@@ -49,4 +48,15 @@ public class PaymentRequest {
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "updated_at", nullable = false)
   private Date updatedAt;
+
+  public PaymentRequest(String id, String freelancerId, String clientId, double amount, String description, PaymentRequestStatus status, Date createdAt, Date updatedAt) {
+    this.id = id;
+    this.freelancerId = freelancerId;
+    this.clientId = clientId;
+    this.amount = amount;
+    this.description = description;
+    this.status = PaymentRequestStatus.PENDING;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
 }

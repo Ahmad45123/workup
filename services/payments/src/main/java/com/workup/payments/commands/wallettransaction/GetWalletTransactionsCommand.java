@@ -14,6 +14,13 @@ public class GetWalletTransactionsCommand
 
   @Override
   public GetWalletTransactionsResponse Run(GetWalletTransactionsRequest request) {
+      if (getWalletRepository().existsById(request.getFreelancerId())) {
+        return GetWalletTransactionsResponse
+            .builder()
+            .withStatusCode(HttpStatusCode.BAD_REQUEST)
+            .withErrorMessage("Wallet does not exist")
+            .build();
+      }
     List<WalletTransaction> savedTransactions = getWalletTransactionRepository()
       .findAllByWalletId(request.getFreelancerId());
     List<WalletTransactionDTO> walletTransactionDTOS = WalletTransactionMapper.mapToWalletTransactionDTOs(
