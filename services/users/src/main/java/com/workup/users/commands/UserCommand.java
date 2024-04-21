@@ -14,6 +14,7 @@ public abstract class UserCommand<T extends com.workup.shared.commands.CommandRe
         implements Command<T, Q> {
 
     static final String PHOTO_BUCKET = "photos:";
+    static final String RESUME_BUCKET = "resume:";
 
     @Setter
     FreelancerRepository freelancerRepository;
