@@ -20,45 +20,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PaymentCommandMap extends CommandMap<PaymentCommand<? extends CommandRequest, ? extends CommandResponse>> {
-    @Autowired
-    private PaymentRequestRepository paymentRequestRepository;
-    @Autowired
-    private PaymentTransactionRepository paymentTransactionRepository;
-    @Autowired
-    private WalletRepository walletRepository;
-    @Autowired
-    private WalletTransactionRepository walletTransactionRepository;
+public class PaymentCommandMap
+  extends CommandMap<PaymentCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
+  @Autowired
+  private PaymentRequestRepository paymentRequestRepository;
 
-    public void registerCommands() {
-        /* PaymentRequest commands */
-        commands.put("CreatePaymentRequest", CreatePaymentRequestCommand.class);
-        commands.put("GetClientPaymentRequests", GetClientPaymentRequestsCommand.class);
-        commands.put("GetFreelancerPaymentRequests", GetFreelancerPaymentRequestsCommand.class);
-        commands.put("GetPaymentRequest", GetPaymentRequestCommand.class);
-        commands.put("PayPaymentRequest", PayPaymentRequestCommand.class);
+  @Autowired
+  private PaymentTransactionRepository paymentTransactionRepository;
 
-        /* PaymentTransaction commands */
-        commands.put("GetClientPaymentTransactions", GetClientPaymentTransactionsCommand.class);
-        commands.put("GetFreelancerPaymentTransactions", GetFreelancerPaymentTransactionsCommand.class);
+  @Autowired
+  private WalletRepository walletRepository;
 
-        /* Wallet commands */
-        commands.put("CreateWallet", CreateWalletCommand.class);
-        commands.put("GetWallet", GetWalletCommand.class);
+  @Autowired
+  private WalletTransactionRepository walletTransactionRepository;
 
-        /* WalletTransaction commands */
-        commands.put("CreateWalletTransaction", CreateWalletTransactionCommand.class);
-        commands.put("GetWalletTransaction", GetWalletTransactionCommand.class);
-        commands.put("GetWalletTransactions", GetWalletTransactionsCommand.class);
-        commands.put("WithdrawFromWallet", WithdrawFromWalletCommand.class);
-    }
+  public void registerCommands() {
+    /* PaymentRequest commands */
+    commands.put("CreatePaymentRequest", CreatePaymentRequestCommand.class);
+    commands.put("GetClientPaymentRequests", GetClientPaymentRequestsCommand.class);
+    commands.put(
+      "GetFreelancerPaymentRequests",
+      GetFreelancerPaymentRequestsCommand.class
+    );
+    commands.put("GetPaymentRequest", GetPaymentRequestCommand.class);
+    commands.put("PayPaymentRequest", PayPaymentRequestCommand.class);
 
-    @Override
-    public void setupCommand(PaymentCommand<? extends CommandRequest, ? extends CommandResponse> command) {
-        command.setPaymentRequestRepository(paymentRequestRepository);
-        command.setPaymentTransactionRepository(paymentTransactionRepository);
-        command.setWalletRepository(walletRepository);
-        command.setWalletTransactionRepository(walletTransactionRepository);
-    }
+    /* PaymentTransaction commands */
+    commands.put(
+      "GetClientPaymentTransactions",
+      GetClientPaymentTransactionsCommand.class
+    );
+    commands.put(
+      "GetFreelancerPaymentTransactions",
+      GetFreelancerPaymentTransactionsCommand.class
+    );
+
+    /* Wallet commands */
+    commands.put("CreateWallet", CreateWalletCommand.class);
+    commands.put("GetWallet", GetWalletCommand.class);
+
+    /* WalletTransaction commands */
+    commands.put("CreateWalletTransaction", CreateWalletTransactionCommand.class);
+    commands.put("GetWalletTransaction", GetWalletTransactionCommand.class);
+    commands.put("GetWalletTransactions", GetWalletTransactionsCommand.class);
+    commands.put("WithdrawFromWallet", WithdrawFromWalletCommand.class);
+  }
+
+  @Override
+  public void setupCommand(
+    PaymentCommand<? extends CommandRequest, ? extends CommandResponse> command
+  ) {
+    command.setPaymentRequestRepository(paymentRequestRepository);
+    command.setPaymentTransactionRepository(paymentTransactionRepository);
+    command.setWalletRepository(walletRepository);
+    command.setWalletTransactionRepository(walletTransactionRepository);
+  }
 }

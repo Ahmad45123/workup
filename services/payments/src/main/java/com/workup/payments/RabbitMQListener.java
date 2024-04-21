@@ -10,9 +10,8 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = "paymentsqueue")
 public class RabbitMQListener {
 
-    @Autowired
-    public PaymentCommandMap commandMap;
-
-    // TODO: Implement receive method for each command
+  @Autowired
+  public PaymentCommandMap commandMap;
+  // TODO: Implement receive method for each command
 
 }

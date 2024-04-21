@@ -8,19 +8,24 @@ import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletT
 import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionResponse;
 import com.workup.shared.enums.HttpStatusCode;
 
-public class GetWalletTransactionCommand extends PaymentCommand<GetWalletTransactionRequest, GetWalletTransactionResponse> {
+public class GetWalletTransactionCommand
+  extends PaymentCommand<GetWalletTransactionRequest, GetWalletTransactionResponse> {
 
-    @Override
-    public GetWalletTransactionResponse Run(GetWalletTransactionRequest request) {
-        WalletTransaction savedTransaction = getWalletTransactionRepository().findByWalletId(request.getWalletTransactionId());
+  @Override
+  public GetWalletTransactionResponse Run(GetWalletTransactionRequest request) {
+    WalletTransaction savedTransaction = getWalletTransactionRepository()
+      .findByWalletId(request.getWalletTransactionId());
 
-        WalletTransactionDTO walletTransactionDTO = WalletTransactionMapper.mapToWalletTransactionDTO(savedTransaction);
+    WalletTransactionDTO walletTransactionDTO = WalletTransactionMapper.mapToWalletTransactionDTO(
+      savedTransaction
+    );
 
-        System.out.println("[x] Wallet transaction fetched : " + walletTransactionDTO);
+    System.out.println("[x] Wallet transaction fetched : " + walletTransactionDTO);
 
-        return GetWalletTransactionResponse.builder()
-                .withStatusCode(HttpStatusCode.OK)
-                .withTransaction(walletTransactionDTO)
-                .build();
-    }
+    return GetWalletTransactionResponse
+      .builder()
+      .withStatusCode(HttpStatusCode.OK)
+      .withTransaction(walletTransactionDTO)
+      .build();
+  }
 }
