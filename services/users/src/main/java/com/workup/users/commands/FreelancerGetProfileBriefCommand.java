@@ -19,6 +19,7 @@ public class FreelancerGetProfileBriefCommand
         }
 
         return FreelancerGetProfileBriefResponse.builder()
+                .withSuccess(true)
                 .withEmail(freelancer.get().getEmail())
                 .withFull_name(freelancer.get().getFull_name())
                 .build();

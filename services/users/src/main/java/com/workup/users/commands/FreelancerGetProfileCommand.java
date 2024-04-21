@@ -16,7 +16,7 @@ public class FreelancerGetProfileCommand
 
         }
 
-        return FreelancerGetProfileResponse.builder().withBirth_date(freelancer.get().getBirthdate())
+        return FreelancerGetProfileResponse.builder().withSuccess(true).withBirth_date(freelancer.get().getBirthdate())
                 .withCity(freelancer.get().getCity()).withDescription(freelancer.get().getDescription())
                 .withEmail(freelancer.get().getEmail()).withFull_name(freelancer.get().getFull_name())
                 .withJob_title(freelancer.get().getJob_title()).withLanguages(freelancer.get().getLanguages())

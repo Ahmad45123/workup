@@ -21,6 +21,7 @@ public class FreelancerSetResumeCommand
                     .build();
         }
         return FreelancerSetResumeResponse.builder()
+                .withSuccess(true)
                 .build();
 
     }

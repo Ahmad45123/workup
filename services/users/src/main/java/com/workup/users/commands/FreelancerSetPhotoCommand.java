@@ -21,6 +21,7 @@ public class FreelancerSetPhotoCommand
                     .build();
         }
         return FreelancerSetPhotoResponse.builder()
+                .withSuccess(true)
                 .build();
 
     }

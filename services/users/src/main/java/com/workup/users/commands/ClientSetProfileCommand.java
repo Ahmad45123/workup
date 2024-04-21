@@ -13,7 +13,7 @@ public class ClientSetProfileCommand
         Client client;
 
         if (request.user_id == null) {
-            client = Client.builder().withId(null).build();
+            client = Client.builder().build();
         } else {
             Optional<Client> clientOption = clientRepository.findById(request.user_id);
             if (!clientOption.isPresent()) {
@@ -43,7 +43,8 @@ public class ClientSetProfileCommand
 
         clientRepository.save(client);
 
-        return ClientSetProfileResponse.builder().withSuccess(true)
+        return ClientSetProfileResponse.builder()
+                .withSuccess(true)
                 .build();
 
     }

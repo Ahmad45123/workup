@@ -2,13 +2,11 @@ package com.workup.users.commands;
 
 import java.util.Base64;
 import java.util.Optional;
-import java.util.UUID;
 
 import com.workup.users.db.Client;
 
 public class FreelancerGetPhotoCommand
         extends UserCommand<FreelancerGetPhotoRequest, FreelancerGetPhotoResponse> {
-
 
     @Override
     public FreelancerGetPhotoResponse Run(FreelancerGetPhotoRequest request) {
@@ -33,6 +31,7 @@ public class FreelancerGetPhotoCommand
         String base64Encoded = Base64.getEncoder().encodeToString(bytesArr);
 
         return FreelancerGetPhotoResponse.builder()
+                .withSuccess(true)
                 .withPhotoEncoded(base64Encoded)
                 .build();
 

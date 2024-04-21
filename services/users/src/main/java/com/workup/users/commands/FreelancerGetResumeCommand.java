@@ -9,7 +9,6 @@ import com.workup.users.db.Client;
 public class FreelancerGetResumeCommand
         extends UserCommand<FreelancerGetResumeRequest, FreelancerGetResumeResponse> {
 
-
     @Override
     public FreelancerGetResumeResponse Run(FreelancerGetResumeRequest request) {
         Optional<Client> clientOptional = clientRepository.findById(request.user_id);
@@ -33,6 +32,7 @@ public class FreelancerGetResumeCommand
         String base64Encoded = Base64.getEncoder().encodeToString(bytesArr);
 
         return FreelancerGetResumeResponse.builder()
+                .withSuccess(true)
                 .withResumeEncoded(base64Encoded)
                 .build();
 

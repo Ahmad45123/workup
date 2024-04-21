@@ -43,7 +43,8 @@ public class FreelancerSetProfileCommand
 
         freelancerRepository.save(freelancer);
 
-        return FreelancerSetProfileResponse.builder().withSuccess(true)
+        return FreelancerSetProfileResponse.builder()
+                .withSuccess(true)
                 .build();
 
     }

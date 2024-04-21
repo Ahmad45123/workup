@@ -18,6 +18,7 @@ public class ClientGetProfileCommand
         Client client = clientOptional.get();
 
         return ClientGetProfileResponse.builder()
+                .withSuccess(true)
                 .withName(client.getClient_name())
                 .withEmail(client.getEmail())
                 .withCity(client.getCity())
