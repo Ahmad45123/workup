@@ -111,4 +111,19 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>github_action</id>
+            <activation>
+                <property>
+                    <name>env.GITHUB_ACTIONS</name>
+                </property>
+            </activation>
+            <properties>
+                <!-- But in our CI environment we want to validate that code is formatted -->
+                <plugin.prettier.goal>check</plugin.prettier.goal>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>
