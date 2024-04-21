@@ -15,6 +15,7 @@
     <description>payments</description>
     <properties>
         <java.version>21</java.version>
+        <plugin.prettier.goal>write</plugin.prettier.goal>
     </properties>
     <dependencies>
         <dependency>
@@ -31,6 +32,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.amqp</groupId>
@@ -76,7 +81,49 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.hubspot.maven.plugins</groupId>
+                <artifactId>prettier-maven-plugin</artifactId>
+                <version>0.22</version>
+                <configuration>
+                    <prettierJavaVersion>2.0.0</prettierJavaVersion>
+                    <printWidth>90</printWidth>
+                    <tabWidth>2</tabWidth>
+                    <useTabs>false</useTabs>
+                    <ignoreConfigFile>true</ignoreConfigFile>
+                    <ignoreEditorConfig>true</ignoreEditorConfig>
+                    <!-- Use <inputGlobs> to override the default input patterns -->
+                    <inputGlobs>
+                        <!-- These are the default patterns, you can omit <inputGlobs> entirely unless you want to override them -->
+                        <inputGlob>src/main/java/**/*.java</inputGlob>
+                        <inputGlob>src/test/java/**/*.java</inputGlob>
+                    </inputGlobs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>${plugin.prettier.goal}</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>github_action</id>
+            <activation>
+                <property>
+                    <name>env.GITHUB_ACTIONS</name>
+                </property>
+            </activation>
+            <properties>
+                <!-- But in our CI environment we want to validate that code is formatted -->
+                <plugin.prettier.goal>check</plugin.prettier.goal>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>
