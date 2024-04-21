@@ -12,7 +12,7 @@ public class FreelancerGetProfileCommand
         Optional<Freelancer> freelancer = freelancerRepository.findById(request.user_id);
 
         if (!freelancer.isPresent()) {
-            return null;
+            return FreelancerGetProfileResponse.builder().withSuccess(false).build();
 
         }
 

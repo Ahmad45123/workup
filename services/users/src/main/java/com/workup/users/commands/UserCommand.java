@@ -5,9 +5,15 @@ import com.workup.users.repositories.ClientRepository;
 import com.workup.users.repositories.ExperienceRepository;
 import com.workup.users.repositories.FreelancerRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+
 import lombok.Setter;
 
-public abstract class UserCommand<T extends com.workup.shared.commands.CommandRequest, Q extends com.workup.shared.commands.CommandResponse> implements Command<T, Q> {
+public abstract class UserCommand<T extends com.workup.shared.commands.CommandRequest, Q extends com.workup.shared.commands.CommandResponse>
+        implements Command<T, Q> {
+
+    static final String PHOTO_BUCKET = "photos:";
 
     @Setter
     FreelancerRepository freelancerRepository;
@@ -17,4 +23,7 @@ public abstract class UserCommand<T extends com.workup.shared.commands.CommandRe
 
     @Setter
     ClientRepository clientRepository;
+
+    @Autowired
+    GridFsTemplate gridFsTemplate;
 }

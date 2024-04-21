@@ -12,7 +12,7 @@ public class ClientGetProfileCommand
         Optional<Client> clientOptional = clientRepository.findById(request.user_id);
 
         if (!clientOptional.isPresent()) {
-            return null;
+            return ClientGetProfileResponse.builder().withSuccess(false).build();
         }
 
         Client client = clientOptional.get();
