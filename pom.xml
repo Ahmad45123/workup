@@ -19,6 +19,7 @@
         <module>services/jobs</module>
         <module>services/payments</module>
         <module>services/users</module>
+        <module>services/contracts</module>
     </modules>
 
 </project>
