@@ -13,13 +13,13 @@ public class GetWalletTransactionCommand
 
   @Override
   public GetWalletTransactionResponse Run(GetWalletTransactionRequest request) {
-      if (!getWalletTransactionRepository().existsById(request.getWalletTransactionId())) {
-        return GetWalletTransactionResponse
-            .builder()
-            .withStatusCode(HttpStatusCode.NOT_FOUND)
-            .withErrorMessage("Wallet transaction not found")
-            .build();
-      }
+    if (!getWalletTransactionRepository().existsById(request.getWalletTransactionId())) {
+      return GetWalletTransactionResponse
+        .builder()
+        .withStatusCode(HttpStatusCode.NOT_FOUND)
+        .withErrorMessage("Wallet transaction not found")
+        .build();
+    }
     WalletTransaction savedTransaction = getWalletTransactionRepository()
       .findByWalletId(request.getWalletTransactionId());
 

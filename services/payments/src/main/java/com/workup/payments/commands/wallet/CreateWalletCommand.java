@@ -11,13 +11,13 @@ public class CreateWalletCommand
 
   @Override
   public CreateWalletResponse Run(CreateWalletRequest request) {
-      if (getWalletRepository().existsById(request.getFreelancerId())) {
-        return CreateWalletResponse
-            .builder()
-            .withStatusCode(HttpStatusCode.BAD_REQUEST)
-            .withErrorMessage("Wallet already exists")
-            .build();
-      }
+    if (getWalletRepository().existsById(request.getFreelancerId())) {
+      return CreateWalletResponse
+        .builder()
+        .withStatusCode(HttpStatusCode.BAD_REQUEST)
+        .withErrorMessage("Wallet already exists")
+        .build();
+    }
     Wallet wallet = Wallet.builder().withFreelancerId(request.getFreelancerId()).build();
     try {
       Wallet savedWallet = getWalletRepository().save(wallet);

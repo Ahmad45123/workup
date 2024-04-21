@@ -4,7 +4,6 @@ import com.workup.shared.enums.payments.PaymentRequestStatus;
 import jakarta.persistence.*;
 import java.util.Date;
 import javax.validation.constraints.DecimalMin;
-
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -49,7 +48,16 @@ public class PaymentRequest {
   @Column(name = "updated_at", nullable = false)
   private Date updatedAt;
 
-  public PaymentRequest(String id, String freelancerId, String clientId, double amount, String description, PaymentRequestStatus status, Date createdAt, Date updatedAt) {
+  public PaymentRequest(
+    String id,
+    String freelancerId,
+    String clientId,
+    double amount,
+    String description,
+    PaymentRequestStatus status,
+    Date createdAt,
+    Date updatedAt
+  ) {
     this.id = id;
     this.freelancerId = freelancerId;
     this.clientId = clientId;

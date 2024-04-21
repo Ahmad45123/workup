@@ -1,10 +1,9 @@
 package com.workup.shared.commands.payments.dto;
 
 import com.workup.shared.enums.payments.PaymentRequestStatus;
+import java.util.Date;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
-
-import java.util.Date;
 
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
