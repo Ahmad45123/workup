@@ -9,5 +9,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class PayPaymentRequestRequest extends CommandRequest {
-    private final String paymentRequestId;
+
+  private final String paymentRequestId;
 }
