@@ -4,5 +4,5 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder(setterPrefix = "with")
 public abstract class CommandResponse {
-    public boolean success;
+    public boolean success = true;
 }
