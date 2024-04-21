@@ -6,7 +6,7 @@ import java.util.Date;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder(setterPrefix = "with")
-@JsonDeserialize
+@Jacksonized
 public class PaymentTransactionDTO {
 
   private String id;
