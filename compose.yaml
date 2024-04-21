@@ -5,6 +5,11 @@ services:
   # ----- GENERAL SERVICES -------
   service_mq:
     image: rabbitmq:3.13-management
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
     networks:
       - microservices
     ports:
@@ -18,7 +23,7 @@ services:
       jobs_db:
         condition: service_healthy
       service_mq:
-        condition: service_started
+        condition: service_healthy
     networks:
       - microservices
       - jobs
@@ -27,10 +32,12 @@ services:
     image: cassandra:4.0.7
     networks:
       - jobs # only accessible by the jobs service
+    volumes:
+      - ./services/jobs/cassandra-config/cassandra.yaml:/etc/cassandra/cassandra.yaml
     healthcheck:
       test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
-      interval: 5s
-      timeout: 5s
+      interval: 20s
+      timeout: 10s
       retries: 60
     ports:
       - "9042:9042"

@@ -18,5 +18,4 @@ public class CreateJobRequest extends CommandRequest {
     private final double budget;
     private final String[] skills;
     private final Experience experience;
-    private final String clientId;
 }
