@@ -7,6 +7,7 @@ import com.workup.payments.models.Wallet;
 import com.workup.payments.models.WalletTransaction;
 import com.workup.shared.commands.payments.paymentrequest.requests.PayPaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.PayPaymentRequestResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.payments.PaymentRequestStatus;
 import com.workup.shared.enums.payments.PaymentTransactionStatus;
 import com.workup.shared.enums.payments.WalletTransactionType;
@@ -22,7 +23,8 @@ public class PayPaymentRequestCommand extends PaymentCommand<PayPaymentRequestRe
         Optional<PaymentRequest> paymentRequest = getPaymentRequestRepository().findById(request.getPaymentRequestId());
         if (paymentRequest.isEmpty()) {
             return PayPaymentRequestResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.NOT_FOUND)
+                    .withErrorMessage("Payment request not found")
                     .withTransactionId(null)
                     .withTransactionStatus(null)
                     .build();
@@ -62,7 +64,7 @@ public class PayPaymentRequestCommand extends PaymentCommand<PayPaymentRequestRe
                 // TODO: Handle freelancer wallet not found
             }
             return PayPaymentRequestResponse.builder()
-                    .withSuccess(true)
+                    .withStatusCode(HttpStatusCode.OK)
                     .withTransactionId(savedPaymentTransaction.getId())
                     .withTransactionStatus(PaymentTransactionStatus.SUCCESS)
                     .build();
@@ -70,7 +72,8 @@ public class PayPaymentRequestCommand extends PaymentCommand<PayPaymentRequestRe
             System.out.println("[x] Payment request failed : " + e.getMessage());
             // TODO: Handle payment transaction failure (Retry mechanism ?)
             return PayPaymentRequestResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                    .withErrorMessage("An error occurred while paying payment request")
                     .withTransactionId(null)
                     .withTransactionStatus(null)
                     .build();

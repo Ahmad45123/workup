@@ -6,6 +6,7 @@ import com.workup.payments.models.PaymentRequest;
 import com.workup.shared.commands.payments.dto.PaymentRequestDTO;
 import com.workup.shared.commands.payments.paymentrequest.requests.GetPaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.GetPaymentRequestResponse;
+import com.workup.shared.enums.HttpStatusCode;
 
 import java.util.Optional;
 
@@ -17,7 +18,8 @@ public class GetPaymentRequestCommand extends PaymentCommand<GetPaymentRequestRe
 
         if (savedPaymentRequest.isEmpty()) {
             return GetPaymentRequestResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.NOT_FOUND)
+                    .withErrorMessage("Payment request not found")
                     .withRequest(null)
                     .build();
         }
@@ -27,7 +29,7 @@ public class GetPaymentRequestCommand extends PaymentCommand<GetPaymentRequestRe
         PaymentRequestDTO paymentRequestDTO = PaymentRequestMapper.mapToPaymentRequestDTO(savedPaymentRequest.get());
 
         return GetPaymentRequestResponse.builder()
-                .withSuccess(true)
+                .withStatusCode(HttpStatusCode.OK)
                 .withRequest(paymentRequestDTO)
                 .build();
     }

@@ -5,6 +5,7 @@ import com.workup.payments.models.Wallet;
 import com.workup.payments.models.WalletTransaction;
 import com.workup.shared.commands.payments.wallettransaction.requests.WithdrawFromWalletRequest;
 import com.workup.shared.commands.payments.wallettransaction.responses.WithdrawFromWalletResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.payments.WalletTransactionType;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +23,22 @@ public class WithdrawFromWalletCommand extends PaymentCommand<WithdrawFromWallet
         String description = request.getDescription();
 
         Optional<Wallet> wallet = getWalletRepository().findById(request.getFreelancerId());
-        if (wallet.isEmpty() || amount <= 0 || wallet.get().getBalance() < amount) {
+        if (wallet.isEmpty()) {
             return WithdrawFromWalletResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.NOT_FOUND)
+                    .withErrorMessage("Wallet not found")
+                    .build();
+        }
+        if (amount <= 0) {
+            return WithdrawFromWalletResponse.builder()
+                    .withStatusCode(HttpStatusCode.BAD_REQUEST)
+                    .withErrorMessage("Amount must be greater than 0")
+                    .build();
+        }
+        if (wallet.get().getBalance() < amount) {
+            return WithdrawFromWalletResponse.builder()
+                    .withStatusCode(HttpStatusCode.BAD_REQUEST)
+                    .withErrorMessage("Insufficient balance")
                     .build();
         }
         wallet.get().setBalance(wallet.get().getBalance() - amount);
@@ -45,12 +59,13 @@ public class WithdrawFromWalletCommand extends PaymentCommand<WithdrawFromWallet
             System.out.println("[x] Wallet transaction created : " + walletTransaction);
 
             return WithdrawFromWalletResponse.builder()
-                    .withSuccess(true)
+                    .withStatusCode(HttpStatusCode.OK)
                     .withBalance(wallet.get().getBalance())
                     .build();
         } catch (Exception e) {
             return WithdrawFromWalletResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+                    .withErrorMessage("An error occurred while withdrawing from wallet")
                     .build();
         }
     }

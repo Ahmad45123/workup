@@ -6,6 +6,7 @@ import com.workup.payments.models.PaymentTransaction;
 import com.workup.shared.commands.payments.dto.PaymentTransactionDTO;
 import com.workup.shared.commands.payments.paymenttransaction.requests.GetFreelancerPaymentTransactionsRequest;
 import com.workup.shared.commands.payments.paymenttransaction.responses.GetFreelancerPaymentTransactionsResponse;
+import com.workup.shared.enums.HttpStatusCode;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class GetFreelancerPaymentTransactionsCommand extends PaymentCommand<GetF
         System.out.println("[x] Payment transactions fetched : " + paymentTransactionDTOS);
 
         return GetFreelancerPaymentTransactionsResponse.builder()
-                .withSuccess(true)
+                .withStatusCode(HttpStatusCode.OK)
                 .withTransactions(paymentTransactionDTOS)
                 .build();
     }

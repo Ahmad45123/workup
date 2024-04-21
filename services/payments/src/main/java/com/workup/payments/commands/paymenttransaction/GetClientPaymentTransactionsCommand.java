@@ -6,6 +6,7 @@ import com.workup.payments.models.PaymentTransaction;
 import com.workup.shared.commands.payments.dto.PaymentTransactionDTO;
 import com.workup.shared.commands.payments.paymenttransaction.requests.GetClientPaymentTransactionsRequest;
 import com.workup.shared.commands.payments.paymenttransaction.responses.GetClientPaymentTransactionsResponse;
+import com.workup.shared.enums.HttpStatusCode;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class GetClientPaymentTransactionsCommand extends PaymentCommand<GetClien
         System.out.println("[x] Payment transactions fetched : " + paymentTransactionDTOS);
 
         return GetClientPaymentTransactionsResponse.builder()
-                .withSuccess(true)
+                .withStatusCode(HttpStatusCode.OK)
                 .withTransactions(paymentTransactionDTOS)
                 .build();
     }
