@@ -10,6 +10,7 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class PayPaymentRequestResponse extends CommandResponse {
-    private final String transactionId;
-    private final PaymentTransactionStatus transactionStatus;
+
+  private final String transactionId;
+  private final PaymentTransactionStatus transactionStatus;
 }

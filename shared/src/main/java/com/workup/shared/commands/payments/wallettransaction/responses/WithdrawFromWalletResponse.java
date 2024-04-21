@@ -9,5 +9,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class WithdrawFromWalletResponse extends CommandResponse {
-    private final double balance;
+
+  private final double balance;
 }

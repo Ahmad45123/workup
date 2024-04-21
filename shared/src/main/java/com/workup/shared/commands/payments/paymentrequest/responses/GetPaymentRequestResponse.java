@@ -10,5 +10,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class GetPaymentRequestResponse extends CommandResponse {
-    private final PaymentRequestDTO request;
+
+  private final PaymentRequestDTO request;
 }

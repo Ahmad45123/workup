@@ -9,8 +9,9 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class WithdrawFromWalletRequest extends CommandRequest {
-    private final String freelancerId;
-    private final double amount;
-    private final String paymentTransactionId;
-    private final String description;
+
+  private final String freelancerId;
+  private final double amount;
+  private final String paymentTransactionId;
+  private final String description;
 }

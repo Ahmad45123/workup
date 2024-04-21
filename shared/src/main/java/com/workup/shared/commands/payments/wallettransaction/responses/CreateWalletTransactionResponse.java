@@ -9,5 +9,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class CreateWalletTransactionResponse extends CommandResponse {
-    private final String walletTransactionId;
+
+  private final String walletTransactionId;
 }
