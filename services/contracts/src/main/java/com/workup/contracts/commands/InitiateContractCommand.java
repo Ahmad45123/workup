@@ -5,6 +5,7 @@ import com.workup.contracts.models.ContractMilestone;
 import com.workup.shared.commands.contracts.Milestone;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.contracts.ContractState;
 import com.workup.shared.enums.contracts.MilestoneState;
 
@@ -64,12 +65,14 @@ public class InitiateContractCommand extends ContractCommand<InitiateContractReq
             System.out.println(" [x] Saved All Milestones '" + savedContract.getJobTitle()) ;
 
             return InitiateContractResponse.builder()
-                    .withSuccess(true)
+                    .withStatusCode(HttpStatusCode.CREATED)
+                    .withErrorMessage("")
                     .build();
         }catch(Exception e){
             e.printStackTrace();
             return InitiateContractResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.BAD_REQUEST)
+                    .withErrorMessage(e.getMessage())
                     .build();
         }
 

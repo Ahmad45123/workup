@@ -33,7 +33,7 @@ public class InitiateContractTests {
         InitiateContractResponse resp = (InitiateContractResponse) template.convertSendAndReceive("contractsqueue", initiateContractRequest);
 
         assert resp != null : "InitiateContractTest1 Response was null";
-        System.out.println("Response success output: " + resp.success);
+        System.out.println("Response success output: " + resp.getStatusCode() + " " + resp.getErrorMessage());
         System.out.println("[x] Finished InitiateContractTest1...");
     }
 
