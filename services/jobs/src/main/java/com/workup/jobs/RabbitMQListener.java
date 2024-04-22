@@ -70,9 +70,12 @@ public class RabbitMQListener {
   }
 
   @RabbitHandler
-  public GetProposalsByJobIdResponse receive(GetProposalsByJobIdRequest request) throws Exception {
+  public GetProposalsByJobIdResponse receive(GetProposalsByJobIdRequest request)
+    throws Exception {
     GetProposalsByJobIdResponse response =
-      ((GetProposalsByJobIdCommand) commandMap.getCommand("GetProposalsByJobId")).Run(request);
+      ((GetProposalsByJobIdCommand) commandMap.getCommand("GetProposalsByJobId")).Run(
+          request
+        );
     return response;
   }
 }
