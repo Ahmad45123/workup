@@ -1,11 +1,12 @@
 package com.workup.jobs;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workup.jobs.commands.*;
 import com.workup.shared.commands.jobs.proposals.requests.AcceptProposalRequest;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
+import com.workup.shared.commands.jobs.proposals.requests.GetProposalsByJobIdRequest;
 import com.workup.shared.commands.jobs.proposals.responses.AcceptProposalResponse;
 import com.workup.shared.commands.jobs.proposals.responses.CreateProposalResponse;
+import com.workup.shared.commands.jobs.proposals.responses.GetProposalsByJobIdResponse;
 import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 import com.workup.shared.commands.jobs.requests.GetJobByIdRequest;
 import com.workup.shared.commands.jobs.requests.GetMyJobsRequest;
@@ -65,6 +66,13 @@ public class RabbitMQListener {
   public AcceptProposalResponse receive(AcceptProposalRequest request) throws Exception {
     AcceptProposalResponse response =
       ((AcceptProposalCommand) commandMap.getCommand("AcceptProposal")).Run(request);
+    return response;
+  }
+
+  @RabbitHandler
+  public GetProposalsByJobIdResponse receive(GetProposalsByJobIdRequest request) throws Exception {
+    GetProposalsByJobIdResponse response =
+      ((GetProposalsByJobIdCommand) commandMap.getCommand("GetProposalsByJobId")).Run(request);
     return response;
   }
 }
