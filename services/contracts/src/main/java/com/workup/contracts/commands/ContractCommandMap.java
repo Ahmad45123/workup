@@ -26,6 +26,7 @@ public class ContractCommandMap
     commands.put("InitiateContract", InitiateContractCommand.class);
     commands.put("RequestContractTermination", RequestContractTerminationCommand.class);
     commands.put("HandleTerminationRequest", HandleTerminationRequestCommand.class);
+    commands.put("PrintContract", PrintContractCommand.class);
     // NEW_COMMAND_BOILERPLATE
   }
 

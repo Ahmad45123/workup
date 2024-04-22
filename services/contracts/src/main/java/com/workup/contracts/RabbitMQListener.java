@@ -4,12 +4,15 @@ import com.workup.contracts.commands.ContractCommandMap;
 import com.workup.contracts.commands.HandleTerminationRequestCommand;
 import com.workup.contracts.commands.InitiateContractCommand;
 import com.workup.contracts.commands.RequestContractTerminationCommand;
+import com.workup.contracts.commands.PrintContractCommand;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.HandleTerminationRequest;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
+import com.workup.shared.commands.contracts.requests.PrintContractRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
+import com.workup.shared.commands.contracts.responses.PrintContractResponse;
 import com.workup.shared.commands.jobs.responses.CreateJobResponse;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -45,6 +48,13 @@ public class RabbitMQListener {
     return (
       (HandleTerminationRequestCommand) commandMap.getCommand("HandleTerminationRequest")
     ).Run(in);
+  }
+
+  @RabbitHandler
+  public PrintContractResponse receive(PrintContractRequest in) throws Exception {
+    PrintContractResponse response =
+      ((PrintContractCommand) commandMap.getCommand("PrintContract")).Run(in);
+    return response;
   }
   // NEW_COMMAND_BOILERPLATE
 
