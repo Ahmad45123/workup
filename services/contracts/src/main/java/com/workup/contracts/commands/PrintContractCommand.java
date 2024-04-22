@@ -36,7 +36,7 @@ public class PrintContractCommand
       .builder()
       .withStatusCode(HttpStatusCode.FOUND)
       .withErrorMessage("No Termination Requests Found")
-      .withContractFileLink(contractString)
+      .withFormatedContractDetails(contractString)
       .build();
   }
 
