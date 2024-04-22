@@ -12,5 +12,5 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class PrintContractResponse extends CommandResponse {
 
-  private final String contractFileLink;
+  private final String formatedContractDetails;
 }
