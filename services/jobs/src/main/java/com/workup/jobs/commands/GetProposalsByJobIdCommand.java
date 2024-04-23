@@ -59,7 +59,11 @@ public class GetProposalsByJobIdCommand
             .build()
         );
       }
-      return GetProposalsByJobIdResponse.builder().withProposals(proposals).build();
+      return GetProposalsByJobIdResponse
+        .builder()
+        .withProposals(proposals)
+        .withStatusCode(HttpStatusCode.OK)
+        .build();
     } catch (Exception e) {
       return GetProposalsByJobIdResponse
         .builder()
