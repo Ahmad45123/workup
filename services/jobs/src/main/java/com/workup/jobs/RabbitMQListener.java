@@ -1,11 +1,21 @@
 package com.workup.jobs;
 
-import com.workup.jobs.commands.*;
+import com.workup.jobs.commands.AcceptProposalCommand;
+import com.workup.jobs.commands.CreateJobCommand;
+import com.workup.jobs.commands.CreateProposalCommand;
+import com.workup.jobs.commands.GetJobByIdCommand;
+import com.workup.jobs.commands.GetMyJobsCommand;
+import com.workup.jobs.commands.GetMyProposalsCommand;
+import com.workup.jobs.commands.GetProposalsByJobIdCommand;
+import com.workup.jobs.commands.JobCommandMap;
+import com.workup.jobs.commands.SearchJobsCommand;
 import com.workup.shared.commands.jobs.proposals.requests.AcceptProposalRequest;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
+import com.workup.shared.commands.jobs.proposals.requests.GetMyProposalsRequest;
 import com.workup.shared.commands.jobs.proposals.requests.GetProposalsByJobIdRequest;
 import com.workup.shared.commands.jobs.proposals.responses.AcceptProposalResponse;
 import com.workup.shared.commands.jobs.proposals.responses.CreateProposalResponse;
+import com.workup.shared.commands.jobs.proposals.responses.GetMyProposalsResponse;
 import com.workup.shared.commands.jobs.proposals.responses.GetProposalsByJobIdResponse;
 import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 import com.workup.shared.commands.jobs.requests.GetJobByIdRequest;
@@ -76,6 +86,13 @@ public class RabbitMQListener {
       ((GetProposalsByJobIdCommand) commandMap.getCommand("GetProposalsByJobId")).Run(
           request
         );
+    return response;
+  }
+
+  @RabbitHandler
+  public GetMyProposalsResponse receive(GetMyProposalsRequest request) throws Exception {
+    GetMyProposalsResponse response =
+      ((GetMyProposalsCommand) commandMap.getCommand("GetMyProposals")).Run(request);
     return response;
   }
 }

@@ -29,6 +29,7 @@ public class JobCommandMap
     commands.put("GetMyJobs", GetMyJobsCommand.class);
     commands.put("AcceptProposal", AcceptProposalCommand.class);
     commands.put("GetProposalsByJobId", GetProposalsByJobIdCommand.class);
+    commands.put("GetMyProposals", GetMyProposalsCommand.class);
   }
 
   @Override
