@@ -1,5 +1,6 @@
 package com.workup.contracts.tests;
 
+import com.workup.contracts.repositories.ContractRepository;
 import com.workup.shared.commands.contracts.Milestone;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
@@ -75,7 +76,57 @@ public class RequestContractTerminationTests {
                 .build();
         ContractTerminationResponse response = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
         assert Objects.requireNonNull(response).getErrorMessage().equals("The requester is not a part of the contract");
-        System.out.println(" [x] UnAuthorized TerminationRequest has Passed");
+        System.out.println(" [x] UnAuthorized TerminationRequest Test has Passed");
         System.out.println("[x] Finished RequestContractTermination Unauthorized Termination Request test .....");
+    }
+
+    //TODO: Make a test for the inActive contract (But we don't have a contract status update now)
+
+    public void requestedBeforeTest(AmqpTemplate template)
+    {
+        System.out.println("[ ] Running RequestContractTermination Requested Before Test .....");
+
+        //create a contract to exist there
+        Milestone milestone = Milestone
+                .builder()
+                .withDescription("make sure the students hate your admin system")
+                .withDueDate("2025-01-01")
+                .withAmount("30000")
+                .build();
+
+        List<Milestone> milestones = new ArrayList<>();
+        milestones.add(milestone);
+
+        String clientId = UUID.randomUUID().toString(), freelancerId = UUID.randomUUID().toString();
+        InitiateContractRequest initiateContractRequest = InitiateContractRequest
+                .builder()
+                .withClientId(clientId)
+                .withFreelancerId(freelancerId)
+                .withJobId("789")
+                .withProposalId("bruh")
+                .withJobTitle("very happy guc worker :)")
+                .withJobMilestones(milestones)
+                .build();
+        InitiateContractResponse contractResponse = (InitiateContractResponse) template.convertSendAndReceive(
+                "contractsqueue",
+                initiateContractRequest
+        );
+
+        assert contractResponse != null;
+
+        ContractTerminationRequest request = ContractTerminationRequest.builder().withContractId(contractResponse.getContractId()).withReason("M4 3agebny ana el 4o8l da")
+                .withUserId(UUID.randomUUID().toString()).build();
+
+        ContractTerminationResponse response = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+        assert response != null;
+
+        ContractTerminationRequest duplicateRequest = ContractTerminationRequest.builder().withContractId(contractResponse.getContractId()).withReason("M4 3agebny ana el 4o8l da")
+                .withUserId(UUID.randomUUID().toString()).build();
+
+        ContractTerminationResponse duplicateResponse = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+
+        assert Objects.requireNonNull(duplicateResponse).getErrorMessage().equals("Termination Request already exists");
+        System.out.println(" [x] RequestedBefore TerminationRequest has Passed");
+        System.out.println("[x] Finished RequestContractTermination Requested Before test .....");
     }
 }
