@@ -28,6 +28,7 @@ public class ContractsApplication {
       initiateContractTest1(template);
       RequestContractTerminationTests requestTerminationCommandTests = new RequestContractTerminationTests();
       requestTerminationCommandTests.contractNotFoundTest(template);
+      requestTerminationCommandTests.unAuthorizedRequestTest(template);
     };
   }
 
