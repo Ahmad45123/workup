@@ -2,6 +2,7 @@ package com.workup.contracts;
 
 import static com.workup.contracts.tests.InitiateContractTests.initiateContractTest1;
 
+import com.workup.contracts.tests.RequestContractTerminationTests;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -25,6 +26,8 @@ public class ContractsApplication {
 
       // Use below example function to test sending to the queue.
       initiateContractTest1(template);
+      RequestContractTerminationTests requestTerminationCommandTests = new RequestContractTerminationTests();
+      requestTerminationCommandTests.contractNotFoundTest(template);
     };
   }
 

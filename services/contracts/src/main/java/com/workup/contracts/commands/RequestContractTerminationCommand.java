@@ -5,6 +5,7 @@ import com.workup.contracts.models.TerminationRequest;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.enums.contracts.ContractState;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
 
 import java.util.Date;
@@ -25,6 +26,11 @@ public class RequestContractTerminationCommand
                     .withErrorMessage("The contract is not valid.")
                     .build();
         }
+        if(contract.get().getStatus() != ContractState.ACTIVE)
+            return ContractTerminationResponse.builder()
+                    .withStatusCode(HttpStatusCode.BAD_REQUEST)
+                    .withErrorMessage("The contract is not active anymore.")
+                    .build();
         //check that requester id is a part of the contract
         String freelancerId = contract.get().getFreelancerId();
         String clientId = contract.get().getClientId();
