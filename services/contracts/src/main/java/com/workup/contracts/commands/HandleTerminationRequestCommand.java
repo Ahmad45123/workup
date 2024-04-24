@@ -5,6 +5,7 @@ import com.workup.contracts.models.TerminationRequest;
 import com.workup.shared.commands.contracts.requests.HandleTerminationRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
+import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.contracts.ContractState;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
@@ -50,7 +51,7 @@ public class HandleTerminationRequestCommand
       return HandleTerminationResponse
         .builder()
         .withRequestStatus(updatedRequest.getStatus())
-        .withStatusCode(HttpStatusCode.ACCEPTED)
+        .withStatusCode(HttpStatusCode.OK)
         .withErrorMessage("")
         .build();
     } catch (Exception e) {
@@ -66,7 +67,7 @@ public class HandleTerminationRequestCommand
   private HandleTerminationResponse terminateContract(String contractId)
   {
       Optional<Contract> contract = contractRepository.findById(UUID.fromString(contractId));
-      if(contract.isEmpty())
+      if(contract.isEmpty() || contract.get().getStatus() != ContractState.ACTIVE)
         return HandleTerminationResponse
                 .builder()
                 .withStatusCode(HttpStatusCode.BAD_REQUEST)
