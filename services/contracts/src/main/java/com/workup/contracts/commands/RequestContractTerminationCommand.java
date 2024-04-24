@@ -59,7 +59,6 @@ public class RequestContractTerminationCommand
         );
         if (!existedRequests.isEmpty()) return ContractTerminationResponse
                 .builder()
-                .withRequestStatus(existedRequests.getFirst().getStatus())
                 .withStatusCode(HttpStatusCode.BAD_REQUEST)
                 .withErrorMessage("Termination Request already exists")
                 .build();
@@ -82,7 +81,7 @@ public class RequestContractTerminationCommand
 
             return ContractTerminationResponse
                     .builder()
-                    .withRequestStatus(savedRequest.getStatus())
+                    .withRequestId(savedRequest.getRequestId().toString())
                     .withStatusCode(HttpStatusCode.CREATED)
                     .withErrorMessage("")
                     .build();

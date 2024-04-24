@@ -36,6 +36,7 @@ public class ContractsApplication {
 
       HandleContractTerminationTests handleContractTerminationTests = new HandleContractTerminationTests();
       handleContractTerminationTests.requestNotFoundTest(template);
+      handleContractTerminationTests.successTest(template);
     };
   }
 

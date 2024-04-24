@@ -1,10 +1,18 @@
 package com.workup.contracts.tests;
 
+import com.workup.shared.commands.contracts.Milestone;
+import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.HandleTerminationRequest;
+import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
+import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
+import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
 import org.springframework.amqp.core.AmqpTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class HandleContractTerminationTests {
@@ -28,6 +36,66 @@ public class HandleContractTerminationTests {
         System.out.println("[x] Finished RequestContractTermination Request NotFound Test .....");
     }
 
+    //TODO: Add a test for checking if the contract is not active before applying termination AFTER HAVING ENDPOINT FOR UPDATING CONTRACT STATUS
+
+    public void successTest(AmqpTemplate template)
+    {
+        System.out.println("[ ] Running HandleContractTermination Success Test...");
+        // create a contract
+        Milestone milestone = Milestone
+                .builder()
+                .withDescription("make sure the students hate your admin system")
+                .withDueDate("2025-01-01")
+                .withAmount("30000")
+                .build();
+
+        List<Milestone> milestones = new ArrayList<>();
+        milestones.add(milestone);
+
+        String clientId = UUID.randomUUID().toString(), freelancerId = UUID.randomUUID().toString();
+        InitiateContractRequest initiateContractRequest = InitiateContractRequest
+                .builder()
+                .withClientId(clientId)
+                .withFreelancerId(freelancerId)
+                .withJobId("789")
+                .withProposalId("bruh")
+                .withJobTitle("very happy guc worker :)")
+                .withJobMilestones(milestones)
+                .build();
+        InitiateContractResponse contractResponse = (InitiateContractResponse) template.convertSendAndReceive(
+                "contractsqueue",
+                initiateContractRequest
+        );
+        assert contractResponse != null;
+
+        // create termination request
+        String terminationRequestID = UUID.randomUUID().toString();
+        ContractTerminationRequest terminationRequest = ContractTerminationRequest.builder()
+                .withUserId(clientId)
+                .withContractId(contractResponse.getContractId())
+                .withReason("M4 3agebni l 4o8l da")
+                .build();
+
+        ContractTerminationResponse terminationResponse = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", terminationRequest);
+        assert terminationResponse != null;
+
+        // check over the functionality
+        HandleTerminationRequest request = HandleTerminationRequest.builder()
+                .withChosenStatus(TerminationRequestStatus.ACCEPTED)
+                .withContractTerminationRequestId(terminationResponse.getRequestId())
+                .build();
+
+        HandleTerminationResponse response = (HandleTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+        assert response != null;
+        if(response.getStatusCode() == HttpStatusCode.OK)
+        {
+            System.out.println(" [x] Success Test has Passed");
+        }
+        else
+            System.out.println(" [x] Success Test has Failed");
+
+        System.out.println("[x] Finished RequestContractTermination Success Test .....");
+    }
 
 
 }
