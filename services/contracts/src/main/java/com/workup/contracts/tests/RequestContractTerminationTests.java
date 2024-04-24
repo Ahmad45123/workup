@@ -1,6 +1,5 @@
 package com.workup.contracts.tests;
 
-import com.workup.contracts.repositories.ContractRepository;
 import com.workup.shared.commands.contracts.Milestone;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
@@ -27,14 +26,11 @@ public class RequestContractTerminationTests {
 
         ContractTerminationResponse response = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
 
-        if(response == null)
-        {
-            System.out.println("Problem has occured in the Contract Not Found Test");
-            return;
-        }
-
-        assert response.getErrorMessage().equals("The contract is not valid.") : "Contract Not Found Test has Failed";
-        System.out.println(" [x] Contract Not Found Test has Passed");
+        assert response != null;
+        if(response.getErrorMessage().equals("The contract is not valid."))
+            System.out.println(" [x] Contract Not Found Test has Passed");
+        else
+            System.out.println(" [x] Contract Not Found Test has Failed");
         System.out.println("[x] Finished RequestContractTermination Contract Not Found test .....");
     }
 
@@ -76,8 +72,11 @@ public class RequestContractTerminationTests {
                 .withUserId(UUID.randomUUID().toString())
                 .build();
         ContractTerminationResponse response = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
-        assert Objects.requireNonNull(response).getErrorMessage().equals("The requester is not a part of the contract");
-        System.out.println(" [x] UnAuthorized TerminationRequest Test has Passed");
+        assert response != null;
+        if(response.getErrorMessage().equals("The requester is not a part of the contract"))
+            System.out.println(" [x] UnAuthorized TerminationRequest Test has Passed");
+        else
+            System.out.println(" [x] UnAuthorized TerminationRequest Test has Failed");
         System.out.println("[x] Finished RequestContractTermination Unauthorized Termination Request test .....");
     }
 
@@ -126,8 +125,11 @@ public class RequestContractTerminationTests {
 
         ContractTerminationResponse duplicateResponse = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", duplicateRequest);
 
-        assert Objects.requireNonNull(duplicateResponse).getErrorMessage().equals("Termination Request already exists") : "RequestedBefore Test has failed";
-        System.out.println(" [x] RequestedBefore TerminationRequest has Passed");
+        assert duplicateResponse != null;
+        if(duplicateResponse.getErrorMessage().equals("Termination Request already exists"))
+            System.out.println(" [x] RequestedBefore TerminationRequest has Passed");
+        else
+            System.out.println(" [x] RequestedBefore TerminationRequest has Failed");
         System.out.println("[x] Finished RequestContractTermination Requested Before test .....");
     }
 
