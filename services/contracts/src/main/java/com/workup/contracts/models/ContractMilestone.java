@@ -4,6 +4,7 @@ import com.workup.shared.enums.contracts.MilestoneState;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -20,5 +21,6 @@ public class ContractMilestone {
   private final String description;
   private final String dueDate;
   private final String amount;
-  private final MilestoneState status;
+  @Setter
+  private MilestoneState status;
 }
