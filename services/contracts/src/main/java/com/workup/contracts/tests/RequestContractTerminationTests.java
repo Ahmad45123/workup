@@ -6,6 +6,7 @@ import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import org.springframework.amqp.core.AmqpTemplate;
 
 import java.util.ArrayList;
@@ -115,18 +116,62 @@ public class RequestContractTerminationTests {
         assert contractResponse != null;
 
         ContractTerminationRequest request = ContractTerminationRequest.builder().withContractId(contractResponse.getContractId()).withReason("M4 3agebny ana el 4o8l da")
-                .withUserId(UUID.randomUUID().toString()).build();
+                .withUserId(clientId).build();
 
         ContractTerminationResponse response = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
         assert response != null;
 
         ContractTerminationRequest duplicateRequest = ContractTerminationRequest.builder().withContractId(contractResponse.getContractId()).withReason("M4 3agebny ana el 4o8l da")
-                .withUserId(UUID.randomUUID().toString()).build();
+                .withUserId(clientId).build();
 
-        ContractTerminationResponse duplicateResponse = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+        ContractTerminationResponse duplicateResponse = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", duplicateRequest);
 
-        assert Objects.requireNonNull(duplicateResponse).getErrorMessage().equals("Termination Request already exists");
+        assert Objects.requireNonNull(duplicateResponse).getErrorMessage().equals("Termination Request already exists") : "RequestedBefore Test has failed";
         System.out.println(" [x] RequestedBefore TerminationRequest has Passed");
         System.out.println("[x] Finished RequestContractTermination Requested Before test .....");
+    }
+
+    public void sucessTest(AmqpTemplate template)
+    {
+        System.out.println("[ ] Running RequestContractTermination Success Test .....");
+
+        //create a contract to exist there
+        Milestone milestone = Milestone
+                .builder()
+                .withDescription("make sure the students hate your admin system")
+                .withDueDate("2025-01-01")
+                .withAmount("30000")
+                .build();
+
+        List<Milestone> milestones = new ArrayList<>();
+        milestones.add(milestone);
+
+        String clientId = UUID.randomUUID().toString(), freelancerId = UUID.randomUUID().toString();
+        InitiateContractRequest initiateContractRequest = InitiateContractRequest
+                .builder()
+                .withClientId(clientId)
+                .withFreelancerId(freelancerId)
+                .withJobId("789")
+                .withProposalId("bruh")
+                .withJobTitle("very happy guc worker :)")
+                .withJobMilestones(milestones)
+                .build();
+        InitiateContractResponse contractResponse = (InitiateContractResponse) template.convertSendAndReceive(
+                "contractsqueue",
+                initiateContractRequest
+        );
+        assert contractResponse != null;
+        ContractTerminationRequest request = ContractTerminationRequest.builder()
+                .withUserId(clientId)
+                .withContractId(contractResponse.getContractId())
+                .withReason("M4 3agebni l 4o8l da")
+                .build();
+
+        ContractTerminationResponse response = (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+        if(Objects.requireNonNull(response).getStatusCode().equals(HttpStatusCode.CREATED))
+            System.out.println(" [x] success test has Passed");
+        else
+            System.out.println(" [x] success test has Failed");
+        System.out.println("[x] Finished RequestContractTermination Success Test .....");
     }
 }

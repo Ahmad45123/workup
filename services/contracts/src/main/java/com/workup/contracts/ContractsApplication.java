@@ -30,6 +30,7 @@ public class ContractsApplication {
       requestTerminationCommandTests.contractNotFoundTest(template);
       requestTerminationCommandTests.unAuthorizedRequestTest(template);
       requestTerminationCommandTests.requestedBeforeTest(template);
+      requestTerminationCommandTests.sucessTest(template);
     };
   }
 
