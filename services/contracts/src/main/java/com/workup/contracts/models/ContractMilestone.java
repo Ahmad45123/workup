@@ -21,6 +21,7 @@ public class ContractMilestone {
   private final String description;
   private final String dueDate;
   private final String amount;
+
   @Setter
   private MilestoneState status;
 }

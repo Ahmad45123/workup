@@ -38,10 +38,11 @@ public class HandleTerminationRequestCommand
     terminationRequest.setStatus(newStatus);
 
     //We are terminating the contract
-    if(newStatus == TerminationRequestStatus.ACCEPTED) {
-      HandleTerminationResponse validatorResponse = terminateContract(terminationRequest.getContractId());
-      if(validatorResponse != null)
-        return validatorResponse;
+    if (newStatus == TerminationRequestStatus.ACCEPTED) {
+      HandleTerminationResponse validatorResponse = terminateContract(
+        terminationRequest.getContractId()
+      );
+      if (validatorResponse != null) return validatorResponse;
     }
     try {
       TerminationRequest updatedRequest = terminationRequestRepository.save(
@@ -64,30 +65,30 @@ public class HandleTerminationRequestCommand
     }
   }
 
-  private HandleTerminationResponse terminateContract(String contractId)
-  {
-      Optional<Contract> contract = contractRepository.findById(UUID.fromString(contractId));
-      if(contract.isEmpty() || contract.get().getStatus() != ContractState.ACTIVE)
-        return HandleTerminationResponse
-                .builder()
-                .withStatusCode(HttpStatusCode.BAD_REQUEST)
-                .withErrorMessage("The contract has already ended.")
-                .build();
-      Contract updatedContract = contract.get();
-      updatedContract.setStatus(ContractState.TERMINATED);
-      try {
-         updatedContract = contractRepository.save(updatedContract);
-         System.out.println(" [x] Updated Contract Status to Terminated " + updatedContract);
-      }
-      catch (Exception e) {
-        e.printStackTrace();
-        return HandleTerminationResponse
-                .builder()
-                .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                .withErrorMessage(e.getMessage())
-                .build();
-      }
-      return null;
+  private HandleTerminationResponse terminateContract(String contractId) {
+    Optional<Contract> contract = contractRepository.findById(
+      UUID.fromString(contractId)
+    );
+    if (
+      contract.isEmpty() || contract.get().getStatus() != ContractState.ACTIVE
+    ) return HandleTerminationResponse
+      .builder()
+      .withStatusCode(HttpStatusCode.BAD_REQUEST)
+      .withErrorMessage("The contract has already ended.")
+      .build();
+    Contract updatedContract = contract.get();
+    updatedContract.setStatus(ContractState.TERMINATED);
+    try {
+      updatedContract = contractRepository.save(updatedContract);
+      System.out.println(" [x] Updated Contract Status to Terminated " + updatedContract);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return HandleTerminationResponse
+        .builder()
+        .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .withErrorMessage(e.getMessage())
+        .build();
+    }
+    return null;
   }
-
 }

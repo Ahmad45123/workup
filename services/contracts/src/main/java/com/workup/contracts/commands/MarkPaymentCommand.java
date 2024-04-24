@@ -6,51 +6,53 @@ import com.workup.shared.commands.contracts.responses.ContractTerminationRespons
 import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.contracts.MilestoneState;
-
 import java.util.Optional;
 import java.util.UUID;
 
-public class MarkPaymentCommand extends ContractCommand<MarkPaymentCompletedRequest, MarkPaymentCompletedResponse>{
+public class MarkPaymentCommand
+  extends ContractCommand<MarkPaymentCompletedRequest, MarkPaymentCompletedResponse> {
 
-    private MarkPaymentCompletedResponse isValid(MarkPaymentCompletedRequest request)
-    {
-        Optional<ContractMilestone> milestone = contractMilestoneRepository.findById(UUID.fromString(request.getMilestoneId()));
-        if(milestone.isEmpty())
-            return MarkPaymentCompletedResponse.builder()
-                    .withStatusCode(HttpStatusCode.BAD_REQUEST)
-                    .withErrorMessage("Milestone is not found")
-                    .build();
-        if(milestone.get().getStatus() != MilestoneState.ACCEPTED)
-            return MarkPaymentCompletedResponse.builder()
-                    .withStatusCode(HttpStatusCode.BAD_REQUEST)
-                    .withErrorMessage("Milestone is not accepted for payment")
-                    .build();
-        return null;
+  private MarkPaymentCompletedResponse isValid(MarkPaymentCompletedRequest request) {
+    Optional<ContractMilestone> milestone = contractMilestoneRepository.findById(
+      UUID.fromString(request.getMilestoneId())
+    );
+    if (milestone.isEmpty()) return MarkPaymentCompletedResponse
+      .builder()
+      .withStatusCode(HttpStatusCode.BAD_REQUEST)
+      .withErrorMessage("Milestone is not found")
+      .build();
+    if (
+      milestone.get().getStatus() != MilestoneState.ACCEPTED
+    ) return MarkPaymentCompletedResponse
+      .builder()
+      .withStatusCode(HttpStatusCode.BAD_REQUEST)
+      .withErrorMessage("Milestone is not accepted for payment")
+      .build();
+    return null;
+  }
+
+  public MarkPaymentCompletedResponse Run(MarkPaymentCompletedRequest request) {
+    MarkPaymentCompletedResponse checkerResponse = isValid(request);
+    if (checkerResponse != null) return checkerResponse;
+
+    Optional<ContractMilestone> milestone = contractMilestoneRepository.findById(
+      UUID.fromString(request.getMilestoneId())
+    );
+    ContractMilestone updatedMilestone = milestone.get();
+    updatedMilestone.setStatus(MilestoneState.PAID);
+
+    try {
+      contractMilestoneRepository.save(updatedMilestone);
+      System.out.println(" [x] Marked Milestone as Paid '" + updatedMilestone);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return MarkPaymentCompletedResponse
+        .builder()
+        .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .withErrorMessage(e.getMessage())
+        .build();
     }
 
-    public MarkPaymentCompletedResponse Run(MarkPaymentCompletedRequest request)
-    {
-        MarkPaymentCompletedResponse checkerResponse = isValid(request);
-        if(checkerResponse != null)
-            return checkerResponse;
-
-        Optional<ContractMilestone> milestone = contractMilestoneRepository.findById(UUID.fromString(request.getMilestoneId()));
-        ContractMilestone updatedMilestone = milestone.get();
-        updatedMilestone.setStatus(MilestoneState.PAID);
-
-        try{
-            contractMilestoneRepository.save(updatedMilestone);
-            System.out.println(" [x] Marked Milestone as Paid '" + updatedMilestone);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-            return MarkPaymentCompletedResponse.builder()
-                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-                    .withErrorMessage(e.getMessage())
-                    .build();
-        }
-
-        return null;
-    }
+    return null;
+  }
 }

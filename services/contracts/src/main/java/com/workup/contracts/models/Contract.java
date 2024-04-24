@@ -25,6 +25,7 @@ public class Contract {
   private String clientId;
 
   private List<String> milestonesIds;
+
   @Setter
   private ContractState status;
 }
