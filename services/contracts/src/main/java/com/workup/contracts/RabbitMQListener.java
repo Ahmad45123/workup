@@ -45,11 +45,12 @@ public class RabbitMQListener {
     ).Run(in);
   }
 
-    @RabbitHandler
-  public ViewContractMilestonesResponse receive(ViewContractMilestonesRequest in) throws Exception {
-    return (
-            (ViewContractMilestonesCommand) commandMap.getCommand("ViewMilestone")
-    ).Run(in);
+  @RabbitHandler
+  public ViewContractMilestonesResponse receive(ViewContractMilestonesRequest in)
+    throws Exception {
+    return ((ViewContractMilestonesCommand) commandMap.getCommand("ViewMilestone")).Run(
+        in
+      );
   }
   // NEW_COMMAND_BOILERPLATE
 
