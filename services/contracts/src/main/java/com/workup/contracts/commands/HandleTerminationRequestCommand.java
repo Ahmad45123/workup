@@ -37,7 +37,7 @@ public class HandleTerminationRequestCommand
   ) {
     terminationRequest.setStatus(newStatus);
 
-    //We are terminating the contract
+    // Terminating the contract
     if (newStatus == TerminationRequestStatus.ACCEPTED) {
       HandleTerminationResponse validatorResponse = terminateContract(
         terminationRequest.getContractId()

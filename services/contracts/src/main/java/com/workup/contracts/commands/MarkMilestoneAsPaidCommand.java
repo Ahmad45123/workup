@@ -2,14 +2,13 @@ package com.workup.contracts.commands;
 
 import com.workup.contracts.models.ContractMilestone;
 import com.workup.shared.commands.contracts.requests.MarkPaymentCompletedRequest;
-import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.contracts.MilestoneState;
 import java.util.Optional;
 import java.util.UUID;
 
-public class MarkPaymentCommand
+public class MarkMilestoneAsPaidCommand
   extends ContractCommand<MarkPaymentCompletedRequest, MarkPaymentCompletedResponse> {
 
   private MarkPaymentCompletedResponse isValid(MarkPaymentCompletedRequest request) {

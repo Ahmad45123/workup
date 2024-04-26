@@ -9,7 +9,6 @@ import com.workup.shared.commands.contracts.responses.ContractTerminationRespons
 import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
 import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedResponse;
-import com.workup.shared.commands.jobs.responses.CreateJobResponse;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ public class RabbitMQListener {
   @RabbitHandler
   public MarkPaymentCompletedResponse receive(MarkPaymentCompletedRequest in)
     throws Exception {
-    return ((MarkPaymentCommand) commandMap.getCommand("MarkMilestonePayment")).Run(in);
+    return ((MarkMilestoneAsPaidCommand) commandMap.getCommand("MarkMilestoneAsPaid")).Run(in);
   }
   // NEW_COMMAND_BOILERPLATE
 
