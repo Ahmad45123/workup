@@ -41,7 +41,7 @@ public class RequestContractTerminationCommand
       return ContractTerminationResponse
         .builder()
         .withStatusCode(HttpStatusCode.UNAUTHORIZED)
-        .withErrorMessage("The requester is not a part of the contract")
+        .withErrorMessage("Unauthorized request")
         .build();
     }
     return null;
