@@ -87,9 +87,7 @@ public class RequestContractTerminationTests {
       request
     );
     assert response != null;
-    if (
-      response.getErrorMessage().equals("Unauthorized request")
-    ) System.out.println(
+    if (response.getErrorMessage().equals("Unauthorized request")) System.out.println(
       " [x] UnAuthorized TerminationRequest Test has Passed"
     ); else System.out.println(" [x] UnAuthorized TerminationRequest Test has Failed");
     System.out.println(

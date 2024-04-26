@@ -48,7 +48,9 @@ public class RabbitMQListener {
   @RabbitHandler
   public MarkPaymentCompletedResponse receive(MarkPaymentCompletedRequest in)
     throws Exception {
-    return ((MarkMilestoneAsPaidCommand) commandMap.getCommand("MarkMilestoneAsPaid")).Run(in);
+    return (
+      (MarkMilestoneAsPaidCommand) commandMap.getCommand("MarkMilestoneAsPaid")
+    ).Run(in);
   }
   // NEW_COMMAND_BOILERPLATE
 
