@@ -60,11 +60,6 @@ services:
       POSTGRES_PASSWORD: payments_password
       POSTGRES_USER: payments_user
       POSTGRES_DB: payments_database
-    healthcheck:
-      test: [ "CMD", "pg_isready","-U","postgres" ]
-      interval: 20s
-      timeout: 10s
-      retries: 60
     ports:
       - "5432:5432"
 
