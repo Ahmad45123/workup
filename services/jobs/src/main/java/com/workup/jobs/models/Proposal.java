@@ -4,6 +4,7 @@ import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalStatus;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,14 +41,14 @@ public class Proposal {
     typeArguments = CassandraType.Name.UDT,
     userTypeName = "milestone"
   )
-  private ArrayList<Milestone> milestones;
+  private List<Milestone> milestones;
 
   @CassandraType(
     type = CassandraType.Name.LIST,
     typeArguments = CassandraType.Name.UDT,
     userTypeName = "attachment"
   )
-  private ArrayList<Attachment> attachments;
+  private List<Attachment> attachments;
 
   private Date createdAt;
   private Date updatedAt;

@@ -3,6 +3,7 @@ package com.workup.jobs.commands;
 import com.workup.jobs.models.Attachment;
 import com.workup.jobs.models.Milestone;
 import com.workup.jobs.models.Proposal;
+import com.workup.shared.commands.jobs.proposals.ProposalStatus;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
 import com.workup.shared.commands.jobs.proposals.responses.CreateProposalResponse;
 import com.workup.shared.enums.HttpStatusCode;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties.Stream;
 
 public class CreateProposalCommand
   extends JobCommand<CreateProposalRequest, CreateProposalResponse> {
@@ -27,7 +27,7 @@ public class CreateProposalCommand
             .withId(UUID.randomUUID())
             .build()
         )
-        .withFreelancerId(request.getFreelancerId())
+        .withFreelancerId(request.getUserId())
         .withCoverLetter(request.getCoverLetter())
         .withDuration(request.getJobDuration())
         .withAttachments(
@@ -59,6 +59,7 @@ public class CreateProposalCommand
         )
         .withCreatedAt(new Date())
         .withUpdatedAt(new Date())
+        .withStatus(ProposalStatus.PENDING)
         .build();
       Proposal savedProposal = proposalRepository.save(proposal);
       System.out.println(" [x] Saved Proposal '" + savedProposal.getCoverLetter());

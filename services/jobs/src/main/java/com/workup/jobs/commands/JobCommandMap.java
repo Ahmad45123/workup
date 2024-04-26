@@ -8,6 +8,7 @@ import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,9 @@ public class JobCommandMap
 
   @Autowired
   ProposalRepository proposalRepository;
+
+  @Autowired
+  AmqpTemplate rabbitTemplate;
 
   public void registerCommands() {
     commands.put("CreateJob", CreateJobCommand.class);
@@ -38,5 +42,6 @@ public class JobCommandMap
   ) {
     command.setJobRepository(jobRepository);
     command.setProposalRepository(proposalRepository);
+    command.setRabbitTemplate(rabbitTemplate);
   }
 }
