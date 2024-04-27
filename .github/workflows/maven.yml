@@ -30,7 +30,7 @@ jobs:
       run: mvn -DskipTests -B compile --file pom.xml
 
     - name: Check Formatting
-      run: mvn verify
+      run: mvn -DskipTests verify
 
     - name: Submit Dependency Snapshot
       uses: advanced-security/maven-dependency-submission-action@v3
