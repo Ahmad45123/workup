@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.workup</groupId>
     <artifactId>payments</artifactId>
@@ -15,7 +16,6 @@
     <description>payments</description>
     <properties>
         <java.version>21</java.version>
-        <plugin.prettier.goal>write</plugin.prettier.goal>
     </properties>
     <dependencies>
         <dependency>
@@ -82,48 +82,25 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.hubspot.maven.plugins</groupId>
-                <artifactId>prettier-maven-plugin</artifactId>
-                <version>0.22</version>
-                <configuration>
-                    <prettierJavaVersion>2.0.0</prettierJavaVersion>
-                    <printWidth>90</printWidth>
-                    <tabWidth>2</tabWidth>
-                    <useTabs>false</useTabs>
-                    <ignoreConfigFile>true</ignoreConfigFile>
-                    <ignoreEditorConfig>true</ignoreEditorConfig>
-                    <!-- Use <inputGlobs> to override the default input patterns -->
-                    <inputGlobs>
-                        <!-- These are the default patterns, you can omit <inputGlobs> entirely unless you want to override them -->
-                        <inputGlob>src/main/java/**/*.java</inputGlob>
-                        <inputGlob>src/test/java/**/*.java</inputGlob>
-                    </inputGlobs>
-                </configuration>
+                <groupId>com.cosium.code</groupId>
+                <artifactId>git-code-format-maven-plugin</artifactId>
+                <version>5.3</version>
                 <executions>
                     <execution>
-                        <phase>validate</phase>
+                        <id>validate-code-format</id>
                         <goals>
-                            <goal>${plugin.prettier.goal}</goal>
+                            <goal>validate-code-format</goal>
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.cosium.code</groupId>
+                        <artifactId>google-java-format</artifactId>
+                        <version>5.3</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>github_action</id>
-            <activation>
-                <property>
-                    <name>env.GITHUB_ACTIONS</name>
-                </property>
-            </activation>
-            <properties>
-                <!-- But in our CI environment we want to validate that code is formatted -->
-                <plugin.prettier.goal>check</plugin.prettier.goal>
-            </properties>
-        </profile>
-    </profiles>
-
 </project>
