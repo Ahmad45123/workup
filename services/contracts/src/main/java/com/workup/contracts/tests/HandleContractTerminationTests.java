@@ -9,6 +9,8 @@ import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -43,14 +45,14 @@ public class HandleContractTerminationTests {
 
   //TODO: Add a test for checking if the contract is not active before applying termination AFTER HAVING ENDPOINT FOR UPDATING CONTRACT STATUS
 
-  public void successTest(AmqpTemplate template) {
+  public void successTest(AmqpTemplate template) throws ParseException {
     System.out.println("[ ] Running HandleContractTermination Success Test...");
     // create a contract
     Milestone milestone = Milestone
       .builder()
       .withDescription("make sure the students hate your admin system")
-      .withDueDate("2025-01-01")
-      .withAmount("30000")
+      .withDueDate(new SimpleDateFormat("yyyy-MM-dd").parse("2025-01-01"))
+      .withAmount(30000)
       .build();
 
     List<Milestone> milestones = new ArrayList<>();
