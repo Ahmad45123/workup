@@ -37,7 +37,7 @@ public class SearchJobsCommand extends JobCommand<SearchJobsRequest, SearchJobsR
         .withJobs(
           result
             .stream()
-            .map((Job job) -> {
+            .map(job -> {
               return JobListingItem
                 .builder()
                 .withDescription(job.getDescription())

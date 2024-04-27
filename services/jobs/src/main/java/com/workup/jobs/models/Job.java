@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.Indexed;
@@ -34,6 +35,8 @@ public class Job {
   private String[] skills;
 
   private Experience experienceLevel;
+
+  @Setter
   private boolean isActive;
 
   @Indexed

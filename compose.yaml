@@ -17,7 +17,7 @@ services:
       - "15672:15672"
 
   # ----- JOBS MICROSERVICE -------
-  service_jobs: 
+  service_jobs:
     build: ./services/jobs
     depends_on:
       jobs_db:
@@ -30,16 +30,16 @@ services:
 
   # ----- PAYMENTS MICROSERVICE -------
   service_payments:
-      build: ./services/payments
-      depends_on:
-        payments_db:
-          condition: service_healthy
-        service_mq:
-          condition: service_started
-      networks:
-        - microservices
-        - payments
-    
+    build: ./services/payments
+    depends_on:
+      payments_db:
+        condition: service_healthy
+      service_mq:
+        condition: service_started
+    networks:
+      - microservices
+      - payments
+
   jobs_db:
     image: cassandra:4.0.7
     networks:

@@ -6,6 +6,8 @@ import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
 import com.workup.shared.enums.HttpStatusCode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,7 +43,7 @@ public class RequestContractTerminationTests {
     );
   }
 
-  public void unAuthorizedRequestTest(AmqpTemplate template) {
+  public void unAuthorizedRequestTest(AmqpTemplate template) throws ParseException {
     System.out.println(
       "[ ] Running RequestContractTermination UnAuthorizedRequestTest ....."
     );
@@ -50,8 +52,8 @@ public class RequestContractTerminationTests {
     Milestone milestone = Milestone
       .builder()
       .withDescription("make sure the students hate your admin system")
-      .withDueDate("2025-01-01")
-      .withAmount("30000")
+      .withDueDate(new SimpleDateFormat("yyyy-MM-dd").parse("2025-01-01"))
+      .withAmount(30000)
       .build();
 
     List<Milestone> milestones = new ArrayList<>();
@@ -97,7 +99,7 @@ public class RequestContractTerminationTests {
 
   //TODO: Make a test for the inActive contract (But we don't have a contract status update now)
 
-  public void requestedBeforeTest(AmqpTemplate template) {
+  public void requestedBeforeTest(AmqpTemplate template) throws ParseException {
     System.out.println(
       "[ ] Running RequestContractTermination Requested Before Test ....."
     );
@@ -106,8 +108,8 @@ public class RequestContractTerminationTests {
     Milestone milestone = Milestone
       .builder()
       .withDescription("make sure the students hate your admin system")
-      .withDueDate("2025-01-01")
-      .withAmount("30000")
+      .withDueDate(new SimpleDateFormat("yyyy-MM-dd").parse("2025-01-01"))
+      .withAmount(30000)
       .build();
 
     List<Milestone> milestones = new ArrayList<>();
@@ -168,15 +170,15 @@ public class RequestContractTerminationTests {
     );
   }
 
-  public void sucessTest(AmqpTemplate template) {
+  public void sucessTest(AmqpTemplate template) throws ParseException {
     System.out.println("[ ] Running RequestContractTermination Success Test .....");
 
     //create a contract to exist there
     Milestone milestone = Milestone
       .builder()
       .withDescription("make sure the students hate your admin system")
-      .withDueDate("2025-01-01")
-      .withAmount("30000")
+      .withDueDate(new SimpleDateFormat("yyyy-MM-dd").parse("2025-01-01"))
+      .withAmount(30000)
       .build();
 
     List<Milestone> milestones = new ArrayList<>();

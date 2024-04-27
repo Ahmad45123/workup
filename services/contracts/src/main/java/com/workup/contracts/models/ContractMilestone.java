@@ -1,6 +1,7 @@
 package com.workup.contracts.models;
 
 import com.workup.shared.enums.contracts.MilestoneState;
+import java.util.Date;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +22,8 @@ public class ContractMilestone {
   private final String contractId;
 
   private final String description;
-  private final String dueDate;
-  private final String amount;
+  private final Date dueDate;
+  private final double amount;
 
   @Setter
   private MilestoneState status;

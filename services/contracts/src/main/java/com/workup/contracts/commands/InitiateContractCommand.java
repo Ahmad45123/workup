@@ -66,6 +66,7 @@ public class InitiateContractCommand
         .builder()
         .withContractId(savedContract.getContractId().toString())
         .withStatusCode(HttpStatusCode.CREATED)
+        .withContractId(savedContract.getContractId().toString())
         .withErrorMessage("")
         .build();
     } catch (Exception e) {

@@ -5,18 +5,19 @@ import com.workup.jobs.repositories.ProposalRepository;
 import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
+import lombok.Setter;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 public abstract class JobCommand<T extends CommandRequest, Q extends CommandResponse>
   implements Command<T, Q> {
 
+  @Setter
   JobRepository jobRepository;
+
+  @Setter
   ProposalRepository proposalRepository;
 
-  public void setJobRepository(JobRepository jobRepository) {
-    this.jobRepository = jobRepository;
-  }
-
-  public void setProposalRepository(ProposalRepository proposalRepository) {
-    this.proposalRepository = proposalRepository;
-  }
+  @Setter
+  AmqpTemplate rabbitTemplate;
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.workup.shared.commands.CommandResponse;
 import com.workup.shared.commands.jobs.proposals.ProposalModel;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
@@ -15,5 +16,5 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class GetMyProposalsResponse extends CommandResponse {
 
-  private final ArrayList<ProposalModel> proposals;
+  private final List<ProposalModel> proposals;
 }
