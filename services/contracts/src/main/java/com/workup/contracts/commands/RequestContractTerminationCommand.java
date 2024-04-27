@@ -5,6 +5,7 @@ import com.workup.contracts.models.TerminationRequest;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.enums.contracts.ContractState;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
 import java.util.Date;
 import java.util.List;
@@ -14,29 +15,42 @@ import java.util.UUID;
 public class RequestContractTerminationCommand
   extends ContractCommand<ContractTerminationRequest, ContractTerminationResponse> {
 
-  private boolean isValidRequest(ContractTerminationRequest request) {
+  private ContractTerminationResponse isValidRequest(ContractTerminationRequest request) {
     Optional<Contract> contract = contractRepository.findById(
       UUID.fromString(request.getContractId())
     );
     if (contract.isEmpty()) {
-      return false;
+      return ContractTerminationResponse
+        .builder()
+        .withStatusCode(HttpStatusCode.BAD_REQUEST)
+        .withErrorMessage("The contract is not valid.")
+        .build();
     }
+    if (
+      contract.get().getStatus() != ContractState.ACTIVE
+    ) return ContractTerminationResponse
+      .builder()
+      .withStatusCode(HttpStatusCode.BAD_REQUEST)
+      .withErrorMessage("The contract is not active anymore.")
+      .build();
     //check that requester id is a part of the contract
     String freelancerId = contract.get().getFreelancerId();
     String clientId = contract.get().getClientId();
     String requesterId = request.getUserId();
-    return freelancerId.equals(requesterId) || clientId.equals(requesterId);
+    if (!freelancerId.equals(requesterId) && !clientId.equals(requesterId)) {
+      return ContractTerminationResponse
+        .builder()
+        .withStatusCode(HttpStatusCode.UNAUTHORIZED)
+        .withErrorMessage("Unauthorized request")
+        .build();
+    }
+    return null;
   }
 
   @Override
   public ContractTerminationResponse Run(ContractTerminationRequest request) {
-    if (!isValidRequest(request)) {
-      return ContractTerminationResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.BAD_REQUEST)
-        .withErrorMessage("Invalid Request")
-        .build();
-    }
+    ContractTerminationResponse checkerResponse = isValidRequest(request);
+    if (checkerResponse != null) return checkerResponse;
 
     //Check if there is a termination request pending for this user on that contract
     List<TerminationRequest> existedRequests = terminationRequestRepository.findByRequesterIdAndContractIdAndStatus(
@@ -46,7 +60,6 @@ public class RequestContractTerminationCommand
     );
     if (!existedRequests.isEmpty()) return ContractTerminationResponse
       .builder()
-      .withRequestStatus(existedRequests.getFirst().getStatus())
       .withStatusCode(HttpStatusCode.BAD_REQUEST)
       .withErrorMessage("Termination Request already exists")
       .build();
@@ -69,7 +82,7 @@ public class RequestContractTerminationCommand
 
       return ContractTerminationResponse
         .builder()
-        .withRequestStatus(savedRequest.getStatus())
+        .withRequestId(savedRequest.getRequestId().toString())
         .withStatusCode(HttpStatusCode.CREATED)
         .withErrorMessage("")
         .build();

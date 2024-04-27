@@ -1,16 +1,16 @@
 package com.workup.contracts;
 
-import com.workup.contracts.commands.ContractCommandMap;
-import com.workup.contracts.commands.HandleTerminationRequestCommand;
-import com.workup.contracts.commands.InitiateContractCommand;
-import com.workup.contracts.commands.RequestContractTerminationCommand;
+import com.workup.contracts.commands.*;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.HandleTerminationRequest;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
+import com.workup.shared.commands.contracts.requests.MarkPaymentCompletedRequest;
+import com.workup.shared.commands.contracts.requests.ViewContractMilestonesRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
-import com.workup.shared.commands.jobs.responses.CreateJobResponse;
+import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedResponse;
+import com.workup.shared.commands.contracts.responses.ViewContractMilestonesResponse;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +44,22 @@ public class RabbitMQListener {
   public HandleTerminationResponse receive(HandleTerminationRequest in) throws Exception {
     return (
       (HandleTerminationRequestCommand) commandMap.getCommand("HandleTerminationRequest")
+    ).Run(in);
+  }
+
+  @RabbitHandler
+  public MarkPaymentCompletedResponse receive(MarkPaymentCompletedRequest in)
+    throws Exception {
+    return (
+      (MarkMilestoneAsPaidCommand) commandMap.getCommand("MarkMilestoneAsPaid")
+    ).Run(in);
+  }
+
+  @RabbitHandler
+  public ViewContractMilestonesResponse receive(ViewContractMilestonesRequest in)
+    throws Exception {
+    return (
+      (ViewContractMilestonesCommand) commandMap.getCommand("ViewContractMilestones")
     ).Run(in);
   }
   // NEW_COMMAND_BOILERPLATE

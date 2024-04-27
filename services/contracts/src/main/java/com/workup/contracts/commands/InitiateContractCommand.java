@@ -64,6 +64,7 @@ public class InitiateContractCommand
 
       return InitiateContractResponse
         .builder()
+        .withContractId(savedContract.getContractId().toString())
         .withStatusCode(HttpStatusCode.CREATED)
         .withContractId(savedContract.getContractId().toString())
         .withErrorMessage("")

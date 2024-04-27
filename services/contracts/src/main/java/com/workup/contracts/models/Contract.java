@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -24,5 +25,7 @@ public class Contract {
   private String clientId;
 
   private List<String> milestonesIds;
+
+  @Setter
   private ContractState status;
 }

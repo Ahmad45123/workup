@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.cassandra.core.mapping.Indexed;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
@@ -16,10 +18,13 @@ public class ContractMilestone {
   @PrimaryKey
   private UUID milestoneId;
 
+  @Indexed
   private final String contractId;
 
   private final String description;
   private final Date dueDate;
   private final double amount;
-  private final MilestoneState status;
+
+  @Setter
+  private MilestoneState status;
 }
