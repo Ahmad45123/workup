@@ -13,5 +13,5 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class ContractTerminationResponse extends CommandResponse {
 
-  private final TerminationRequestStatus requestStatus;
+  private final String requestId;
 }
