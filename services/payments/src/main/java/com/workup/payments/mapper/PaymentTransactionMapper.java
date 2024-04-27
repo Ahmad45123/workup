@@ -10,25 +10,21 @@ public class PaymentTransactionMapper {
   private PaymentTransactionMapper() {}
 
   public static PaymentTransactionDTO mapToPaymentTransactionDTO(
-    PaymentTransaction paymentTransaction
-  ) {
-    return PaymentTransactionDTO
-      .builder()
-      .withId(paymentTransaction.getId())
-      .withPaymentRequestId(paymentTransaction.getPaymentRequestId())
-      .withAmount(paymentTransaction.getAmount())
-      .withCreatedAt(paymentTransaction.getCreatedAt())
-      .withUpdatedAt(paymentTransaction.getUpdatedAt())
-      .withStatus(paymentTransaction.getStatus())
-      .build();
+      PaymentTransaction paymentTransaction) {
+    return PaymentTransactionDTO.builder()
+        .withId(paymentTransaction.getId())
+        .withPaymentRequestId(paymentTransaction.getPaymentRequestId())
+        .withAmount(paymentTransaction.getAmount())
+        .withCreatedAt(paymentTransaction.getCreatedAt())
+        .withUpdatedAt(paymentTransaction.getUpdatedAt())
+        .withStatus(paymentTransaction.getStatus())
+        .build();
   }
 
   public static List<PaymentTransactionDTO> mapToPaymentTransactionDTOs(
-    List<PaymentTransaction> paymentTransactions
-  ) {
-    return paymentTransactions
-      .stream()
-      .map(PaymentTransactionMapper::mapToPaymentTransactionDTO)
-      .collect(Collectors.toList());
+      List<PaymentTransaction> paymentTransactions) {
+    return paymentTransactions.stream()
+        .map(PaymentTransactionMapper::mapToPaymentTransactionDTO)
+        .collect(Collectors.toList());
   }
 }

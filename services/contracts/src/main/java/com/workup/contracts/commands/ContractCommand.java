@@ -9,14 +9,11 @@ import com.workup.shared.commands.CommandResponse;
 import lombok.Setter;
 
 public abstract class ContractCommand<T extends CommandRequest, Q extends CommandResponse>
-  implements Command<T, Q> {
+    implements Command<T, Q> {
 
-  @Setter
-  ContractRepository contractRepository;
+  @Setter ContractRepository contractRepository;
 
-  @Setter
-  ContractMilestoneRepository contractMilestoneRepository;
+  @Setter ContractMilestoneRepository contractMilestoneRepository;
 
-  @Setter
-  TerminationRequestRepository terminationRequestRepository;
+  @Setter TerminationRequestRepository terminationRequestRepository;
 }

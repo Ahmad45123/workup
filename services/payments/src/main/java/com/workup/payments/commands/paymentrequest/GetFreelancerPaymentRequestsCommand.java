@@ -10,32 +10,28 @@ import com.workup.shared.enums.HttpStatusCode;
 import java.util.List;
 
 public class GetFreelancerPaymentRequestsCommand
-  extends PaymentCommand<GetFreelancerPaymentRequestsRequest, GetFreelancerPaymentRequestsResponse> {
+    extends PaymentCommand<
+        GetFreelancerPaymentRequestsRequest, GetFreelancerPaymentRequestsResponse> {
 
   @Override
-  public GetFreelancerPaymentRequestsResponse Run(
-    GetFreelancerPaymentRequestsRequest request
-  ) {
+  public GetFreelancerPaymentRequestsResponse Run(GetFreelancerPaymentRequestsRequest request) {
     if (!getPaymentRequestRepository().existsById(request.getFreelancerId())) {
-      return GetFreelancerPaymentRequestsResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.NOT_FOUND)
-        .withErrorMessage("Freelancer not found")
-        .build();
+      return GetFreelancerPaymentRequestsResponse.builder()
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("Freelancer not found")
+          .build();
     }
-    List<PaymentRequest> savedRequests = getPaymentRequestRepository()
-      .findAllByFreelancerId(request.getFreelancerId());
+    List<PaymentRequest> savedRequests =
+        getPaymentRequestRepository().findAllByFreelancerId(request.getFreelancerId());
 
-    List<PaymentRequestDTO> paymentRequestDTOS = PaymentRequestMapper.mapToPaymentRequestDTOs(
-      savedRequests
-    );
+    List<PaymentRequestDTO> paymentRequestDTOS =
+        PaymentRequestMapper.mapToPaymentRequestDTOs(savedRequests);
 
     System.out.println("[x] Payment requests fetched : " + paymentRequestDTOS);
 
-    return GetFreelancerPaymentRequestsResponse
-      .builder()
-      .withStatusCode(HttpStatusCode.OK)
-      .withRequests(paymentRequestDTOS)
-      .build();
+    return GetFreelancerPaymentRequestsResponse.builder()
+        .withStatusCode(HttpStatusCode.OK)
+        .withRequests(paymentRequestDTOS)
+        .build();
   }
 }

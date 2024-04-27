@@ -11,16 +11,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ContractCommandMap
-  extends CommandMap<ContractCommand<? extends CommandRequest, ? extends CommandResponse>> {
+    extends CommandMap<ContractCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
-  @Autowired
-  ContractRepository contractRepository;
+  @Autowired ContractRepository contractRepository;
 
-  @Autowired
-  ContractMilestoneRepository contractMilestoneRepository;
+  @Autowired ContractMilestoneRepository contractMilestoneRepository;
 
-  @Autowired
-  TerminationRequestRepository terminationRequestRepository;
+  @Autowired TerminationRequestRepository terminationRequestRepository;
 
   public void registerCommands() {
     commands.put("InitiateContract", InitiateContractCommand.class);
@@ -33,8 +30,7 @@ public class ContractCommandMap
 
   @Override
   public void setupCommand(
-    ContractCommand<? extends CommandRequest, ? extends CommandResponse> command
-  ) {
+      ContractCommand<? extends CommandRequest, ? extends CommandResponse> command) {
     command.setContractRepository(contractRepository);
     command.setContractMilestoneRepository(contractMilestoneRepository);
     command.setTerminationRequestRepository(terminationRequestRepository);

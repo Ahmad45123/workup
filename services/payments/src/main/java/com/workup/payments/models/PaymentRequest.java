@@ -49,15 +49,14 @@ public class PaymentRequest {
   private Date updatedAt;
 
   public PaymentRequest(
-    String id,
-    String freelancerId,
-    String clientId,
-    double amount,
-    String description,
-    PaymentRequestStatus status,
-    Date createdAt,
-    Date updatedAt
-  ) {
+      String id,
+      String freelancerId,
+      String clientId,
+      double amount,
+      String description,
+      PaymentRequestStatus status,
+      Date createdAt,
+      Date updatedAt) {
     this.id = id;
     this.freelancerId = freelancerId;
     this.clientId = clientId;

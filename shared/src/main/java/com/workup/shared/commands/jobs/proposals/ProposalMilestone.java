@@ -1,6 +1,5 @@
 package com.workup.shared.commands.jobs.proposals;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Date;
 import lombok.Getter;

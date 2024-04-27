@@ -21,40 +21,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PaymentCommandMap
-  extends CommandMap<PaymentCommand<? extends CommandRequest, ? extends CommandResponse>> {
+    extends CommandMap<PaymentCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
-  @Autowired
-  private PaymentRequestRepository paymentRequestRepository;
+  @Autowired private PaymentRequestRepository paymentRequestRepository;
 
-  @Autowired
-  private PaymentTransactionRepository paymentTransactionRepository;
+  @Autowired private PaymentTransactionRepository paymentTransactionRepository;
 
-  @Autowired
-  private WalletRepository walletRepository;
+  @Autowired private WalletRepository walletRepository;
 
-  @Autowired
-  private WalletTransactionRepository walletTransactionRepository;
+  @Autowired private WalletTransactionRepository walletTransactionRepository;
 
   public void registerCommands() {
     /* PaymentRequest commands */
     commands.put("CreatePaymentRequest", CreatePaymentRequestCommand.class);
     commands.put("GetClientPaymentRequests", GetClientPaymentRequestsCommand.class);
-    commands.put(
-      "GetFreelancerPaymentRequests",
-      GetFreelancerPaymentRequestsCommand.class
-    );
+    commands.put("GetFreelancerPaymentRequests", GetFreelancerPaymentRequestsCommand.class);
     commands.put("GetPaymentRequest", GetPaymentRequestCommand.class);
     commands.put("PayPaymentRequest", PayPaymentRequestCommand.class);
 
     /* PaymentTransaction commands */
-    commands.put(
-      "GetClientPaymentTransactions",
-      GetClientPaymentTransactionsCommand.class
-    );
-    commands.put(
-      "GetFreelancerPaymentTransactions",
-      GetFreelancerPaymentTransactionsCommand.class
-    );
+    commands.put("GetClientPaymentTransactions", GetClientPaymentTransactionsCommand.class);
+    commands.put("GetFreelancerPaymentTransactions", GetFreelancerPaymentTransactionsCommand.class);
 
     /* Wallet commands */
     commands.put("CreateWallet", CreateWalletCommand.class);
@@ -69,8 +56,7 @@ public class PaymentCommandMap
 
   @Override
   public void setupCommand(
-    PaymentCommand<? extends CommandRequest, ? extends CommandResponse> command
-  ) {
+      PaymentCommand<? extends CommandRequest, ? extends CommandResponse> command) {
     command.setPaymentRequestRepository(paymentRequestRepository);
     command.setPaymentTransactionRepository(paymentTransactionRepository);
     command.setWalletRepository(walletRepository);

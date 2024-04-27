@@ -34,65 +34,60 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = "jobsqueue")
 public class RabbitMQListener {
 
-  @Autowired
-  public JobCommandMap commandMap;
+  @Autowired public JobCommandMap commandMap;
 
   @RabbitHandler
   public CreateJobResponse receive(CreateJobRequest in) throws Exception {
-    CreateJobResponse response =
-      ((CreateJobCommand) commandMap.getCommand("CreateJob")).Run(in);
+    CreateJobResponse response = ((CreateJobCommand) commandMap.getCommand("CreateJob")).Run(in);
     return response;
   }
 
   @RabbitHandler
   public CreateProposalResponse receive(CreateProposalRequest in) throws Exception {
     CreateProposalResponse response =
-      ((CreateProposalCommand) commandMap.getCommand("CreateProposal")).Run(in);
+        ((CreateProposalCommand) commandMap.getCommand("CreateProposal")).Run(in);
     return response;
   }
 
   @RabbitHandler
   public GetJobByIdResponse receive(GetJobByIdRequest request) throws Exception {
     GetJobByIdResponse response =
-      ((GetJobByIdCommand) commandMap.getCommand("GetJobById")).Run(request);
+        ((GetJobByIdCommand) commandMap.getCommand("GetJobById")).Run(request);
     return response;
   }
 
   @RabbitHandler
   public SearchJobsResponse receive(SearchJobsRequest request) throws Exception {
     SearchJobsResponse response =
-      ((SearchJobsCommand) commandMap.getCommand("SearchJobs")).Run(request);
+        ((SearchJobsCommand) commandMap.getCommand("SearchJobs")).Run(request);
     return response;
   }
 
   @RabbitHandler
   public GetMyJobsResponse receive(GetMyJobsRequest request) throws Exception {
     GetMyJobsResponse response =
-      ((GetMyJobsCommand) commandMap.getCommand("GetMyJobs")).Run(request);
+        ((GetMyJobsCommand) commandMap.getCommand("GetMyJobs")).Run(request);
     return response;
   }
 
   @RabbitHandler
   public AcceptProposalResponse receive(AcceptProposalRequest request) throws Exception {
     AcceptProposalResponse response =
-      ((AcceptProposalCommand) commandMap.getCommand("AcceptProposal")).Run(request);
+        ((AcceptProposalCommand) commandMap.getCommand("AcceptProposal")).Run(request);
     return response;
   }
 
   @RabbitHandler
-  public GetProposalsByJobIdResponse receive(GetProposalsByJobIdRequest request)
-    throws Exception {
+  public GetProposalsByJobIdResponse receive(GetProposalsByJobIdRequest request) throws Exception {
     GetProposalsByJobIdResponse response =
-      ((GetProposalsByJobIdCommand) commandMap.getCommand("GetProposalsByJobId")).Run(
-          request
-        );
+        ((GetProposalsByJobIdCommand) commandMap.getCommand("GetProposalsByJobId")).Run(request);
     return response;
   }
 
   @RabbitHandler
   public GetMyProposalsResponse receive(GetMyProposalsRequest request) throws Exception {
     GetMyProposalsResponse response =
-      ((GetMyProposalsCommand) commandMap.getCommand("GetMyProposals")).Run(request);
+        ((GetMyProposalsCommand) commandMap.getCommand("GetMyProposals")).Run(request);
     return response;
   }
 }

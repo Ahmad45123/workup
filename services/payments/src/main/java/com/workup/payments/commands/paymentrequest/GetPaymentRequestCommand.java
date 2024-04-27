@@ -10,32 +10,29 @@ import com.workup.shared.enums.HttpStatusCode;
 import java.util.Optional;
 
 public class GetPaymentRequestCommand
-  extends PaymentCommand<GetPaymentRequestRequest, GetPaymentRequestResponse> {
+    extends PaymentCommand<GetPaymentRequestRequest, GetPaymentRequestResponse> {
 
   @Override
   public GetPaymentRequestResponse Run(GetPaymentRequestRequest request) {
-    Optional<PaymentRequest> savedPaymentRequest = getPaymentRequestRepository()
-      .findById(request.getPaymentRequestId());
+    Optional<PaymentRequest> savedPaymentRequest =
+        getPaymentRequestRepository().findById(request.getPaymentRequestId());
 
     if (savedPaymentRequest.isEmpty()) {
-      return GetPaymentRequestResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.NOT_FOUND)
-        .withErrorMessage("Payment request not found")
-        .withRequest(null)
-        .build();
+      return GetPaymentRequestResponse.builder()
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("Payment request not found")
+          .withRequest(null)
+          .build();
     }
 
     System.out.println("[x] Payment request fetched : " + savedPaymentRequest.get());
 
-    PaymentRequestDTO paymentRequestDTO = PaymentRequestMapper.mapToPaymentRequestDTO(
-      savedPaymentRequest.get()
-    );
+    PaymentRequestDTO paymentRequestDTO =
+        PaymentRequestMapper.mapToPaymentRequestDTO(savedPaymentRequest.get());
 
-    return GetPaymentRequestResponse
-      .builder()
-      .withStatusCode(HttpStatusCode.OK)
-      .withRequest(paymentRequestDTO)
-      .build();
+    return GetPaymentRequestResponse.builder()
+        .withStatusCode(HttpStatusCode.OK)
+        .withRequest(paymentRequestDTO)
+        .build();
   }
 }

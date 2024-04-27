@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
-//Purpose : The admin can review all the termination requests, and choose to accept/reject some of them based on each case
+// Purpose : The admin can review all the termination requests, and choose to accept/reject some of
+// them based on each case
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized

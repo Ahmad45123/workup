@@ -13,14 +13,10 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = "paymentsqueue")
 public class RabbitMQListener {
 
-  @Autowired
-  public PaymentCommandMap commandMap;
+  @Autowired public PaymentCommandMap commandMap;
 
   @RabbitHandler
-  public CreatePaymentRequestResponse receive(CreatePaymentRequestRequest in)
-    throws Exception {
-    return (
-      (CreatePaymentRequestCommand) commandMap.getCommand("CreatePaymentRequest")
-    ).Run(in);
+  public CreatePaymentRequestResponse receive(CreatePaymentRequestRequest in) throws Exception {
+    return ((CreatePaymentRequestCommand) commandMap.getCommand("CreatePaymentRequest")).Run(in);
   }
 }

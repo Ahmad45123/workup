@@ -65,39 +65,31 @@ public class JobsApplication {
    * @param template the RabbitMQ template.
    * @return a list of the ids of created jobs.
    */
-  private List<String> testCreateJob(AmqpTemplate template)
-    throws JsonProcessingException {
+  private List<String> testCreateJob(AmqpTemplate template) throws JsonProcessingException {
     ArrayList<String> jobIds = new ArrayList<>();
-    CreateJobRequest createJobRequest = CreateJobRequest
-      .builder()
-      .withTitle("Convert HTML Template to React 3")
-      .withDescription(
-        "I have an HTML template that I have purchased and own the rights to. I would like it converted into a React application."
-      )
-      .withSkills(new String[] { "HTML", "CSS", "JavaScript", "React" })
-      .withUserId(CLIENT_ONE_ID)
-      .build();
-    CreateJobResponse response = (CreateJobResponse) template.convertSendAndReceive(
-      "jobsqueue",
-      createJobRequest
-    );
+    CreateJobRequest createJobRequest =
+        CreateJobRequest.builder()
+            .withTitle("Convert HTML Template to React 3")
+            .withDescription(
+                "I have an HTML template that I have purchased and own the rights to. I would like it converted into a React application.")
+            .withSkills(new String[] {"HTML", "CSS", "JavaScript", "React"})
+            .withUserId(CLIENT_ONE_ID)
+            .build();
+    CreateJobResponse response =
+        (CreateJobResponse) template.convertSendAndReceive("jobsqueue", createJobRequest);
     jobIds.add(response.getJobId());
     System.out.println("First job response:");
     System.out.println(mapper.writeValueAsString(response));
     createJobRequest =
-      CreateJobRequest
-        .builder()
-        .withTitle(
-          "Create an interactive web platform where users can create profiles, view them as nodes in a graph"
-        )
-        .withDescription(
-          "Create an interactive web platform where users can create couch profiles (how do you describe yourself as a couch), view them as nodes in a graph, and interact with others."
-        )
-        .withSkills(new String[] { "Nodejs", "Neo4j", "Javascript" })
-        .withUserId(CLIENT_TWO_ID)
-        .build();
-    response =
-      (CreateJobResponse) template.convertSendAndReceive("jobsqueue", createJobRequest);
+        CreateJobRequest.builder()
+            .withTitle(
+                "Create an interactive web platform where users can create profiles, view them as nodes in a graph")
+            .withDescription(
+                "Create an interactive web platform where users can create couch profiles (how do you describe yourself as a couch), view them as nodes in a graph, and interact with others.")
+            .withSkills(new String[] {"Nodejs", "Neo4j", "Javascript"})
+            .withUserId(CLIENT_TWO_ID)
+            .build();
+    response = (CreateJobResponse) template.convertSendAndReceive("jobsqueue", createJobRequest);
     jobIds.add(response.getJobId());
     System.out.println("Second job response:");
     System.out.println(mapper.writeValueAsString(response));
@@ -105,15 +97,10 @@ public class JobsApplication {
   }
 
   private void testSearchJob(AmqpTemplate template) {
-    SearchJobsRequest searchJobsCommand = SearchJobsRequest
-      .builder()
-      .withPageLimit(5)
-      .withQuery("HTML")
-      .build();
-    SearchJobsResponse resp = (SearchJobsResponse) template.convertSendAndReceive(
-      "jobsqueue",
-      searchJobsCommand
-    );
+    SearchJobsRequest searchJobsCommand =
+        SearchJobsRequest.builder().withPageLimit(5).withQuery("HTML").build();
+    SearchJobsResponse resp =
+        (SearchJobsResponse) template.convertSendAndReceive("jobsqueue", searchJobsCommand);
 
     System.out.println("Search results: " + resp.getJobs().length);
     for (int i = 0; i < resp.getJobs().length; i++) {
@@ -124,14 +111,12 @@ public class JobsApplication {
     System.out.println("*****");
 
     searchJobsCommand =
-      SearchJobsRequest
-        .builder()
-        .withPagingState(resp.getPagingState())
-        .withPageLimit(5)
-        .withQuery("HTML")
-        .build();
-    resp =
-      (SearchJobsResponse) template.convertSendAndReceive("jobsqueue", searchJobsCommand);
+        SearchJobsRequest.builder()
+            .withPagingState(resp.getPagingState())
+            .withPageLimit(5)
+            .withQuery("HTML")
+            .build();
+    resp = (SearchJobsResponse) template.convertSendAndReceive("jobsqueue", searchJobsCommand);
 
     System.out.println("Search results 2: " + resp.getJobs().length);
     for (int i = 0; i < resp.getJobs().length; i++) {
@@ -143,41 +128,35 @@ public class JobsApplication {
    * Creates a proposal for a given a job ID.
    *
    * @param template the RabbitMQ template.
-   * @param jobId    the id of the job to which the proposal is created.
+   * @param jobId the id of the job to which the proposal is created.
    * @return a string of the proposal ID.
    */
   private String testCreateProposal(AmqpTemplate template, String jobId)
-    throws JsonProcessingException, ParseException {
+      throws JsonProcessingException, ParseException {
     List<ProposalMilestone> milestones = new ArrayList<>();
     milestones.add(
-      ProposalMilestone
-        .builder()
-        .withDueDate(new SimpleDateFormat("yyyy-MM-dd").parse("2025-01-01"))
-        .withDescription("First milestone")
-        .withAmount(4500)
-        .build()
-    );
+        ProposalMilestone.builder()
+            .withDueDate(new SimpleDateFormat("yyyy-MM-dd").parse("2025-01-01"))
+            .withDescription("First milestone")
+            .withAmount(4500)
+            .build());
     List<ProposalAttachment> attachments = new ArrayList<>();
     attachments.add(
-      ProposalAttachment
-        .builder()
-        .withName("attach")
-        .withUrl("https://picsum.photos/200/300")
-        .build()
-    );
-    CreateProposalRequest request = CreateProposalRequest
-      .builder()
-      .withJobId(jobId)
-      .withAttachments(attachments)
-      .withUserId(FREELANCER_ONE_ID)
-      .withJobDuration(JobDuration.THREE_TO_SIX_MONTHS)
-      .withCoverLetter("Please Hire me :)!")
-      .withMilestones(milestones)
-      .build();
-    CreateProposalResponse response = (CreateProposalResponse) template.convertSendAndReceive(
-      "jobsqueue",
-      request
-    );
+        ProposalAttachment.builder()
+            .withName("attach")
+            .withUrl("https://picsum.photos/200/300")
+            .build());
+    CreateProposalRequest request =
+        CreateProposalRequest.builder()
+            .withJobId(jobId)
+            .withAttachments(attachments)
+            .withUserId(FREELANCER_ONE_ID)
+            .withJobDuration(JobDuration.THREE_TO_SIX_MONTHS)
+            .withCoverLetter("Please Hire me :)!")
+            .withMilestones(milestones)
+            .build();
+    CreateProposalResponse response =
+        (CreateProposalResponse) template.convertSendAndReceive("jobsqueue", request);
     System.out.println("Create proposal response:");
     System.out.println(mapper.writeValueAsString(response));
     return response.getId();
@@ -186,26 +165,21 @@ public class JobsApplication {
   /**
    * Accept a proposal for a given a job ID, with user id "789".
    *
-   * @param template   the RabbitMQ template.
-   * @param jobId      the id of the job.
+   * @param template the RabbitMQ template.
+   * @param jobId the id of the job.
    * @param proposalId the id of the proposal.
    * @return a string of the created initial contract ID.
    */
-  private String testAcceptProposal(
-    AmqpTemplate template,
-    String jobId,
-    String proposalId
-  ) throws JsonProcessingException {
-    AcceptProposalRequest request = AcceptProposalRequest
-      .builder()
-      .withJobId(jobId)
-      .withProposalId(proposalId)
-      .withUserId(CLIENT_ONE_ID)
-      .build();
-    AcceptProposalResponse response = (AcceptProposalResponse) template.convertSendAndReceive(
-      "jobsqueue",
-      request
-    );
+  private String testAcceptProposal(AmqpTemplate template, String jobId, String proposalId)
+      throws JsonProcessingException {
+    AcceptProposalRequest request =
+        AcceptProposalRequest.builder()
+            .withJobId(jobId)
+            .withProposalId(proposalId)
+            .withUserId(CLIENT_ONE_ID)
+            .build();
+    AcceptProposalResponse response =
+        (AcceptProposalResponse) template.convertSendAndReceive("jobsqueue", request);
     System.out.println("Accept proposal response:");
     System.out.println(mapper.writeValueAsString(response));
     return response.getContractId();

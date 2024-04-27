@@ -10,24 +10,22 @@ import com.workup.shared.enums.HttpStatusCode;
 import java.util.List;
 
 public class GetFreelancerPaymentTransactionsCommand
-  extends PaymentCommand<GetFreelancerPaymentTransactionsRequest, GetFreelancerPaymentTransactionsResponse> {
+    extends PaymentCommand<
+        GetFreelancerPaymentTransactionsRequest, GetFreelancerPaymentTransactionsResponse> {
 
   @Override
   public GetFreelancerPaymentTransactionsResponse Run(
-    GetFreelancerPaymentTransactionsRequest request
-  ) {
-    List<PaymentTransaction> savedTransactions = getPaymentTransactionRepository()
-      .findAllByFreelancerId(request.getFreelancerId());
-    List<PaymentTransactionDTO> paymentTransactionDTOS = PaymentTransactionMapper.mapToPaymentTransactionDTOs(
-      savedTransactions
-    );
+      GetFreelancerPaymentTransactionsRequest request) {
+    List<PaymentTransaction> savedTransactions =
+        getPaymentTransactionRepository().findAllByFreelancerId(request.getFreelancerId());
+    List<PaymentTransactionDTO> paymentTransactionDTOS =
+        PaymentTransactionMapper.mapToPaymentTransactionDTOs(savedTransactions);
 
     System.out.println("[x] Payment transactions fetched : " + paymentTransactionDTOS);
 
-    return GetFreelancerPaymentTransactionsResponse
-      .builder()
-      .withStatusCode(HttpStatusCode.OK)
-      .withTransactions(paymentTransactionDTOS)
-      .build();
+    return GetFreelancerPaymentTransactionsResponse.builder()
+        .withStatusCode(HttpStatusCode.OK)
+        .withTransactions(paymentTransactionDTOS)
+        .build();
   }
 }

@@ -1,9 +1,7 @@
 package com.workup.shared.commands.contracts;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.enums.contracts.MilestoneState;
 import java.util.Date;
-import lombok.Data;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;

@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 public class WithdrawFromWalletCommand
-  extends PaymentCommand<WithdrawFromWalletRequest, WithdrawFromWalletResponse> {
+    extends PaymentCommand<WithdrawFromWalletRequest, WithdrawFromWalletResponse> {
 
   @Override
   @Transactional
@@ -23,25 +23,22 @@ public class WithdrawFromWalletCommand
 
     Optional<Wallet> wallet = getWalletRepository().findById(freelancerId);
     if (wallet.isEmpty()) {
-      return WithdrawFromWalletResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.NOT_FOUND)
-        .withErrorMessage("Wallet not found")
-        .build();
+      return WithdrawFromWalletResponse.builder()
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("Wallet not found")
+          .build();
     }
     if (amount <= 0) {
-      return WithdrawFromWalletResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.BAD_REQUEST)
-        .withErrorMessage("Amount must be greater than 0")
-        .build();
+      return WithdrawFromWalletResponse.builder()
+          .withStatusCode(HttpStatusCode.BAD_REQUEST)
+          .withErrorMessage("Amount must be greater than 0")
+          .build();
     }
     if (wallet.get().getBalance() < amount) {
-      return WithdrawFromWalletResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.BAD_REQUEST)
-        .withErrorMessage("Insufficient balance")
-        .build();
+      return WithdrawFromWalletResponse.builder()
+          .withStatusCode(HttpStatusCode.BAD_REQUEST)
+          .withErrorMessage("Insufficient balance")
+          .build();
     }
     wallet.get().setBalance(wallet.get().getBalance() - amount);
     try {
@@ -49,29 +46,27 @@ public class WithdrawFromWalletCommand
 
       System.out.println("[x] Wallet balance updated : " + wallet.get().getBalance());
 
-      WalletTransaction walletTransaction = WalletTransaction
-        .builder()
-        .withWalletId(freelancerId)
-        .withAmount(amount)
-        .withPaymentTransactionId(paymentTransactionId)
-        .withDescription(description)
-        .withTransactionType(WalletTransactionType.DEBIT)
-        .build();
+      WalletTransaction walletTransaction =
+          WalletTransaction.builder()
+              .withWalletId(freelancerId)
+              .withAmount(amount)
+              .withPaymentTransactionId(paymentTransactionId)
+              .withDescription(description)
+              .withTransactionType(WalletTransactionType.DEBIT)
+              .build();
       getWalletTransactionRepository().save(walletTransaction);
 
       System.out.println("[x] Wallet transaction created : " + walletTransaction);
 
-      return WithdrawFromWalletResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.OK)
-        .withBalance(wallet.get().getBalance())
-        .build();
+      return WithdrawFromWalletResponse.builder()
+          .withStatusCode(HttpStatusCode.OK)
+          .withBalance(wallet.get().getBalance())
+          .build();
     } catch (Exception e) {
-      return WithdrawFromWalletResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .withErrorMessage("An error occurred while withdrawing from wallet")
-        .build();
+      return WithdrawFromWalletResponse.builder()
+          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .withErrorMessage("An error occurred while withdrawing from wallet")
+          .build();
     }
   }
 }

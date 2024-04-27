@@ -38,17 +38,17 @@ public class DbConfig extends AbstractCassandraConfiguration {
 
   @Override
   protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
-    CreateKeyspaceSpecification specification = CreateKeyspaceSpecification
-      .createKeyspace(keyspaceName)
-      .ifNotExists()
-      .with(KeyspaceOption.DURABLE_WRITES, true)
-      .withSimpleReplication();
+    CreateKeyspaceSpecification specification =
+        CreateKeyspaceSpecification.createKeyspace(keyspaceName)
+            .ifNotExists()
+            .with(KeyspaceOption.DURABLE_WRITES, true)
+            .withSimpleReplication();
     return Arrays.asList(specification);
   }
 
   @Override
   public String[] getEntityBasePackages() {
-    return new String[] { "com.workup.jobs.models" };
+    return new String[] {"com.workup.jobs.models"};
   }
 
   @Override

@@ -15,8 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @AllArgsConstructor
 public class Wallet {
 
-  @Id
-  private String freelancerId;
+  @Id private String freelancerId;
 
   @Column(name = "balance", nullable = false, columnDefinition = "decimal default 0.00")
   @DecimalMin(value = "0.00", message = "Balance must be greater than 0.00")

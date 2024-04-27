@@ -15,16 +15,13 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table("contract_milestones")
 public class ContractMilestone {
 
-  @PrimaryKey
-  private UUID milestoneId;
+  @PrimaryKey private UUID milestoneId;
 
-  @Indexed
-  private final String contractId;
+  @Indexed private final String contractId;
 
   private final String description;
   private final Date dueDate;
   private final double amount;
 
-  @Setter
-  private MilestoneState status;
+  @Setter private MilestoneState status;
 }
