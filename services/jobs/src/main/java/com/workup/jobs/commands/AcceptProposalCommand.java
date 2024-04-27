@@ -29,73 +29,66 @@ public class AcceptProposalCommand
         .withJobId(request.getJobId())
         .build();
       Optional<Proposal> proposals = proposalRepository.findById(proposalPrimaryKey);
-      if (proposals.isPresent()) {
-        Proposal acceptedProposal = proposals.get();
-        if (acceptedProposal.getStatus() != ProposalStatus.PENDING) {
-          return AcceptProposalResponse
-            .builder()
-            .withStatusCode(HttpStatusCode.BAD_REQUEST)
-            .withErrorMessage("Proposal is not pending")
-            .build();
-        }
-        acceptedProposal.setStatus(ProposalStatus.ACCEPTED);
-
-        UUID jobId = UUID.fromString(request.getJobId());
-        Optional<Job> job = jobRepository.findById(jobId);
-        if (job.isPresent()) {
-          Job acceptedJob = job.get();
-          if (!acceptedJob.isActive()) {
-            return AcceptProposalResponse
-              .builder()
-              .withStatusCode(HttpStatusCode.BAD_REQUEST)
-              .withErrorMessage("This job is no longer active!")
-              .build();
-          }
-          if (!acceptedJob.getClientId().equals(request.getUserId())) {
-            return AcceptProposalResponse
-              .builder()
-              .withStatusCode(HttpStatusCode.UNAUTHORIZED)
-              .withErrorMessage("User is not the owner of this proposal's job!")
-              .build();
-          }
-          acceptedJob.setActive(false);
-          proposalRepository.save(acceptedProposal);
-          jobRepository.save(acceptedJob);
-          String contractId = initiateContract(acceptedProposal, acceptedJob, request);
-          return AcceptProposalResponse
-            .builder()
-            .withStatusCode(HttpStatusCode.OK)
-            .withJob(
-              AcceptedJobInfo
-                .builder()
-                .withId(request.getJobId())
-                .withIsActive(false)
-                .build()
-            )
-            .withProposal(
-              AcceptedProposalInfo
-                .builder()
-                .withId(request.getProposalId())
-                .withStatus(ProposalStatus.ACCEPTED)
-                .build()
-            )
-            .withMessage("Proposal Accepted Successfully!")
-            .withContractId(contractId)
-            .build();
-        } else {
-          return AcceptProposalResponse
-            .builder()
-            .withStatusCode(HttpStatusCode.NOT_FOUND)
-            .withErrorMessage("Job not found")
-            .build();
-        }
-      } else {
+      if (proposals.isEmpty()) {
         return AcceptProposalResponse
           .builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Proposal not found")
           .build();
       }
+      Proposal acceptedProposal = proposals.get();
+      if (acceptedProposal.getStatus() != ProposalStatus.PENDING) {
+        return AcceptProposalResponse
+          .builder()
+          .withStatusCode(HttpStatusCode.BAD_REQUEST)
+          .withErrorMessage("Proposal is not pending")
+          .build();
+      }
+      acceptedProposal.setStatus(ProposalStatus.ACCEPTED);
+      UUID jobId = UUID.fromString(request.getJobId());
+      Optional<Job> job = jobRepository.findById(jobId);
+      if (job.isEmpty()) {
+        return AcceptProposalResponse
+          .builder()
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("Job not found")
+          .build();
+      }
+      Job acceptedJob = job.get();
+      if (!acceptedJob.isActive()) {
+        return AcceptProposalResponse
+          .builder()
+          .withStatusCode(HttpStatusCode.BAD_REQUEST)
+          .withErrorMessage("This job is no longer active!")
+          .build();
+      }
+      if (!acceptedJob.getClientId().equals(request.getUserId())) {
+        return AcceptProposalResponse
+          .builder()
+          .withStatusCode(HttpStatusCode.UNAUTHORIZED)
+          .withErrorMessage("User is not the owner of this proposal's job!")
+          .build();
+      }
+      acceptedJob.setActive(false);
+      proposalRepository.save(acceptedProposal);
+      jobRepository.save(acceptedJob);
+      String contractId = initiateContract(acceptedProposal, acceptedJob, request);
+      return AcceptProposalResponse
+        .builder()
+        .withStatusCode(HttpStatusCode.OK)
+        .withJob(
+          AcceptedJobInfo.builder().withId(request.getJobId()).withIsActive(false).build()
+        )
+        .withProposal(
+          AcceptedProposalInfo
+            .builder()
+            .withId(request.getProposalId())
+            .withStatus(ProposalStatus.ACCEPTED)
+            .build()
+        )
+        .withMessage("Proposal Accepted Successfully!")
+        .withContractId(contractId)
+        .build();
     } catch (Exception e) {
       e.printStackTrace();
       return AcceptProposalResponse
