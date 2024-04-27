@@ -55,8 +55,7 @@ public class MarkMilestoneAsPaidCommand
     return null;
   }
 
-  private void pay(ContractMilestone milestone)
-  {
+  private void pay(ContractMilestone milestone) {
     milestone.setStatus(MilestoneState.PAID);
   }
 }
