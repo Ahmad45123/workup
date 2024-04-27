@@ -4,10 +4,12 @@ import com.workup.contracts.commands.*;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.HandleTerminationRequest;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
+import com.workup.shared.commands.contracts.requests.ViewContractMilestonesRequest;
 import com.workup.shared.commands.contracts.requests.MarkPaymentCompletedRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
+import com.workup.shared.commands.contracts.responses.ViewContractMilestonesResponse;
 import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedResponse;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -50,6 +52,14 @@ public class RabbitMQListener {
     throws Exception {
     return (
       (MarkMilestoneAsPaidCommand) commandMap.getCommand("MarkMilestoneAsPaid")
+    ).Run(in);
+  }
+
+  @RabbitHandler
+  public ViewContractMilestonesResponse receive(ViewContractMilestonesRequest in)
+    throws Exception {
+    return (
+      (ViewContractMilestonesCommand) commandMap.getCommand("ViewContractMilestones")
     ).Run(in);
   }
   // NEW_COMMAND_BOILERPLATE
