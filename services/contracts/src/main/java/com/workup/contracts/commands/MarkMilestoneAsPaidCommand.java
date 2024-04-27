@@ -38,7 +38,7 @@ public class MarkMilestoneAsPaidCommand
       UUID.fromString(request.getMilestoneId())
     );
     ContractMilestone updatedMilestone = milestone.get();
-    updatedMilestone.setStatus(MilestoneState.PAID);
+    pay(updatedMilestone);
 
     try {
       contractMilestoneRepository.save(updatedMilestone);
@@ -53,5 +53,10 @@ public class MarkMilestoneAsPaidCommand
     }
 
     return null;
+  }
+
+  private void pay(ContractMilestone milestone)
+  {
+    milestone.setStatus(MilestoneState.PAID);
   }
 }
