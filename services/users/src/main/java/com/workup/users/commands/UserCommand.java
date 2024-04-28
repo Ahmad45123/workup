@@ -1,6 +1,8 @@
 package com.workup.users.commands;
 
 import com.workup.shared.commands.Command;
+import com.workup.users.db.AchievementRepository;
+import com.workup.users.db.EducationRepository;
 import com.workup.users.repositories.ClientRepository;
 import com.workup.users.repositories.ExperienceRepository;
 import com.workup.users.repositories.FreelancerRepository;
@@ -21,6 +23,12 @@ public abstract class UserCommand<T extends com.workup.shared.commands.CommandRe
 
     @Setter
     ExperienceRepository experienceRepository;
+
+    @Setter
+    EducationRepository educationRepository;
+
+    @Setter
+    AchievementRepository achievementRepository;
 
     @Setter
     ClientRepository clientRepository;

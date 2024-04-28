@@ -15,7 +15,7 @@ import java.util.List;
 @Builder(setterPrefix = "with")
 @Getter
 @Setter
-@Document
+@Document(collection = "Freelancer")
 public class Freelancer {
     @Id
     private ObjectId id;

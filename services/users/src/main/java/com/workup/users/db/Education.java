@@ -12,7 +12,7 @@ import java.util.Date;
 @Builder(setterPrefix = "with")
 @Getter
 @Setter
-@Document
+@Document(collection = "Education")
 public class Education {
     @Id
     private ObjectId id;
