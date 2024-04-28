@@ -1,5 +1,7 @@
 package com.workup.users.db;
 
+import java.util.Date;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,35 +11,27 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import java.util.Date;
-import java.util.List;
-
 @Builder(setterPrefix = "with")
 @Getter
 @Setter
 @Document(collection = "Freelancer")
 public class Freelancer {
-    @Id
-    private ObjectId id;
-    @Indexed
-    private String email;
+  @Id private ObjectId id;
+  @Indexed private String email;
 
-    private String password_hash;
-    private Date created_at;
-    private String full_name;
-    private Date birthdate;
-    private String resume_id;
-    private String city;
-    private String job_title;
-    private String photo_id;
-    private String description;
-    private List<String> skills;
-    private List<String> languages;
+  private String password_hash;
+  private Date created_at;
+  private String full_name;
+  private Date birthdate;
+  private String resume_id;
+  private String city;
+  private String job_title;
+  private String photo_id;
+  private String description;
+  private List<String> skills;
+  private List<String> languages;
 
-    @DocumentReference
-    private List<Experience> experiences;
-    @DocumentReference
-    private List<Achievement> achievements;
-    @DocumentReference
-    private List<Education> educations;
+  @DocumentReference private List<Experience> experiences;
+  @DocumentReference private List<Achievement> achievements;
+  @DocumentReference private List<Education> educations;
 }
