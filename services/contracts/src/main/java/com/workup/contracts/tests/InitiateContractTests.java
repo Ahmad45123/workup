@@ -3,6 +3,7 @@ package com.workup.contracts.tests;
 import com.workup.shared.commands.contracts.Milestone;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
+import com.workup.shared.enums.ServiceQueueNames;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class InitiateContractTests {
             .build();
     InitiateContractResponse resp =
         (InitiateContractResponse)
-            template.convertSendAndReceive("contractsqueue", initiateContractRequest);
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
 
     assert resp != null : "InitiateContractTest1 Response was null";
     System.out.println(

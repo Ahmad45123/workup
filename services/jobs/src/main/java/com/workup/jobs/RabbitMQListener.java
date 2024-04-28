@@ -25,13 +25,14 @@ import com.workup.shared.commands.jobs.responses.CreateJobResponse;
 import com.workup.shared.commands.jobs.responses.GetJobByIdResponse;
 import com.workup.shared.commands.jobs.responses.GetMyJobsResponse;
 import com.workup.shared.commands.jobs.responses.SearchJobsResponse;
+import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@RabbitListener(queues = "jobsqueue")
+@RabbitListener(queues = ServiceQueueNames.JOBS)
 public class RabbitMQListener {
 
   @Autowired public JobCommandMap commandMap;

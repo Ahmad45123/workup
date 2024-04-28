@@ -4,6 +4,7 @@ import static com.workup.contracts.tests.InitiateContractTests.initiateContractT
 
 import com.workup.contracts.tests.HandleContractTerminationTests;
 import com.workup.contracts.tests.RequestContractTerminationTests;
+import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -44,7 +45,7 @@ public class ContractsApplication {
 
   @Bean
   public Queue myQueue() {
-    return new Queue("contractsqueue");
+    return new Queue(ServiceQueueNames.CONTRACTS);
   }
 
   @Bean

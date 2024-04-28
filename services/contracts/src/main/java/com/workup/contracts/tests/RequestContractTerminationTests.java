@@ -6,6 +6,7 @@ import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
 import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.enums.ServiceQueueNames;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ public class RequestContractTerminationTests {
             .build();
 
     ContractTerminationResponse response =
-        (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+        (ContractTerminationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
 
     assert response != null;
     if (response.getErrorMessage().equals("The contract is not valid."))
@@ -61,7 +63,7 @@ public class RequestContractTerminationTests {
             .build();
     InitiateContractResponse contractResponse =
         (InitiateContractResponse)
-            template.convertSendAndReceive("contractsqueue", initiateContractRequest);
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
 
     // now the contract is in db craft termination req
     assert contractResponse != null;
@@ -72,7 +74,8 @@ public class RequestContractTerminationTests {
             .withUserId(UUID.randomUUID().toString())
             .build();
     ContractTerminationResponse response =
-        (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+        (ContractTerminationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
     assert response != null;
     if (response.getErrorMessage().equals("Unauthorized request"))
       System.out.println(" [x] UnAuthorized TerminationRequest Test has Passed");
@@ -109,7 +112,7 @@ public class RequestContractTerminationTests {
             .build();
     InitiateContractResponse contractResponse =
         (InitiateContractResponse)
-            template.convertSendAndReceive("contractsqueue", initiateContractRequest);
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
 
     assert contractResponse != null;
 
@@ -121,7 +124,8 @@ public class RequestContractTerminationTests {
             .build();
 
     ContractTerminationResponse response =
-        (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+        (ContractTerminationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
     assert response != null;
 
     ContractTerminationRequest duplicateRequest =
@@ -133,7 +137,7 @@ public class RequestContractTerminationTests {
 
     ContractTerminationResponse duplicateResponse =
         (ContractTerminationResponse)
-            template.convertSendAndReceive("contractsqueue", duplicateRequest);
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, duplicateRequest);
 
     assert duplicateResponse != null;
     if (duplicateResponse.getErrorMessage().equals("Termination Request already exists"))
@@ -168,7 +172,7 @@ public class RequestContractTerminationTests {
             .build();
     InitiateContractResponse contractResponse =
         (InitiateContractResponse)
-            template.convertSendAndReceive("contractsqueue", initiateContractRequest);
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
     assert contractResponse != null;
     ContractTerminationRequest request =
         ContractTerminationRequest.builder()
@@ -178,7 +182,8 @@ public class RequestContractTerminationTests {
             .build();
 
     ContractTerminationResponse response =
-        (ContractTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+        (ContractTerminationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
     if (Objects.requireNonNull(response).getStatusCode().equals(HttpStatusCode.CREATED))
       System.out.println(" [x] success test has Passed");
     else System.out.println(" [x] success test has Failed");
