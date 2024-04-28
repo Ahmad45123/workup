@@ -1,19 +1,20 @@
 package com.workup.shared.commands.users.requests;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandRequest;
-import java.util.Date;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.experimental.SuperBuilder;
-import lombok.extern.jackson.Jacksonized;
+
+import java.util.Date;
 
 @Getter
-@SuperBuilder(setterPrefix = "with")
-@Jacksonized
+@Builder(setterPrefix = "with")
+@JsonDeserialize(builder = FreelancerRegisterRequest.FreelancerRegisterRequestBuilder.class)
 public class FreelancerRegisterRequest extends CommandRequest {
-  public String email;
-  public String passwordHash;
-  public String fullName;
-  public String jobTitle;
-  public String city;
-  public Date birthDate;
+    private String email;
+    private String passwordHash;
+    private String fullName;
+    private String jobTitle;
+    private String city;
+    private Date birthDate;
 }
