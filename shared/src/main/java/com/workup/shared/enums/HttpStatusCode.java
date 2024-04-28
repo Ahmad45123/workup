@@ -1,13 +1,13 @@
 package com.workup.shared.enums;
 
 public enum HttpStatusCode {
-  //1xx: Informational
+  // 1xx: Informational
   CONTINUE(100, "Continue"),
   SWITCHING_PROTOCOLS(101, "Switching Protocols"),
   PROCESSING(102, "Processing"),
   EARLY_HINTS(103, "Early Hints"),
 
-  //2xx: Success
+  // 2xx: Success
   OK(200, "OK"),
   CREATED(201, "Created"),
   ACCEPTED(202, "Accepted"),
@@ -19,7 +19,7 @@ public enum HttpStatusCode {
   ALREADY_REPORTED(208, "Already Reported"),
   IM_USED(226, "IM Used"),
 
-  //3xx: Redirection
+  // 3xx: Redirection
   MULTIPLE_CHOICES(300, "Multiple Choice"),
   MOVED_PERMANENTLY(301, "Moved Permanently"),
   FOUND(302, "Found"),
@@ -29,7 +29,7 @@ public enum HttpStatusCode {
   TEMPORARY_REDIRECT(307, "Temporary Redirect"),
   PERMANENT_REDIRECT(308, "Permanent Redirect"),
 
-  //4xx: Client Error
+  // 4xx: Client Error
   BAD_REQUEST(400, "Bad Request"),
   UNAUTHORIZED(401, "Unauthorized"),
   PAYMENT_REQUIRED(402, "Payment Required"),
@@ -59,7 +59,7 @@ public enum HttpStatusCode {
   REQUEST_HEADER_FIELDS_TOO_LARGE(431, "Request Header Fields Too Large"),
   UNAVAILABLE_FOR_LEGAL_REASONS(451, "Unavailable For Legal Reasons"),
 
-  //5xx: Server Error
+  // 5xx: Server Error
   INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
   NOT_IMPLEMENTED(501, "Not Implemented"),
   BAD_GATEWAY(502, "Bad Gateway"),

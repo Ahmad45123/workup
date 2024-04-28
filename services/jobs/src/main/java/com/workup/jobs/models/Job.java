@@ -19,8 +19,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table("jobs")
 public class Job {
 
-  @PrimaryKey
-  private UUID id;
+  @PrimaryKey private UUID id;
 
   private String title;
   private String description;
@@ -36,8 +35,7 @@ public class Job {
 
   private Experience experienceLevel;
 
-  @Setter
-  private boolean isActive;
+  @Setter private boolean isActive;
 
   @Indexed
   @Column("client_id")
@@ -67,11 +65,8 @@ public class Job {
     }
 
     private void updateSearchIndex() {
-      String skills_with_commas = this.skills != null
-        ? String.join(",", this.skills)
-        : "";
-      this.searchIndex =
-        String.join(",", this.title, this.description, skills_with_commas);
+      String skills_with_commas = this.skills != null ? String.join(",", this.skills) : "";
+      this.searchIndex = String.join(",", this.title, this.description, skills_with_commas);
     }
   }
 }

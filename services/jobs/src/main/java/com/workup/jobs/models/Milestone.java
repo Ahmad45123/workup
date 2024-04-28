@@ -3,7 +3,6 @@ package com.workup.jobs.models;
 import java.util.Date;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 
 @Getter

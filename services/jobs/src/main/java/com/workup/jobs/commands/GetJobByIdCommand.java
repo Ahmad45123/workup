@@ -16,34 +16,31 @@ public class GetJobByIdCommand extends JobCommand<GetJobByIdRequest, GetJobByIdR
 
       Optional<Job> job = jobRepository.findById(jobId);
       if (job.isPresent()) {
-        return GetJobByIdResponse
-          .builder()
-          .withId(job.get().getId().toString())
-          .withTitle(job.get().getTitle())
-          .withDescription(job.get().getDescription())
-          .withLocation(job.get().getLocation())
-          .withSkills(job.get().getSkills())
-          .withExperience(job.get().getExperienceLevel())
-          .withClientId(job.get().getClientId())
-          .withIsActive(job.get().isActive())
-          .withBudget(job.get().getBudget())
-          .withCreatedAt(job.get().getCreatedAt())
-          .withModifiedAt(job.get().getUpdatedAt())
-          .withStatusCode(HttpStatusCode.OK)
-          .build();
+        return GetJobByIdResponse.builder()
+            .withId(job.get().getId().toString())
+            .withTitle(job.get().getTitle())
+            .withDescription(job.get().getDescription())
+            .withLocation(job.get().getLocation())
+            .withSkills(job.get().getSkills())
+            .withExperience(job.get().getExperienceLevel())
+            .withClientId(job.get().getClientId())
+            .withIsActive(job.get().isActive())
+            .withBudget(job.get().getBudget())
+            .withCreatedAt(job.get().getCreatedAt())
+            .withModifiedAt(job.get().getUpdatedAt())
+            .withStatusCode(HttpStatusCode.OK)
+            .build();
       } else {
-        return GetJobByIdResponse
-          .builder()
-          .withStatusCode(HttpStatusCode.NOT_FOUND)
-          .withErrorMessage("Job not found")
-          .build();
+        return GetJobByIdResponse.builder()
+            .withStatusCode(HttpStatusCode.NOT_FOUND)
+            .withErrorMessage("Job not found")
+            .build();
       }
     } catch (Exception e) {
-      return GetJobByIdResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .withErrorMessage("An error occurred while fetching job")
-        .build();
+      return GetJobByIdResponse.builder()
+          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .withErrorMessage("An error occurred while fetching job")
+          .build();
     }
   }
 }

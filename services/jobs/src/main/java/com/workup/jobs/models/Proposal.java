@@ -2,7 +2,6 @@ package com.workup.jobs.models;
 
 import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalStatus;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -23,8 +22,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table("proposals")
 public class Proposal {
 
-  @PrimaryKey
-  private Proposal.ProposalPrimaryKey primaryKey;
+  @PrimaryKey private Proposal.ProposalPrimaryKey primaryKey;
 
   @Indexed
   @Column("freelancer_id")
@@ -33,21 +31,18 @@ public class Proposal {
   private String coverLetter;
   private JobDuration duration;
 
-  @Setter
-  private ProposalStatus status;
+  @Setter private ProposalStatus status;
 
   @CassandraType(
-    type = CassandraType.Name.LIST,
-    typeArguments = CassandraType.Name.UDT,
-    userTypeName = "milestone"
-  )
+      type = CassandraType.Name.LIST,
+      typeArguments = CassandraType.Name.UDT,
+      userTypeName = "milestone")
   private List<Milestone> milestones;
 
   @CassandraType(
-    type = CassandraType.Name.LIST,
-    typeArguments = CassandraType.Name.UDT,
-    userTypeName = "attachment"
-  )
+      type = CassandraType.Name.LIST,
+      typeArguments = CassandraType.Name.UDT,
+      userTypeName = "attachment")
   private List<Attachment> attachments;
 
   private Date createdAt;

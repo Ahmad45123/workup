@@ -4,10 +4,10 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
 public abstract class CommandMap<
-  R extends Command<? extends CommandRequest, ? extends CommandResponse>
-> {
+    R extends Command<? extends CommandRequest, ? extends CommandResponse>> {
 
-  protected HashMap<String, Class<? extends R>> commands = new HashMap<String, Class<? extends R>>();
+  protected HashMap<String, Class<? extends R>> commands =
+      new HashMap<String, Class<? extends R>>();
 
   public CommandMap() {
     registerCommands();

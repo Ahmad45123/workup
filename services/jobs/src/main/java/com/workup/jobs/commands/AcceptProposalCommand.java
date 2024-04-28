@@ -17,120 +17,98 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class AcceptProposalCommand
-  extends JobCommand<AcceptProposalRequest, AcceptProposalResponse> {
+    extends JobCommand<AcceptProposalRequest, AcceptProposalResponse> {
 
   @Override
   public AcceptProposalResponse Run(AcceptProposalRequest request) {
     try {
       UUID proposalId = UUID.fromString(request.getProposalId());
-      ProposalPrimaryKey proposalPrimaryKey = ProposalPrimaryKey
-        .builder()
-        .withId(proposalId)
-        .withJobId(request.getJobId())
-        .build();
+      ProposalPrimaryKey proposalPrimaryKey =
+          ProposalPrimaryKey.builder().withId(proposalId).withJobId(request.getJobId()).build();
       Optional<Proposal> proposals = proposalRepository.findById(proposalPrimaryKey);
       if (proposals.isEmpty()) {
-        return AcceptProposalResponse
-          .builder()
-          .withStatusCode(HttpStatusCode.NOT_FOUND)
-          .withErrorMessage("Proposal not found")
-          .build();
+        return AcceptProposalResponse.builder()
+            .withStatusCode(HttpStatusCode.NOT_FOUND)
+            .withErrorMessage("Proposal not found")
+            .build();
       }
       Proposal acceptedProposal = proposals.get();
       if (acceptedProposal.getStatus() != ProposalStatus.PENDING) {
-        return AcceptProposalResponse
-          .builder()
-          .withStatusCode(HttpStatusCode.BAD_REQUEST)
-          .withErrorMessage("Proposal is not pending")
-          .build();
+        return AcceptProposalResponse.builder()
+            .withStatusCode(HttpStatusCode.BAD_REQUEST)
+            .withErrorMessage("Proposal is not pending")
+            .build();
       }
       acceptedProposal.setStatus(ProposalStatus.ACCEPTED);
       UUID jobId = UUID.fromString(request.getJobId());
       Optional<Job> job = jobRepository.findById(jobId);
       if (job.isEmpty()) {
-        return AcceptProposalResponse
-          .builder()
-          .withStatusCode(HttpStatusCode.NOT_FOUND)
-          .withErrorMessage("Job not found")
-          .build();
+        return AcceptProposalResponse.builder()
+            .withStatusCode(HttpStatusCode.NOT_FOUND)
+            .withErrorMessage("Job not found")
+            .build();
       }
       Job acceptedJob = job.get();
       if (!acceptedJob.isActive()) {
-        return AcceptProposalResponse
-          .builder()
-          .withStatusCode(HttpStatusCode.BAD_REQUEST)
-          .withErrorMessage("This job is no longer active!")
-          .build();
+        return AcceptProposalResponse.builder()
+            .withStatusCode(HttpStatusCode.BAD_REQUEST)
+            .withErrorMessage("This job is no longer active!")
+            .build();
       }
       if (!acceptedJob.getClientId().equals(request.getUserId())) {
-        return AcceptProposalResponse
-          .builder()
-          .withStatusCode(HttpStatusCode.UNAUTHORIZED)
-          .withErrorMessage("User is not the owner of this proposal's job!")
-          .build();
+        return AcceptProposalResponse.builder()
+            .withStatusCode(HttpStatusCode.UNAUTHORIZED)
+            .withErrorMessage("User is not the owner of this proposal's job!")
+            .build();
       }
       acceptedJob.setActive(false);
       proposalRepository.save(acceptedProposal);
       jobRepository.save(acceptedJob);
       String contractId = initiateContract(acceptedProposal, acceptedJob, request);
-      return AcceptProposalResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.OK)
-        .withJob(
-          AcceptedJobInfo.builder().withId(request.getJobId()).withIsActive(false).build()
-        )
-        .withProposal(
-          AcceptedProposalInfo
-            .builder()
-            .withId(request.getProposalId())
-            .withStatus(ProposalStatus.ACCEPTED)
-            .build()
-        )
-        .withMessage("Proposal Accepted Successfully!")
-        .withContractId(contractId)
-        .build();
+      return AcceptProposalResponse.builder()
+          .withStatusCode(HttpStatusCode.OK)
+          .withJob(AcceptedJobInfo.builder().withId(request.getJobId()).withIsActive(false).build())
+          .withProposal(
+              AcceptedProposalInfo.builder()
+                  .withId(request.getProposalId())
+                  .withStatus(ProposalStatus.ACCEPTED)
+                  .build())
+          .withMessage("Proposal Accepted Successfully!")
+          .withContractId(contractId)
+          .build();
     } catch (Exception e) {
       e.printStackTrace();
-      return AcceptProposalResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .withErrorMessage("An error occurred while accepting job proposal")
-        .build();
+      return AcceptProposalResponse.builder()
+          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .withErrorMessage("An error occurred while accepting job proposal")
+          .build();
     }
   }
 
   private String initiateContract(
-    Proposal acceptedProposal,
-    Job acceptedJob,
-    AcceptProposalRequest request
-  ) {
-    return (
-      (InitiateContractResponse) rabbitTemplate.convertSendAndReceive(
-        "contractsqueue",
-        InitiateContractRequest
-          .builder()
-          .withFreelancerId(acceptedProposal.getFreelancerId())
-          .withJobId(request.getJobId())
-          .withProposalId(request.getProposalId())
-          .withJobTitle(acceptedJob.getTitle())
-          .withClientId(acceptedJob.getClientId())
-          .withUserId(request.getUserId())
-          .withJobMilestones(
-            acceptedProposal
-              .getMilestones()
-              .stream()
-              .map(milestone -> {
-                return Milestone
-                  .builder()
-                  .withAmount(milestone.getAmount())
-                  .withDescription(milestone.getDescription())
-                  .withDueDate(milestone.getDueDate())
-                  .build();
-              })
-              .collect(Collectors.toList())
-          )
-          .build()
-      )
-    ).getContractId();
+      Proposal acceptedProposal, Job acceptedJob, AcceptProposalRequest request) {
+    return ((InitiateContractResponse)
+            rabbitTemplate.convertSendAndReceive(
+                "contractsqueue",
+                InitiateContractRequest.builder()
+                    .withFreelancerId(acceptedProposal.getFreelancerId())
+                    .withJobId(request.getJobId())
+                    .withProposalId(request.getProposalId())
+                    .withJobTitle(acceptedJob.getTitle())
+                    .withClientId(acceptedJob.getClientId())
+                    .withUserId(request.getUserId())
+                    .withJobMilestones(
+                        acceptedProposal.getMilestones().stream()
+                            .map(
+                                milestone -> {
+                                  return Milestone.builder()
+                                      .withAmount(milestone.getAmount())
+                                      .withDescription(milestone.getDescription())
+                                      .withDueDate(milestone.getDueDate())
+                                      .build();
+                                })
+                            .collect(Collectors.toList()))
+                    .build()))
+        .getContractId();
   }
 }

@@ -8,33 +8,31 @@ import com.workup.shared.enums.HttpStatusCode;
 import java.util.List;
 
 public class ViewContractMilestonesCommand
-  extends ContractCommand<ViewContractMilestonesRequest, ViewContractMilestonesResponse> {
+    extends ContractCommand<ViewContractMilestonesRequest, ViewContractMilestonesResponse> {
 
   @Override
   public ViewContractMilestonesResponse Run(ViewContractMilestonesRequest request) {
-    List<ContractMilestone> milestones = contractMilestoneRepository.findByContractId(
-      request.getContractId()
-    );
+    List<ContractMilestone> milestones =
+        contractMilestoneRepository.findByContractId(request.getContractId());
 
     @SuppressWarnings("unchecked")
-    List<Milestone> contractMilestones = (List<Milestone>) milestones
-      .stream()
-      .map(milestone ->
-        Milestone
-          .builder()
-          .withMilestoneId(milestone.getMilestoneId().toString())
-          .withContractId(milestone.getContractId())
-          .withDescription(milestone.getDescription())
-          .withDueDate(milestone.getDueDate())
-          .withAmount(milestone.getAmount())
-          .build()
-      )
-      .toList();
+    List<Milestone> contractMilestones =
+        (List<Milestone>)
+            milestones.stream()
+                .map(
+                    milestone ->
+                        Milestone.builder()
+                            .withMilestoneId(milestone.getMilestoneId().toString())
+                            .withContractId(milestone.getContractId())
+                            .withDescription(milestone.getDescription())
+                            .withDueDate(milestone.getDueDate())
+                            .withAmount(milestone.getAmount())
+                            .build())
+                .toList();
 
-    return ViewContractMilestonesResponse
-      .builder()
-      .withContractMilestones(contractMilestones)
-      .withStatusCode(HttpStatusCode.OK)
-      .build();
+    return ViewContractMilestonesResponse.builder()
+        .withContractMilestones(contractMilestones)
+        .withStatusCode(HttpStatusCode.OK)
+        .build();
   }
 }

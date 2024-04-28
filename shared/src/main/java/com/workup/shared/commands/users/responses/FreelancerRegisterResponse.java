@@ -1,6 +1,5 @@
 package com.workup.shared.commands.users.responses;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandResponse;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;

@@ -10,30 +10,27 @@ import com.workup.shared.enums.HttpStatusCode;
 import java.util.List;
 
 public class GetClientPaymentRequestsCommand
-  extends PaymentCommand<GetClientPaymentRequestsRequest, GetClientPaymentRequestsResponse> {
+    extends PaymentCommand<GetClientPaymentRequestsRequest, GetClientPaymentRequestsResponse> {
 
   @Override
   public GetClientPaymentRequestsResponse Run(GetClientPaymentRequestsRequest request) {
     if (!getPaymentRequestRepository().existsById(request.getClientId())) {
-      return GetClientPaymentRequestsResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.NOT_FOUND)
-        .withErrorMessage("Client not found")
-        .build();
+      return GetClientPaymentRequestsResponse.builder()
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("Client not found")
+          .build();
     }
-    List<PaymentRequest> savedRequests = getPaymentRequestRepository()
-      .findAllByClientId(request.getClientId());
+    List<PaymentRequest> savedRequests =
+        getPaymentRequestRepository().findAllByClientId(request.getClientId());
 
-    List<PaymentRequestDTO> paymentRequestDTOS = PaymentRequestMapper.mapToPaymentRequestDTOs(
-      savedRequests
-    );
+    List<PaymentRequestDTO> paymentRequestDTOS =
+        PaymentRequestMapper.mapToPaymentRequestDTOs(savedRequests);
 
     System.out.println("[x] Payment requests fetched : " + paymentRequestDTOS);
 
-    return GetClientPaymentRequestsResponse
-      .builder()
-      .withStatusCode(HttpStatusCode.OK)
-      .withRequests(paymentRequestDTOS)
-      .build();
+    return GetClientPaymentRequestsResponse.builder()
+        .withStatusCode(HttpStatusCode.OK)
+        .withRequests(paymentRequestDTOS)
+        .build();
   }
 }

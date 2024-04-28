@@ -7,17 +7,13 @@ import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
 import lombok.Setter;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 public abstract class JobCommand<T extends CommandRequest, Q extends CommandResponse>
-  implements Command<T, Q> {
+    implements Command<T, Q> {
 
-  @Setter
-  JobRepository jobRepository;
+  @Setter JobRepository jobRepository;
 
-  @Setter
-  ProposalRepository proposalRepository;
+  @Setter ProposalRepository proposalRepository;
 
-  @Setter
-  AmqpTemplate rabbitTemplate;
+  @Setter AmqpTemplate rabbitTemplate;
 }

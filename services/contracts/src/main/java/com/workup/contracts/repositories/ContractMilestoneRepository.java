@@ -8,8 +8,7 @@ import org.springframework.data.cassandra.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ContractMilestoneRepository
-  extends CassandraRepository<ContractMilestone, UUID> {
+public interface ContractMilestoneRepository extends CassandraRepository<ContractMilestone, UUID> {
   @Query("SELECT * FROM contracts_data.contract_milestones WHERE contractid = ?0")
   List<ContractMilestone> findByContractId(String contractId);
 }

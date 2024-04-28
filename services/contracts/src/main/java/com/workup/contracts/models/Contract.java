@@ -14,8 +14,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table("contracts")
 public class Contract {
 
-  @PrimaryKey
-  private UUID contractId;
+  @PrimaryKey private UUID contractId;
 
   private String jobTitle;
   private String jobId;
@@ -26,6 +25,5 @@ public class Contract {
 
   private List<String> milestonesIds;
 
-  @Setter
-  private ContractState status;
+  @Setter private ContractState status;
 }

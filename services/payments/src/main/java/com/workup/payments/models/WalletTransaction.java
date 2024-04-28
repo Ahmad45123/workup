@@ -43,12 +43,11 @@ public class WalletTransaction {
   private WalletTransactionType transactionType;
 
   public WalletTransaction(
-    String walletId,
-    double amount,
-    String paymentTransactionId,
-    String description,
-    WalletTransactionType transactionType
-  ) {
+      String walletId,
+      double amount,
+      String paymentTransactionId,
+      String description,
+      WalletTransactionType transactionType) {
     this.walletId = walletId;
     this.amount = amount;
     this.paymentTransactionId = paymentTransactionId;

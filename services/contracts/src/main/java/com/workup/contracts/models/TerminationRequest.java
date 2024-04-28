@@ -1,7 +1,6 @@
 package com.workup.contracts.models;
 
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
-import java.util.Date;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,13 +13,11 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Table("termination_requests")
 public class TerminationRequest {
 
-  @PrimaryKey
-  private UUID requestId;
+  @PrimaryKey private UUID requestId;
 
   private String contractId;
   private String requesterId;
   private String reason;
 
-  @Setter
-  private TerminationRequestStatus status;
+  @Setter private TerminationRequestStatus status;
 }

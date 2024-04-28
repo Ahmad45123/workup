@@ -20,13 +20,13 @@ public class PaymentsApplication {
   @Bean
   public ApplicationRunner runner(AmqpTemplate template) {
     return args -> {
-      CreatePaymentRequestRequest createPaymentRequest = CreatePaymentRequestRequest
-        .builder()
-        .withAmount(1200)
-        .withDescription("Payment for services rendered")
-        .withClientId("3")
-        .withFreelancerId("4")
-        .build();
+      CreatePaymentRequestRequest createPaymentRequest =
+          CreatePaymentRequestRequest.builder()
+              .withAmount(1200)
+              .withDescription("Payment for services rendered")
+              .withClientId("3")
+              .withFreelancerId("4")
+              .build();
       template.convertSendAndReceive("paymentsqueue", createPaymentRequest);
     };
   }

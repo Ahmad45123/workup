@@ -20,47 +20,36 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = "contractsqueue")
 public class RabbitMQListener {
 
-  @Autowired
-  public ContractCommandMap commandMap;
+  @Autowired public ContractCommandMap commandMap;
 
   @RabbitHandler
   public InitiateContractResponse receive(InitiateContractRequest in) throws Exception {
     InitiateContractResponse response =
-      ((InitiateContractCommand) commandMap.getCommand("InitiateContract")).Run(in);
+        ((InitiateContractCommand) commandMap.getCommand("InitiateContract")).Run(in);
     return response;
   }
 
   @RabbitHandler
-  public ContractTerminationResponse receive(ContractTerminationRequest in)
-    throws Exception {
-    return (
-      (RequestContractTerminationCommand) commandMap.getCommand(
-        "RequestContractTermination"
-      )
-    ).Run(in);
+  public ContractTerminationResponse receive(ContractTerminationRequest in) throws Exception {
+    return ((RequestContractTerminationCommand) commandMap.getCommand("RequestContractTermination"))
+        .Run(in);
   }
 
   @RabbitHandler
   public HandleTerminationResponse receive(HandleTerminationRequest in) throws Exception {
-    return (
-      (HandleTerminationRequestCommand) commandMap.getCommand("HandleTerminationRequest")
-    ).Run(in);
+    return ((HandleTerminationRequestCommand) commandMap.getCommand("HandleTerminationRequest"))
+        .Run(in);
   }
 
   @RabbitHandler
-  public MarkPaymentCompletedResponse receive(MarkPaymentCompletedRequest in)
-    throws Exception {
-    return (
-      (MarkMilestoneAsPaidCommand) commandMap.getCommand("MarkMilestoneAsPaid")
-    ).Run(in);
+  public MarkPaymentCompletedResponse receive(MarkPaymentCompletedRequest in) throws Exception {
+    return ((MarkMilestoneAsPaidCommand) commandMap.getCommand("MarkMilestoneAsPaid")).Run(in);
   }
 
   @RabbitHandler
-  public ViewContractMilestonesResponse receive(ViewContractMilestonesRequest in)
-    throws Exception {
-    return (
-      (ViewContractMilestonesCommand) commandMap.getCommand("ViewContractMilestones")
-    ).Run(in);
+  public ViewContractMilestonesResponse receive(ViewContractMilestonesRequest in) throws Exception {
+    return ((ViewContractMilestonesCommand) commandMap.getCommand("ViewContractMilestones"))
+        .Run(in);
   }
   // NEW_COMMAND_BOILERPLATE
 

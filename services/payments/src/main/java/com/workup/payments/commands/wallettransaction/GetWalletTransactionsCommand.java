@@ -10,29 +10,26 @@ import com.workup.shared.enums.HttpStatusCode;
 import java.util.List;
 
 public class GetWalletTransactionsCommand
-  extends PaymentCommand<GetWalletTransactionsRequest, GetWalletTransactionsResponse> {
+    extends PaymentCommand<GetWalletTransactionsRequest, GetWalletTransactionsResponse> {
 
   @Override
   public GetWalletTransactionsResponse Run(GetWalletTransactionsRequest request) {
     if (getWalletRepository().existsById(request.getFreelancerId())) {
-      return GetWalletTransactionsResponse
-        .builder()
-        .withStatusCode(HttpStatusCode.BAD_REQUEST)
-        .withErrorMessage("Wallet does not exist")
-        .build();
+      return GetWalletTransactionsResponse.builder()
+          .withStatusCode(HttpStatusCode.BAD_REQUEST)
+          .withErrorMessage("Wallet does not exist")
+          .build();
     }
-    List<WalletTransaction> savedTransactions = getWalletTransactionRepository()
-      .findAllByWalletId(request.getFreelancerId());
-    List<WalletTransactionDTO> walletTransactionDTOS = WalletTransactionMapper.mapToWalletTransactionDTOs(
-      savedTransactions
-    );
+    List<WalletTransaction> savedTransactions =
+        getWalletTransactionRepository().findAllByWalletId(request.getFreelancerId());
+    List<WalletTransactionDTO> walletTransactionDTOS =
+        WalletTransactionMapper.mapToWalletTransactionDTOs(savedTransactions);
 
     System.out.println("[x] Wallet transactions fetched : " + walletTransactionDTOS);
 
-    return GetWalletTransactionsResponse
-      .builder()
-      .withStatusCode(HttpStatusCode.OK)
-      .withTransactions(walletTransactionDTOS)
-      .build();
+    return GetWalletTransactionsResponse.builder()
+        .withStatusCode(HttpStatusCode.OK)
+        .withTransactions(walletTransactionDTOS)
+        .build();
   }
 }

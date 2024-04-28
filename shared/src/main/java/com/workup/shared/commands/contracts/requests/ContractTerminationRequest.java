@@ -1,9 +1,6 @@
 package com.workup.shared.commands.contracts.requests;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.workup.shared.commands.CommandRequest;
-import java.util.Date;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;

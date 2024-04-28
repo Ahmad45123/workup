@@ -2,28 +2,22 @@ package com.workup.jobs.commands;
 
 import com.workup.jobs.repositories.JobRepository;
 import com.workup.jobs.repositories.ProposalRepository;
-import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
-import java.lang.reflect.Constructor;
-import java.util.HashMap;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JobCommandMap
-  extends CommandMap<JobCommand<? extends CommandRequest, ? extends CommandResponse>> {
+    extends CommandMap<JobCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
-  @Autowired
-  JobRepository jobRepository;
+  @Autowired JobRepository jobRepository;
 
-  @Autowired
-  ProposalRepository proposalRepository;
+  @Autowired ProposalRepository proposalRepository;
 
-  @Autowired
-  AmqpTemplate rabbitTemplate;
+  @Autowired AmqpTemplate rabbitTemplate;
 
   public void registerCommands() {
     commands.put("CreateJob", CreateJobCommand.class);
@@ -38,8 +32,7 @@ public class JobCommandMap
 
   @Override
   public void setupCommand(
-    JobCommand<? extends CommandRequest, ? extends CommandResponse> command
-  ) {
+      JobCommand<? extends CommandRequest, ? extends CommandResponse> command) {
     command.setJobRepository(jobRepository);
     command.setProposalRepository(proposalRepository);
     command.setRabbitTemplate(rabbitTemplate);
