@@ -7,8 +7,8 @@ import lombok.Getter;
 
 @Getter
 @Builder(setterPrefix = "with")
-@JsonDeserialize(builder = FreelancerRegisterResponse.FreelancerRegisterResponseBuilder.class)
-public class FreelancerRegisterResponse extends CommandResponse {
+@JsonDeserialize(builder = SignUpAndInResponse.SignUpAndInResponseBuilder.class)
+public class SignUpAndInResponse extends CommandResponse {
     boolean success;
     String authToken;
 }

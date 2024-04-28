@@ -11,10 +11,10 @@ import java.util.Date;
 @Builder(setterPrefix = "with")
 @JsonDeserialize(builder = FreelancerRegisterRequest.FreelancerRegisterRequestBuilder.class)
 public class FreelancerRegisterRequest extends CommandRequest {
-    String email;
-    String passwordHash;
-    String fullName;
-    String jobTitle;
-    String city;
-    Date birthDate;
+    private String email;
+    private String passwordHash;
+    private String fullName;
+    private String jobTitle;
+    private String city;
+    private Date birthDate;
 }
