@@ -1,6 +1,7 @@
 package com.workup.payments;
 
 import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
+import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -27,13 +28,13 @@ public class PaymentsApplication {
               .withClientId("3")
               .withFreelancerId("4")
               .build();
-      template.convertSendAndReceive("paymentsqueue", createPaymentRequest);
+      template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createPaymentRequest);
     };
   }
 
   @Bean
   public Queue myQueue() {
-    return new Queue("paymentsqueue");
+    return new Queue(ServiceQueueNames.PAYMENTS);
   }
 
   @Bean

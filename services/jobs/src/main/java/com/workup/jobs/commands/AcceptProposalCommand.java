@@ -12,6 +12,7 @@ import com.workup.shared.commands.jobs.proposals.ProposalStatus;
 import com.workup.shared.commands.jobs.proposals.requests.AcceptProposalRequest;
 import com.workup.shared.commands.jobs.proposals.responses.AcceptProposalResponse;
 import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.enums.ServiceQueueNames;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -89,7 +90,7 @@ public class AcceptProposalCommand
       Proposal acceptedProposal, Job acceptedJob, AcceptProposalRequest request) {
     return ((InitiateContractResponse)
             rabbitTemplate.convertSendAndReceive(
-                "contractsqueue",
+                ServiceQueueNames.CONTRACTS,
                 InitiateContractRequest.builder()
                     .withFreelancerId(acceptedProposal.getFreelancerId())
                     .withJobId(request.getJobId())

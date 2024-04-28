@@ -11,13 +11,14 @@ import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
 import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedResponse;
 import com.workup.shared.commands.contracts.responses.ViewContractMilestonesResponse;
+import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@RabbitListener(queues = "contractsqueue")
+@RabbitListener(queues = ServiceQueueNames.CONTRACTS)
 public class RabbitMQListener {
 
   @Autowired public ContractCommandMap commandMap;

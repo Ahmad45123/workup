@@ -1,5 +1,6 @@
 package com.workup.jobs;
 
+import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.core.Queue;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,6 @@ import org.springframework.context.annotation.Bean;
 public class TestConfigBase {
   @Bean
   public Queue contractsQueueMock() {
-    return new Queue("contractsqueue");
+    return new Queue(ServiceQueueNames.CONTRACTS);
   }
 }

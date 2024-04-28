@@ -1,5 +1,6 @@
 package com.workup.jobs;
 
+import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -16,7 +17,7 @@ public class JobsApplication {
 
   @Bean
   public Queue myQueue() {
-    return new Queue("jobsqueue");
+    return new Queue(ServiceQueueNames.JOBS);
   }
 
   @Bean

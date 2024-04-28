@@ -8,6 +8,7 @@ import com.workup.shared.commands.contracts.responses.ContractTerminationRespons
 import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
 import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,7 +29,8 @@ public class HandleContractTerminationTests {
             .build();
 
     HandleTerminationResponse response =
-        (HandleTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+        (HandleTerminationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
     assert response != null;
     if (response.getErrorMessage().equals("No Termination Requests Found"))
       System.out.println(" [x] Request Not Found Test has Passed");
@@ -65,7 +67,7 @@ public class HandleContractTerminationTests {
             .build();
     InitiateContractResponse contractResponse =
         (InitiateContractResponse)
-            template.convertSendAndReceive("contractsqueue", initiateContractRequest);
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
     assert contractResponse != null;
 
     // create termination request
@@ -79,7 +81,7 @@ public class HandleContractTerminationTests {
 
     ContractTerminationResponse terminationResponse =
         (ContractTerminationResponse)
-            template.convertSendAndReceive("contractsqueue", terminationRequest);
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, terminationRequest);
     assert terminationResponse != null;
 
     // check over the functionality
@@ -90,7 +92,8 @@ public class HandleContractTerminationTests {
             .build();
 
     HandleTerminationResponse response =
-        (HandleTerminationResponse) template.convertSendAndReceive("contractsqueue", request);
+        (HandleTerminationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
     assert response != null;
     if (response.getStatusCode() == HttpStatusCode.OK) {
       System.out.println(" [x] Success Test has Passed");

@@ -20,6 +20,7 @@ import com.workup.shared.commands.jobs.requests.SearchJobsRequest;
 import com.workup.shared.commands.jobs.responses.CreateJobResponse;
 import com.workup.shared.commands.jobs.responses.SearchJobsResponse;
 import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.enums.ServiceQueueNames;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -92,7 +93,8 @@ class JobsApplicationTests {
             .build();
 
     CreateJobResponse response =
-        (CreateJobResponse) template.convertSendAndReceive("jobsqueue", createJobRequest);
+        (CreateJobResponse)
+            template.convertSendAndReceive(ServiceQueueNames.JOBS, createJobRequest);
 
     assertNotNull(response);
     assertTrue(response.getStatusCode() == HttpStatusCode.CREATED);
@@ -146,7 +148,7 @@ class JobsApplicationTests {
             .withMilestones(milestones)
             .build();
     CreateProposalResponse response =
-        (CreateProposalResponse) template.convertSendAndReceive("jobsqueue", request);
+        (CreateProposalResponse) template.convertSendAndReceive(ServiceQueueNames.JOBS, request);
 
     assertTrue(response.getStatusCode() == HttpStatusCode.CREATED);
   }
@@ -187,7 +189,7 @@ class JobsApplicationTests {
             .build();
 
     AcceptProposalResponse response =
-        (AcceptProposalResponse) template.convertSendAndReceive("jobsqueue", request);
+        (AcceptProposalResponse) template.convertSendAndReceive(ServiceQueueNames.JOBS, request);
 
     assertTrue(response.getStatusCode() == HttpStatusCode.BAD_REQUEST);
     assertTrue(
@@ -239,7 +241,7 @@ class JobsApplicationTests {
     ContractsMockingListener.statusCodeToBeReturned = HttpStatusCode.CREATED;
 
     AcceptProposalResponse response =
-        (AcceptProposalResponse) template.convertSendAndReceive("jobsqueue", request);
+        (AcceptProposalResponse) template.convertSendAndReceive(ServiceQueueNames.JOBS, request);
 
     assertTrue(response.getStatusCode() == HttpStatusCode.OK);
     assertTrue(
@@ -287,7 +289,7 @@ class JobsApplicationTests {
             .build();
 
     AcceptProposalResponse response =
-        (AcceptProposalResponse) template.convertSendAndReceive("jobsqueue", request);
+        (AcceptProposalResponse) template.convertSendAndReceive(ServiceQueueNames.JOBS, request);
 
     assertTrue(response.getStatusCode() == HttpStatusCode.UNAUTHORIZED);
     assertTrue(
@@ -325,7 +327,8 @@ class JobsApplicationTests {
     SearchJobsRequest searchJobsCommand =
         SearchJobsRequest.builder().withPageLimit(2).withQuery("Developer").build();
     SearchJobsResponse resp =
-        (SearchJobsResponse) template.convertSendAndReceive("jobsqueue", searchJobsCommand);
+        (SearchJobsResponse)
+            template.convertSendAndReceive(ServiceQueueNames.JOBS, searchJobsCommand);
 
     HashSet<String> jobIds = new HashSet<>();
     jobIds.add(job1.getId().toString());
@@ -345,7 +348,9 @@ class JobsApplicationTests {
             .withQuery("Developer")
             .withPagingState(resp.getPagingState())
             .build();
-    resp = (SearchJobsResponse) template.convertSendAndReceive("jobsqueue", searchJobsCommand);
+    resp =
+        (SearchJobsResponse)
+            template.convertSendAndReceive(ServiceQueueNames.JOBS, searchJobsCommand);
 
     assertEquals(HttpStatusCode.OK, resp.getStatusCode());
     assertEquals(1, resp.getJobs().length);
