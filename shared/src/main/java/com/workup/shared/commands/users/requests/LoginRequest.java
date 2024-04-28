@@ -1,13 +1,13 @@
 package com.workup.shared.commands.users.requests;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
-@Builder(setterPrefix = "with")
-@JsonDeserialize(builder = LoginRequest.LoginRequestBuilder.class)
+@SuperBuilder(setterPrefix = "with")
+@Jacksonized
 public class LoginRequest {
-    private String email;
-    private String passwordHash;
+  private String email;
+  private String passwordHash;
 }
