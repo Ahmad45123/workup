@@ -4,6 +4,7 @@ import com.workup.jobs.models.Job;
 import com.workup.shared.commands.jobs.JobListingItem;
 import com.workup.shared.commands.jobs.requests.SearchJobsRequest;
 import com.workup.shared.commands.jobs.responses.SearchJobsResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import java.nio.ByteBuffer;
 import org.springframework.data.cassandra.core.query.CassandraPageRequest;
 import org.springframework.data.domain.PageRequest;
@@ -41,11 +42,15 @@ public class SearchJobsCommand extends JobCommand<SearchJobsRequest, SearchJobsR
                       })
                   .toArray(JobListingItem[]::new))
           .withPagingState(getPagingState(result))
+          .withStatusCode(HttpStatusCode.OK)
           .build();
     } catch (Exception e) {
       System.err.println("ERROR: " + e.getMessage());
       e.printStackTrace();
-      return SearchJobsResponse.builder().withErrorMessage(e.getMessage()).build();
+      return SearchJobsResponse.builder()
+          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .withErrorMessage(e.getMessage())
+          .build();
     }
   }
 
