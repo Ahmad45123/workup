@@ -1,12 +1,12 @@
 package com.workup.shared.commands.users.requests;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
-@Builder(setterPrefix = "with")
-@JsonDeserialize(builder = AuthenticationRequest.AuthenticationRequestBuilder.class)
+@SuperBuilder(setterPrefix = "with")
+@Jacksonized
 public class AuthenticationRequest {
-    private String authToken;
+  private String authToken;
 }
