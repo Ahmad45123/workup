@@ -1,0 +1,72 @@
+# This docker compose is for testing a real production env locally..
+# Simulates a network etc.
+
+services:
+  # ----- GENERAL SERVICES -------
+  service_mq:
+    image: rabbitmq:3.13-management
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      - microservices
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  # ----- JOBS MICROSERVICE -------
+  service_jobs:
+    build: ./services/jobs
+    depends_on:
+      jobs_db:
+        condition: service_healthy
+      service_mq:
+        condition: service_healthy
+    networks:
+      - microservices
+      - jobs
+
+  # ----- PAYMENTS MICROSERVICE -------
+  service_payments:
+    build: ./services/payments
+    depends_on:
+      payments_db:
+        condition: service_healthy
+      service_mq:
+        condition: service_started
+    networks:
+      - microservices
+      - payments
+
+  jobs_db:
+    image: cassandra:4.0.7
+    networks:
+      - jobs # only accessible by the jobs service
+    volumes:
+      - ./services/jobs/cassandra-config/cassandra.yaml:/etc/cassandra/cassandra.yaml
+    healthcheck:
+      test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
+      interval: 20s
+      timeout: 10s
+      retries: 60
+    ports:
+      - "9042:9042"
+
+  payments_db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: payments_password
+      POSTGRES_USER: payments_user
+      POSTGRES_DB: payments_database
+    ports:
+      - "5432:5432"
+
+networks:
+  microservices:
+    driver: bridge
+  jobs:
+    driver: bridge
+  payments:
+    driver: bridge
