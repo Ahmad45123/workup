@@ -20,19 +20,18 @@ import com.workup.shared.commands.jobs.requests.SearchJobsRequest;
 import com.workup.shared.commands.jobs.responses.CreateJobResponse;
 import com.workup.shared.commands.jobs.responses.SearchJobsResponse;
 import com.workup.shared.enums.HttpStatusCode;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.CassandraContainer;
@@ -42,6 +41,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest
 @Testcontainers
+@Import(TestConfigBase.class)
 class JobsApplicationTests {
 
   @Container
@@ -69,12 +69,6 @@ class JobsApplicationTests {
   private static final String CLIENT_TWO_ID = "456";
   private static final String FREELANCER_ONE_ID = "789";
 
-  @BeforeAll
-  static void mockContractsQueue()
-      throws UnsupportedOperationException, IOException, InterruptedException {
-    rabbitMQContainer.execInContainer("rabbitmqadmin", "declare", "queue", "name=contractsqueue");
-  }
-
   @Autowired AmqpTemplate template;
   @Autowired JobRepository jobRepository;
   @Autowired ProposalRepository proposalRepository;
@@ -84,9 +78,6 @@ class JobsApplicationTests {
     jobRepository.deleteAll();
     proposalRepository.deleteAll();
   }
-
-  @Test
-  void contextLoads() {}
 
   @Test
   void testCreateJob() {
@@ -243,6 +234,10 @@ class JobsApplicationTests {
             .withUserId(CLIENT_ONE_ID)
             .build();
 
+    String fakeContractId = UUID.randomUUID().toString();
+    ContractsMockingListener.contractIdToBeReturned = fakeContractId;
+    ContractsMockingListener.statusCodeToBeReturned = HttpStatusCode.CREATED;
+
     AcceptProposalResponse response =
         (AcceptProposalResponse) template.convertSendAndReceive("jobsqueue", request);
 
@@ -250,6 +245,7 @@ class JobsApplicationTests {
     assertTrue(
         proposalRepository.findById(proposal.getPrimaryKey()).get().getStatus()
             == ProposalStatus.ACCEPTED);
+    assertEquals(fakeContractId, response.getContractId());
     assertTrue(!jobRepository.findById(job.getId()).get().isActive());
   }
 

@@ -10,12 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RabbitListener(queues = "contractsqueue")
 public class ContractsMockingListener {
+
+  public static String contractIdToBeReturned;
+  public static HttpStatusCode statusCodeToBeReturned;
+
   @RabbitHandler
   public InitiateContractResponse receive(InitiateContractRequest in) throws Exception {
-    System.out.println("Received: " + in);
     return InitiateContractResponse.builder()
-        .withContractId("123")
-        .withStatusCode(HttpStatusCode.CREATED)
+        .withContractId(contractIdToBeReturned)
+        .withStatusCode(statusCodeToBeReturned)
         .build();
   }
 }
