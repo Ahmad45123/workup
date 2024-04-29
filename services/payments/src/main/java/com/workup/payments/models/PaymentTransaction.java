@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.validation.constraints.DecimalMin;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Data
 @Builder(setterPrefix = "with")
+@NoArgsConstructor
 public class PaymentTransaction {
 
   @Id
@@ -41,4 +43,19 @@ public class PaymentTransaction {
   @Temporal(TemporalType.TIMESTAMP)
   @Column(name = "updated_at", nullable = false)
   private Date updatedAt;
+
+  public PaymentTransaction(
+      String id,
+      String paymentRequestId,
+      double amount,
+      PaymentTransactionStatus status,
+      Date createdAt,
+      Date updatedAt) {
+    this.id = id;
+    this.paymentRequestId = paymentRequestId;
+    this.amount = amount;
+    this.status = PaymentTransactionStatus.PENDING;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
 }
