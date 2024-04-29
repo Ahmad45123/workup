@@ -7,6 +7,7 @@ import javax.validation.constraints.DecimalMin;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,6 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Data
 @Builder(setterPrefix = "with")
 @AllArgsConstructor
+@NoArgsConstructor
 public class WalletTransaction {
 
   @Id
