@@ -10,7 +10,7 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class UpdateFreelancerEducationRequest extends CommandRequest {
-    String freelancer_id;
-    String education_id;
-    Education updatedEducation;
+  String freelancer_id;
+  String education_id;
+  Education updatedEducation;
 }

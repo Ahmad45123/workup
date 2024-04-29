@@ -10,6 +10,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class UpdateFreelancerAchievementRequest extends CommandRequest {
-    String freelancer_id;
-    Achievement updatedAchievement;
+  String freelancer_id;
+  Achievement updatedAchievement;
 }

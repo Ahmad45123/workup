@@ -10,5 +10,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class AddFreelancerExperienceResponse extends CommandResponse {
-    private Freelancer freelancer;
+  private Freelancer freelancer;
 }

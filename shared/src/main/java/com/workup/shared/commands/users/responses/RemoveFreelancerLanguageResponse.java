@@ -8,5 +8,4 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
-public class RemoveFreelancerLanguageResponse extends CommandResponse {
-}
+public class RemoveFreelancerLanguageResponse extends CommandResponse {}

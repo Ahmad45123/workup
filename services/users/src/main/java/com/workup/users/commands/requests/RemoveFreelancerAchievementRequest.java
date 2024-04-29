@@ -9,6 +9,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class RemoveFreelancerAchievementRequest extends CommandRequest {
-    String freelancerId;
-    String achievementId;
+  String freelancerId;
+  String achievementId;
 }

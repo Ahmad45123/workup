@@ -1,10 +1,6 @@
 package com.workup.users.repositories;
 
-import java.util.List;
-
+import com.workup.users.db.Client;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.workup.users.db.Client;
-
-public interface ClientRepository extends MongoRepository<Client, String> {
-}
+public interface ClientRepository extends MongoRepository<Client, String> {}

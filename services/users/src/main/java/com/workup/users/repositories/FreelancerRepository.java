@@ -1,10 +1,6 @@
 package com.workup.users.repositories;
 
-import java.util.List;
-
-import org.springframework.data.mongodb.repository.MongoRepository;
 import com.workup.users.db.Freelancer;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface FreelancerRepository extends MongoRepository<Freelancer, String> {
-
-}
+public interface FreelancerRepository extends MongoRepository<Freelancer, String> {}
