@@ -12,10 +12,10 @@ import java.util.Date;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerRegisterRequest extends CommandRequest {
-    String email;
-    String passwordHash;
-    String fullName;
-    String jobTitle;
-    String city;
-    Date birthDate;
+    public String email;
+    public String passwordHash;
+    public String fullName;
+    public String jobTitle;
+    public String city;
+    public Date birthDate;
 }

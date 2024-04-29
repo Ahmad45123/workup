@@ -3,6 +3,9 @@ package com.workup.users.commands;
 import java.io.ByteArrayInputStream;
 import java.util.Base64;
 
+import com.workup.shared.commands.users.requests.FreelancerSetResumeRequest;
+import com.workup.shared.commands.users.responses.FreelancerSetResumeResponse;
+
 public class FreelancerSetResumeCommand
         extends UserCommand<FreelancerSetResumeRequest, FreelancerSetResumeResponse> {
 

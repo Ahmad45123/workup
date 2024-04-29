@@ -1,4 +1,4 @@
-package com.workup.users.commands;
+package com.workup.shared.commands.users.responses;
 
 import com.workup.shared.commands.CommandResponse;
 
@@ -9,7 +9,6 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
-public class FreelancerGetProfileBriefResponse extends CommandResponse {
-    String email;
-    String full_name;
+public class ClientSetProfileResponse extends CommandResponse {
+    public boolean success;
 }

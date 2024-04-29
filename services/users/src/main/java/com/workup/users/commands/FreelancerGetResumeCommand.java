@@ -4,6 +4,8 @@ import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.workup.shared.commands.users.requests.FreelancerGetResumeRequest;
+import com.workup.shared.commands.users.responses.FreelancerGetResumeResponse;
 import com.workup.users.db.Client;
 
 public class FreelancerGetResumeCommand

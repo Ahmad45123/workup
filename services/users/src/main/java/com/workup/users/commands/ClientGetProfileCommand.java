@@ -2,6 +2,8 @@ package com.workup.users.commands;
 
 import java.util.Optional;
 
+import com.workup.shared.commands.users.requests.ClientGetProfileRequest;
+import com.workup.shared.commands.users.responses.ClientGetProfileResponse;
 import com.workup.users.db.Client;
 
 public class ClientGetProfileCommand

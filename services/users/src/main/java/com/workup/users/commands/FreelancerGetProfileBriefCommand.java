@@ -2,6 +2,8 @@ package com.workup.users.commands;
 
 import java.util.Optional;
 
+import com.workup.shared.commands.users.requests.FreelancerGetProfileBriefRequest;
+import com.workup.shared.commands.users.responses.FreelancerGetProfileBriefResponse;
 import com.workup.users.db.Freelancer;
 
 public class FreelancerGetProfileBriefCommand

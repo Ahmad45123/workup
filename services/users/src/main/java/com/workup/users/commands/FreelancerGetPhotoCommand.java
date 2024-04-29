@@ -3,6 +3,8 @@ package com.workup.users.commands;
 import java.util.Base64;
 import java.util.Optional;
 
+import com.workup.shared.commands.users.requests.FreelancerGetPhotoRequest;
+import com.workup.shared.commands.users.responses.FreelancerGetPhotoResponse;
 import com.workup.users.db.Client;
 
 public class FreelancerGetPhotoCommand

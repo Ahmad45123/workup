@@ -3,6 +3,9 @@ package com.workup.users.commands;
 import java.io.ByteArrayInputStream;
 import java.util.Base64;
 
+import com.workup.shared.commands.users.requests.FreelancerSetPhotoRequest;
+import com.workup.shared.commands.users.responses.FreelancerSetPhotoResponse;
+
 public class FreelancerSetPhotoCommand
         extends UserCommand<FreelancerSetPhotoRequest, FreelancerSetPhotoResponse> {
 

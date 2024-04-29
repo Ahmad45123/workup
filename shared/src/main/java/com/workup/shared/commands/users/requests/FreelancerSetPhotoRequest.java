@@ -1,4 +1,4 @@
-package com.workup.users.commands;
+package com.workup.shared.commands.users.requests;
 
 import com.workup.shared.commands.CommandRequest;
 
@@ -9,7 +9,8 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
-public class FreelancerGetPhotoRequest extends CommandRequest {
-    String user_id;
+public class FreelancerSetPhotoRequest extends CommandRequest {
+    public String user_id;
+    public String photo_encoded; // Base64 encoded photo
    
 }
