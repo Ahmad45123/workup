@@ -9,6 +9,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class SignUpAndInResponse extends CommandResponse {
-  boolean success;
   String authToken;
 }
