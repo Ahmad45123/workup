@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.validation.constraints.DecimalMin;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,6 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Data
 @Builder(setterPrefix = "with")
+@NoArgsConstructor
 public class PaymentRequest {
 
   @Id
