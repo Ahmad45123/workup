@@ -1,5 +1,6 @@
 package com.workup.users.commands;
 
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.commands.requests.GetFreelancerAchievementsRequest;
 import com.workup.users.commands.responses.GetFreelancerAchievementsResponse;
 import com.workup.users.db.Achievement;
@@ -14,11 +15,14 @@ public class GetFreelancerAchievementsCommand
     Optional<Freelancer> freelancerOptional =
         freelancerRepository.findById(request.getFreelancer_id());
     if (freelancerOptional.isEmpty())
-      return GetFreelancerAchievementsResponse.builder().withSuccess(false).build();
+      return GetFreelancerAchievementsResponse.builder()
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("Freelancer Doesn't Exist")
+          .build();
     Freelancer freelancer = freelancerOptional.get();
     List<Achievement> achievements = freelancer.getAchievements();
     return GetFreelancerAchievementsResponse.builder()
-        .withSuccess(true)
+        .withStatusCode(HttpStatusCode.OK)
         .withAchievements(achievements)
         .build();
   }

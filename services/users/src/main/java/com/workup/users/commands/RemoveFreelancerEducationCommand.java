@@ -1,11 +1,11 @@
 package com.workup.users.commands;
 
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.commands.requests.RemoveFreelancerEducationRequest;
 import com.workup.users.commands.responses.RemoveFreelancerEducationResponse;
 import com.workup.users.db.Education;
 import com.workup.users.db.Freelancer;
 import java.util.Optional;
-import org.springframework.http.ResponseEntity;
 
 public class RemoveFreelancerEducationCommand
     extends UserCommand<RemoveFreelancerEducationRequest, RemoveFreelancerEducationResponse> {
@@ -15,7 +15,10 @@ public class RemoveFreelancerEducationCommand
     Optional<Freelancer> freelancerOptional =
         freelancerRepository.findById(request.getFreelancer_id());
     if (freelancerOptional.isEmpty())
-      return RemoveFreelancerEducationResponse.builder().withSuccess(false).build();
+      return RemoveFreelancerEducationResponse.builder()
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("Freelancer Doesn't Exist")
+          .build();
     Freelancer freelancer = freelancerOptional.get();
     freelancer
         .getEducations()
@@ -23,18 +26,14 @@ public class RemoveFreelancerEducationCommand
     deleteEducation(request.getEducation_id());
     freelancerRepository.save(freelancer);
     return RemoveFreelancerEducationResponse.builder()
-        .withSuccess(true)
+        .withStatusCode(HttpStatusCode.OK)
         .withFreelancer(freelancer)
         .build();
   }
 
   void deleteEducation(String id) {
     Optional<Education> educationOptional = educationRepository.findById(id);
-    if (educationOptional.isEmpty()) {
-      ResponseEntity.notFound().build();
-      return;
-    }
+    if (educationOptional.isEmpty()) return;
     educationRepository.delete(educationOptional.get());
-    ResponseEntity.noContent().build();
   }
 }

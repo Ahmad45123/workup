@@ -1,5 +1,6 @@
 package com.workup.users.commands;
 
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.commands.requests.GetFreelancerEducationsRequest;
 import com.workup.users.commands.responses.GetFreelancerEducationsResponse;
 import com.workup.users.db.Education;
@@ -13,11 +14,14 @@ public class GetFreelancerEducationsCommand
   public GetFreelancerEducationsResponse Run(GetFreelancerEducationsRequest request) {
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUser_id());
     if (freelancerOptional.isEmpty())
-      return GetFreelancerEducationsResponse.builder().withSuccess(false).build();
+      return GetFreelancerEducationsResponse.builder()
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("Freelancer Doesn't Exist")
+          .build();
     Freelancer freelancer = freelancerOptional.get();
     List<Education> educations = freelancer.getEducations();
     return GetFreelancerEducationsResponse.builder()
-        .withSuccess(true)
+        .withStatusCode(HttpStatusCode.OK)
         .withEducations(educations)
         .build();
   }

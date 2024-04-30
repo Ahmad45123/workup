@@ -1,11 +1,11 @@
 package com.workup.users.commands;
 
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.commands.requests.RemoveFreelancerAchievementRequest;
 import com.workup.users.commands.responses.RemoveFreelancerAchievementResponse;
 import com.workup.users.db.Achievement;
 import com.workup.users.db.Freelancer;
 import java.util.Optional;
-import org.springframework.http.ResponseEntity;
 
 public class RemoveFreelancerAchievementCommand
     extends UserCommand<RemoveFreelancerAchievementRequest, RemoveFreelancerAchievementResponse> {
@@ -14,7 +14,10 @@ public class RemoveFreelancerAchievementCommand
     Optional<Freelancer> freelancerOptional =
         freelancerRepository.findById(request.getFreelancerId());
     if (freelancerOptional.isEmpty())
-      return RemoveFreelancerAchievementResponse.builder().withSuccess(false).build();
+      return RemoveFreelancerAchievementResponse.builder()
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("Freelancer Doesn't Exist")
+          .build();
     Freelancer freelancer = freelancerOptional.get();
     freelancer
         .getAchievements()
@@ -22,18 +25,14 @@ public class RemoveFreelancerAchievementCommand
     deleteAchievement(request.getAchievementId());
     freelancerRepository.save(freelancer);
     return RemoveFreelancerAchievementResponse.builder()
-        .withSuccess(true)
+        .withStatusCode(HttpStatusCode.OK)
         .withFreelancer(freelancer)
         .build();
   }
 
   public void deleteAchievement(String id) {
     Optional<Achievement> achievementOptional = achievementRepository.findById(id);
-    if (achievementOptional.isEmpty()) {
-      ResponseEntity.notFound().build();
-      return;
-    }
+    if (achievementOptional.isEmpty()) return;
     achievementRepository.delete(achievementOptional.get());
-    ResponseEntity.noContent().build();
   }
 }

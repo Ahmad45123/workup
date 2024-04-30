@@ -1,5 +1,6 @@
 package com.workup.users.commands;
 
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.commands.requests.AddFreelancerExperienceRequest;
 import com.workup.users.commands.responses.AddFreelancerExperienceResponse;
 import com.workup.users.db.Experience;
@@ -13,13 +14,16 @@ public class AddFreelancerExperienceCommand
     Optional<Freelancer> freelancerOptional =
         freelancerRepository.findById(request.getFreelancerId());
     if (freelancerOptional.isEmpty())
-      return AddFreelancerExperienceResponse.builder().withSuccess(false).build();
+      return AddFreelancerExperienceResponse.builder()
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("Freelancer Doesn't Exist")
+          .build();
     Freelancer freelancer = freelancerOptional.get();
     Experience newExperience = experienceRepository.save(request.getNewExperience());
     freelancer.getExperiences().add(newExperience);
     freelancerRepository.save(freelancer);
     return AddFreelancerExperienceResponse.builder()
-        .withSuccess(true)
+        .withStatusCode(HttpStatusCode.CREATED)
         .withFreelancer(freelancer)
         .build();
   }
