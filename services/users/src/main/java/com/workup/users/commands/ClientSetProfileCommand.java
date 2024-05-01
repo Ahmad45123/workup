@@ -46,7 +46,7 @@ public class ClientSetProfileCommand
         clientRepository.save(client);
 
         return ClientSetProfileResponse.builder()
-                .withSuccess(true)
+                .withStatusCode(HttpStatusCode.OK)
                 .build();
 
     }

@@ -1,5 +1,7 @@
 package com.workup.users;
 
+import static org.junit.Assert.assertEquals;
+
 import java.time.Instant;
 import java.util.Date;
 
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
@@ -16,21 +19,25 @@ import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import com.workup.shared.commands.users.requests.FreelancerRegisterRequest;
-import com.workup.shared.commands.users.responses.FreelancerRegisterResponse;
+import com.workup.shared.commands.users.requests.FreelancerGetProfileBriefRequest;
+import com.workup.shared.commands.users.responses.FreelancerGetProfileBriefResponse;
+import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.users.db.Freelancer;
 import com.workup.users.repositories.ClientRepository;
 import com.workup.users.repositories.ExperienceRepository;
 import com.workup.users.repositories.FreelancerRepository;
 
 @Testcontainers
 @SpringBootTest
+@Import(TestConfigBase.class)
 class UsersApplicationTests {
 
     @Container
     static final RabbitMQContainer rabbitMQContainer = new RabbitMQContainer("rabbitmq:3.13-management");
 
     @Container
-    static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.6");
+    static final MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7").withExposedPorts(27017);
     @Autowired
     private AmqpTemplate template;
     @Autowired
@@ -53,10 +60,14 @@ class UsersApplicationTests {
         rabbitMQContainer.stop();
     }
 
+    static int mongoport() {
+        return mongoDBContainer.getMappedPort(27017);
+    }
+
     @DynamicPropertySource
     static void setDatasourceProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
-        registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
+        registry.add("spring.data.mongodb.port", UsersApplicationTests::mongoport);
         // registry.add("spring.data.mongodb.database", mongoDBContainer::getname);
 
         registry.add("spring.rabbitmq.host", rabbitMQContainer::getHost);
@@ -66,18 +77,28 @@ class UsersApplicationTests {
     }
 
     @Test
-    void testCreateUser(){
-        var registerRequest = FreelancerRegisterRequest.builder()
-        .withEmail("ahmad45123@gmail.com")
-        .withPasswordHash("verysecurepassword")
-        .withFullName("Mr. Mamdouh")
-        .withJobTitle("Software Engineer")
-        .withCity("Cairo")
-        .withBirthDate(Date.from(Instant.now()))
-        .build();
+    void testCreateUser() {
+        var freelancerObj = Freelancer.builder()
+                .withEmail("ahmad45123@gmail.com")
+                .withPassword_hash("verysecurepassword")
+                .withFull_name("Mr. Mamdouh")
+                .withJob_title("Software Engineer")
+                .withCity("Cairo")
+                .withBirthdate(Date.from(Instant.now()))
+                .build();
 
-        FreelancerRegisterResponse registerResponse  =  (FreelancerRegisterResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, , registerRequest);
+        freelancerRepository.save(freelancerObj);
 
+        FreelancerGetProfileBriefRequest request = FreelancerGetProfileBriefRequest.builder()
+                .withUser_id(freelancerObj.getId().toString())
+                .build();
+
+        FreelancerGetProfileBriefResponse breifResponse = (FreelancerGetProfileBriefResponse) template
+                .convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+        assertEquals(breifResponse.getStatusCode(), (HttpStatusCode.OK));
+        assertEquals(breifResponse.getFull_name(), (freelancerObj.getFull_name()));
+        assertEquals(breifResponse.getEmail(), (freelancerObj.getEmail()));
 
     }
 

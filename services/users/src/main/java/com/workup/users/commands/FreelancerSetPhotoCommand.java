@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.util.Base64;
 
 import com.workup.shared.commands.users.requests.FreelancerSetPhotoRequest;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.commands.users.responses.FreelancerSetPhotoResponse;
 
 public class FreelancerSetPhotoCommand
@@ -20,11 +21,11 @@ public class FreelancerSetPhotoCommand
             gridFsTemplate.store(new ByteArrayInputStream(photo_bytes_arr), name);
         } catch (Exception e) {
             return FreelancerSetPhotoResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                     .build();
         }
         return FreelancerSetPhotoResponse.builder()
-                .withSuccess(true)
+                .withStatusCode(HttpStatusCode.OK)
                 .build();
 
     }

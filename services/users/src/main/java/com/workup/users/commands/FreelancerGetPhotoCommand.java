@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.workup.shared.commands.users.requests.FreelancerGetPhotoRequest;
 import com.workup.shared.commands.users.responses.FreelancerGetPhotoResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.db.Client;
 
 public class FreelancerGetPhotoCommand
@@ -16,7 +17,7 @@ public class FreelancerGetPhotoCommand
 
         if (!clientOptional.isPresent()) {
             return FreelancerGetPhotoResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                     .build();
         }
         String name = PHOTO_BUCKET + request.user_id;
@@ -26,14 +27,14 @@ public class FreelancerGetPhotoCommand
             bytesArr = gridFsTemplate.getResource(name).getInputStream().readAllBytes();
         } catch (Exception e) {
             return FreelancerGetPhotoResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                     .build();
         }
 
         String base64Encoded = Base64.getEncoder().encodeToString(bytesArr);
 
         return FreelancerGetPhotoResponse.builder()
-                .withSuccess(true)
+                .withStatusCode(HttpStatusCode.OK)
                 .withPhotoEncoded(base64Encoded)
                 .build();
 

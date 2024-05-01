@@ -5,6 +5,7 @@ import java.util.Base64;
 
 import com.workup.shared.commands.users.requests.FreelancerSetResumeRequest;
 import com.workup.shared.commands.users.responses.FreelancerSetResumeResponse;
+import com.workup.shared.enums.HttpStatusCode;
 
 public class FreelancerSetResumeCommand
         extends UserCommand<FreelancerSetResumeRequest, FreelancerSetResumeResponse> {
@@ -20,11 +21,11 @@ public class FreelancerSetResumeCommand
             gridFsTemplate.store(new ByteArrayInputStream(resume_byes_arr), name);
         } catch (Exception e) {
             return FreelancerSetResumeResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                     .build();
         }
         return FreelancerSetResumeResponse.builder()
-                .withSuccess(true)
+                .withStatusCode(HttpStatusCode.OK)
                 .build();
 
     }

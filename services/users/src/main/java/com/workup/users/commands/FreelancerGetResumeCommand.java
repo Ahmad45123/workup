@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.workup.shared.commands.users.requests.FreelancerGetResumeRequest;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.commands.users.responses.FreelancerGetResumeResponse;
 import com.workup.users.db.Client;
 
@@ -17,7 +18,7 @@ public class FreelancerGetResumeCommand
 
         if (!clientOptional.isPresent()) {
             return FreelancerGetResumeResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                     .build();
         }
         String name = RESUME_BUCKET + request.user_id;
@@ -27,14 +28,14 @@ public class FreelancerGetResumeCommand
             bytesArr = gridFsTemplate.getResource(name).getInputStream().readAllBytes();
         } catch (Exception e) {
             return FreelancerGetResumeResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                     .build();
         }
 
         String base64Encoded = Base64.getEncoder().encodeToString(bytesArr);
 
         return FreelancerGetResumeResponse.builder()
-                .withSuccess(true)
+                .withStatusCode(HttpStatusCode.OK)
                 .withResumeEncoded(base64Encoded)
                 .build();
 

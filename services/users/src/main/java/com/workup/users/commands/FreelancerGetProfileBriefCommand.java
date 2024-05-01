@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.workup.shared.commands.users.requests.FreelancerGetProfileBriefRequest;
 import com.workup.shared.commands.users.responses.FreelancerGetProfileBriefResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.db.Freelancer;
 
 public class FreelancerGetProfileBriefCommand
@@ -15,13 +16,13 @@ public class FreelancerGetProfileBriefCommand
 
         if (!freelancer.isPresent()) {
             return FreelancerGetProfileBriefResponse.builder()
-                    .withSuccess(false)
+                    .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
                     .build();
 
         }
 
         return FreelancerGetProfileBriefResponse.builder()
-                .withSuccess(true)
+                .withStatusCode(HttpStatusCode.OK)
                 .withEmail(freelancer.get().getEmail())
                 .withFull_name(freelancer.get().getFull_name())
                 .build();

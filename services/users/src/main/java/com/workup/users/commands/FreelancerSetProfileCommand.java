@@ -3,6 +3,7 @@ package com.workup.users.commands;
 import java.util.Optional;
 
 import com.workup.shared.commands.users.requests.FreelancerSetProfileRequest;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.commands.users.responses.FreelancerSetProfileResponse;
 import com.workup.users.db.Freelancer;
 
@@ -46,7 +47,7 @@ public class FreelancerSetProfileCommand
         freelancerRepository.save(freelancer);
 
         return FreelancerSetProfileResponse.builder()
-                .withSuccess(true)
+                .withStatusCode(HttpStatusCode.OK)
                 .build();
 
     }
