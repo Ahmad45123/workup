@@ -8,9 +8,13 @@ import com.workup.payments.repositories.WalletRepository;
 import com.workup.payments.repositories.WalletTransactionRepository;
 import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
+import com.workup.shared.commands.payments.wallettransaction.requests.CreateWalletTransactionRequest;
+import com.workup.shared.commands.payments.wallettransaction.responses.CreateWalletTransactionResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
 import java.util.UUID;
+
+import com.workup.shared.enums.payments.WalletTransactionType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -97,5 +101,36 @@ class PaymentsApplicationTests {
               assertEquals("4", paymentRequest.getFreelancerId());
             },
             () -> fail("Payment request not found"));
+  }
+
+  @Test
+  void testCreateValidWalletTransactionRequest() {
+    CreateWalletTransactionRequest createWalletTransactionRequest =
+        CreateWalletTransactionRequest.builder()
+                .withAmount(1000)
+                .withDescription("Not Empty Description")
+                .withFreelancerId("1") // wallet ID
+                .withPaymentTransactionId("2")
+                .withTransactionType(WalletTransactionType.CREDIT)
+                .build();
+
+    CreateWalletTransactionResponse response = (CreateWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
+
+    walletTransactionRepository.findById(String.valueOf(UUID.fromString(response.getWalletTransactionId())))
+            .ifPresentOrElse(
+                    walletTransaction -> {
+                      System.out.println(walletTransaction.getWalletId());
+                      System.out.println(walletTransaction.getId());
+                      assertEquals(1000, walletTransaction.getAmount());
+                      assertEquals("1", walletTransaction.getWalletId());
+                      assertEquals("2", walletTransaction.getPaymentTransactionId());
+                      assertEquals(WalletTransactionType.CREDIT, walletTransaction.getTransactionType());
+                    },
+                    () -> fail("Wallet Transaction not found")
+            );
+
   }
 }
