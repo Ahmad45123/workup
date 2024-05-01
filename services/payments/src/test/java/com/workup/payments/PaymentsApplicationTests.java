@@ -131,6 +131,28 @@ class PaymentsApplicationTests {
                     },
                     () -> fail("Wallet Transaction not found")
             );
+  }
+
+  @Test
+  void testCreateDuplicatedWalletTransactionRequest() {
+    CreateWalletTransactionRequest createWalletTransactionRequest =
+            CreateWalletTransactionRequest.builder()
+                    .withAmount(1000)
+                    .withDescription("Not Empty Description")
+                    .withFreelancerId("1") // wallet ID
+                    .withPaymentTransactionId("2")
+                    .withTransactionType(WalletTransactionType.CREDIT)
+                    .build();
+
+    CreateWalletTransactionResponse response = (CreateWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
+    // Should work just fine
+    CreateWalletTransactionResponse response2 = (CreateWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
+    assertNotNull(response2);
+    assertEquals(HttpStatusCode.CREATED, response2.getStatusCode());
 
   }
+
+
 }
