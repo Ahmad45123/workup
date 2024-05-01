@@ -15,12 +15,6 @@ public class GetFreelancerPaymentRequestsCommand
 
   @Override
   public GetFreelancerPaymentRequestsResponse Run(GetFreelancerPaymentRequestsRequest request) {
-    if (!getPaymentRequestRepository().existsById(request.getFreelancerId())) {
-      return GetFreelancerPaymentRequestsResponse.builder()
-          .withStatusCode(HttpStatusCode.NOT_FOUND)
-          .withErrorMessage("Freelancer not found")
-          .build();
-    }
     List<PaymentRequest> savedRequests =
         getPaymentRequestRepository().findAllByFreelancerId(request.getFreelancerId());
 
