@@ -9,7 +9,9 @@ import com.workup.payments.repositories.WalletTransactionRepository;
 import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
 import com.workup.shared.commands.payments.wallettransaction.requests.CreateWalletTransactionRequest;
+import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionRequest;
 import com.workup.shared.commands.payments.wallettransaction.responses.CreateWalletTransactionResponse;
+import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
 import java.util.UUID;
@@ -151,6 +153,20 @@ class PaymentsApplicationTests {
     CreateWalletTransactionResponse response2 = (CreateWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
     assertNotNull(response2);
     assertEquals(HttpStatusCode.CREATED, response2.getStatusCode());
+
+  }
+
+  @Test
+  void testGetNonExistingWalletTransactionRequest(){
+    GetWalletTransactionRequest getWalletTransactionRequest =
+            GetWalletTransactionRequest.builder()
+                    .withWalletTransactionId("1")
+                    .withUserId("1")
+                    .build();
+    GetWalletTransactionResponse response = (GetWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletTransactionRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
 
   }
 

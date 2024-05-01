@@ -3,10 +3,13 @@ package com.workup.payments;
 import com.workup.payments.commands.PaymentCommandMap;
 import com.workup.payments.commands.paymentrequest.CreatePaymentRequestCommand;
 import com.workup.payments.commands.wallettransaction.CreateWalletTransactionCommand;
+import com.workup.payments.commands.wallettransaction.GetWalletTransactionCommand;
 import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
 import com.workup.shared.commands.payments.wallettransaction.requests.CreateWalletTransactionRequest;
+import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionRequest;
 import com.workup.shared.commands.payments.wallettransaction.responses.CreateWalletTransactionResponse;
+import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionResponse;
 import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -27,5 +30,10 @@ public class RabbitMQListener {
   @RabbitHandler
   public CreateWalletTransactionResponse receive(CreateWalletTransactionRequest in) throws Exception {
     return ((CreateWalletTransactionCommand) commandMap.getCommand("CreateWalletTransaction")).Run(in);
+  }
+
+  @RabbitHandler
+  public GetWalletTransactionResponse receive(GetWalletTransactionRequest in) throws Exception {
+    return ((GetWalletTransactionCommand) commandMap.getCommand("GetWalletTransaction")).Run(in);
   }
 }
