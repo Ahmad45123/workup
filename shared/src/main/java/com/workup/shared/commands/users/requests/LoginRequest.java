@@ -10,5 +10,5 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class LoginRequest extends CommandRequest {
   private String email;
-  private String passwordHash;
+  private String password;
 }

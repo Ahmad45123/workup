@@ -11,7 +11,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class FreelancerRegisterRequest extends CommandRequest {
   private String email;
-  private String passwordHash;
+  private String password;
   private String fullName;
   private String jobTitle;
   private String city;
