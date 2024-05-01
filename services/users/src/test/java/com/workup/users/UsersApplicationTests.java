@@ -65,7 +65,5 @@ class UsersApplicationTests {
   }
 
   @Test
-  void testCreateUser() {
-
-  }
+  void testCreateUser() {}
 }
