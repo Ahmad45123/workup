@@ -10,7 +10,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class ClientRegisterRequest extends CommandRequest {
   private String email;
-  private String passwordHash;
+  private String password;
   private String clientName;
   private String industry;
   private String city;
