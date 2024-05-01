@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.workup.shared.commands.users.requests.ClientSetProfileRequest;
 import com.workup.shared.commands.users.responses.ClientSetProfileResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.db.Client;
 
 public class ClientSetProfileCommand
