@@ -2,11 +2,9 @@ package com.workup.users;
 
 import com.workup.shared.commands.users.requests.*;
 import com.workup.shared.commands.users.responses.*;
-import com.workup.users.commands.*;
-
 import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.users.commands.*;
 import com.workup.users.commands.UserCommandMap;
-
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +14,13 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = ServiceQueueNames.USERS)
 public class RabbitMQListener {
 
-  @Autowired
-  public UserCommandMap commandMap;
+  @Autowired public UserCommandMap commandMap;
 
   @RabbitHandler
-  public FreelancerGetProfileBriefResponse receive(FreelancerGetProfileBriefRequest in) throws Exception {
-    return ((FreelancerGetProfileBriefCommand) commandMap.getCommand("FreelancerGetProfileBrief")).Run(in);
+  public FreelancerGetProfileBriefResponse receive(FreelancerGetProfileBriefRequest in)
+      throws Exception {
+    return ((FreelancerGetProfileBriefCommand) commandMap.getCommand("FreelancerGetProfileBrief"))
+        .Run(in);
   }
 
   @RabbitHandler

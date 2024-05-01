@@ -1,10 +1,6 @@
 package com.workup.users.repositories;
 
-import java.util.List;
-
+import com.workup.users.db.Experience;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.workup.users.db.Experience;
-
-public interface ExperienceRepository extends MongoRepository<Experience, String> {
-}
+public interface ExperienceRepository extends MongoRepository<Experience, String> {}

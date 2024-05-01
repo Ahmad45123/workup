@@ -1,7 +1,6 @@
 package com.workup.shared.commands.users.responses;
 
 import com.workup.shared.commands.CommandResponse;
-
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
@@ -10,5 +9,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerGetResumeResponse extends CommandResponse {
-    public String resumeEncoded; // Base64 encoded resume
+  public String resumeEncoded; // Base64 encoded resume
 }

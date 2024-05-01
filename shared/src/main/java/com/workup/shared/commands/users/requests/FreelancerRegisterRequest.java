@@ -10,10 +10,10 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerRegisterRequest extends CommandRequest {
-    public String email;
-    public String passwordHash;
-    public String fullName;
-    public String jobTitle;
-    public String city;
-    public Date birthDate;
+  public String email;
+  public String passwordHash;
+  public String fullName;
+  public String jobTitle;
+  public String city;
+  public Date birthDate;
 }

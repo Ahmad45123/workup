@@ -9,6 +9,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerRegisterResponse extends CommandResponse {
-    public boolean success;
-    public String authToken;
+  public boolean success;
+  public String authToken;
 }

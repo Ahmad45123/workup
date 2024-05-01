@@ -1,7 +1,5 @@
 package com.workup.users;
 
-
-
 import com.workup.users.repositories.ClientRepository;
 import com.workup.users.repositories.ExperienceRepository;
 import com.workup.users.repositories.FreelancerRepository;
@@ -68,28 +66,6 @@ class UsersApplicationTests {
 
   @Test
   void testCreateUser() {
-    // var freelancerObj = Freelancer.builder()
-    //         .withEmail("ahmad45123@gmail.com")
-    //         .withPassword_hash("verysecurepassword")
-    //         .withFull_name("Mr. Mamdouh")
-    //         .withJob_title("Software Engineer")
-    //         .withCity("Cairo")
-    //         .withBirthdate(Date.from(Instant.now()))
-    //         .build();
-
-    // freelancerRepository.save(freelancerObj);
-
-    // FreelancerGetProfileBriefRequest request = FreelancerGetProfileBriefRequest.builder()
-    //         .withUser_id(freelancerObj.getId().toString())
-    //         .build();
-
-    // FreelancerGetProfileBriefResponse breifResponse = (FreelancerGetProfileBriefResponse)
-    // template
-    //         .convertSendAndReceive(ServiceQueueNames.USERS, request);
-
-    // assertEquals(breifResponse.getStatusCode(), (HttpStatusCode.OK));
-    // assertEquals(breifResponse.getFull_name(), (freelancerObj.getFull_name()));
-    // assertEquals(breifResponse.getEmail(), (freelancerObj.getEmail()));
 
   }
 }
