@@ -241,6 +241,20 @@ class PaymentsApplicationTests {
   }
 
   @Test
+  void testGetPaymentRequestNotFound() {
+    GetPaymentRequestRequest getPaymentRequest =
+        GetPaymentRequestRequest.builder().withPaymentRequestId("123").build();
+
+    GetPaymentRequestResponse response =
+        (GetPaymentRequestResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getPaymentRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
+    assertNull(response.getRequest());
+  }
+
+  @Test
   void testPayPaymentRequest() {
     PaymentRequest paymentRequest =
         PaymentRequest.builder()
@@ -316,5 +330,44 @@ class PaymentsApplicationTests {
         () -> assertEquals(paymentTransaction.getId(), walletTransaction.getPaymentTransactionId()),
         () -> assertEquals(paymentRequest.getDescription(), walletTransaction.getDescription()),
         () -> assertEquals(WalletTransactionType.CREDIT, walletTransaction.getTransactionType()));
+  }
+
+  @Test
+  void testPayPaymentRequestNotFound() {
+    PayPaymentRequestRequest payPaymentRequest =
+        PayPaymentRequestRequest.builder().withPaymentRequestId("123").build();
+
+    PayPaymentRequestResponse response =
+        (PayPaymentRequestResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, payPaymentRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
+    assertNull(response.getTransactionId());
+    assertNull(response.getTransactionStatus());
+  }
+
+  @Test
+  void testPayPaymentRequestFreelancerWalletNotFound() {
+    PaymentRequest paymentRequest =
+        PaymentRequest.builder()
+            .withAmount(1200)
+            .withDescription("Payment for services rendered")
+            .withClientId("3")
+            .withFreelancerId("4")
+            .build();
+    paymentRequestRepository.save(paymentRequest);
+
+    PayPaymentRequestRequest payPaymentRequest =
+        PayPaymentRequestRequest.builder().withPaymentRequestId(paymentRequest.getId()).build();
+
+    PayPaymentRequestResponse response =
+        (PayPaymentRequestResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, payPaymentRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertNull(response.getTransactionId());
+    assertNull(response.getTransactionStatus());
   }
 }
