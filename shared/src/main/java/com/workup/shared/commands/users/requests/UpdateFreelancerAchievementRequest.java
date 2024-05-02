@@ -1,7 +1,7 @@
-package com.workup.users.commands.requests;
+package com.workup.shared.commands.users.requests;
 
 import com.workup.shared.commands.CommandRequest;
-import com.workup.users.db.Achievement;
+import java.util.Date;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
@@ -11,5 +11,9 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class UpdateFreelancerAchievementRequest extends CommandRequest {
   String freelancer_id;
-  Achievement updatedAchievement;
+  String achievement_id;
+  String new_achievement_name;
+  String new_awarded_by;
+  String new_achievement_description;
+  Date new_award_date;
 }

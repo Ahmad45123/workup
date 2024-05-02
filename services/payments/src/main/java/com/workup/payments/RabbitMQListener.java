@@ -20,8 +20,7 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = ServiceQueueNames.PAYMENTS)
 public class RabbitMQListener {
 
-  @Autowired
-  public PaymentCommandMap commandMap;
+  @Autowired public PaymentCommandMap commandMap;
 
   @RabbitHandler
   public CreatePaymentRequestResponse receive(CreatePaymentRequestRequest in) throws Exception {

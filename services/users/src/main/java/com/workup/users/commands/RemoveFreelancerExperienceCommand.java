@@ -1,8 +1,8 @@
 package com.workup.users.commands;
 
+import com.workup.shared.commands.users.requests.RemoveFreelancerExperienceRequest;
+import com.workup.shared.commands.users.responses.RemoveFreelancerExperienceResponse;
 import com.workup.shared.enums.HttpStatusCode;
-import com.workup.users.commands.requests.RemoveFreelancerExperienceRequest;
-import com.workup.users.commands.responses.RemoveFreelancerExperienceResponse;
 import com.workup.users.db.Experience;
 import com.workup.users.db.Freelancer;
 import java.util.Optional;
@@ -24,10 +24,7 @@ public class RemoveFreelancerExperienceCommand
         .removeIf(experience -> experience.getId().toString().equals(request.getExperience_id()));
     deleteExperience(request.getExperience_id());
     freelancerRepository.save(freelancer);
-    return RemoveFreelancerExperienceResponse.builder()
-        .withStatusCode(HttpStatusCode.OK)
-        .withFreelancer(freelancer)
-        .build();
+    return RemoveFreelancerExperienceResponse.builder().withStatusCode(HttpStatusCode.OK).build();
   }
 
   public void deleteExperience(String id) {

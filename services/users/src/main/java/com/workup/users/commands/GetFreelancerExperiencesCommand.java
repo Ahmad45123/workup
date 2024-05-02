@@ -1,7 +1,7 @@
 package com.workup.users.commands;
 
+import com.workup.shared.commands.users.requests.GetFreelancerExperiencesRequest;
 import com.workup.shared.enums.HttpStatusCode;
-import com.workup.users.commands.requests.GetFreelancerExperiencesRequest;
 import com.workup.users.commands.responses.GetFreelancerExperiencesResponse;
 import com.workup.users.db.Experience;
 import com.workup.users.db.Freelancer;

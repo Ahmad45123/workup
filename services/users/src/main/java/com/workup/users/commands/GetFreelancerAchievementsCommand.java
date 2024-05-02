@@ -1,7 +1,7 @@
 package com.workup.users.commands;
 
+import com.workup.shared.commands.users.requests.GetFreelancerAchievementsRequest;
 import com.workup.shared.enums.HttpStatusCode;
-import com.workup.users.commands.requests.GetFreelancerAchievementsRequest;
 import com.workup.users.commands.responses.GetFreelancerAchievementsResponse;
 import com.workup.users.db.Achievement;
 import com.workup.users.db.Freelancer;

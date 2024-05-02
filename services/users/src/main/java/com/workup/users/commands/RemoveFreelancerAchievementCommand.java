@@ -1,8 +1,8 @@
 package com.workup.users.commands;
 
+import com.workup.shared.commands.users.requests.RemoveFreelancerAchievementRequest;
+import com.workup.shared.commands.users.responses.RemoveFreelancerAchievementResponse;
 import com.workup.shared.enums.HttpStatusCode;
-import com.workup.users.commands.requests.RemoveFreelancerAchievementRequest;
-import com.workup.users.commands.responses.RemoveFreelancerAchievementResponse;
 import com.workup.users.db.Achievement;
 import com.workup.users.db.Freelancer;
 import java.util.Optional;
@@ -24,10 +24,7 @@ public class RemoveFreelancerAchievementCommand
         .removeIf(achievement -> achievement.getId().toString().equals(request.getAchievementId()));
     deleteAchievement(request.getAchievementId());
     freelancerRepository.save(freelancer);
-    return RemoveFreelancerAchievementResponse.builder()
-        .withStatusCode(HttpStatusCode.OK)
-        .withFreelancer(freelancer)
-        .build();
+    return RemoveFreelancerAchievementResponse.builder().withStatusCode(HttpStatusCode.OK).build();
   }
 
   public void deleteAchievement(String id) {

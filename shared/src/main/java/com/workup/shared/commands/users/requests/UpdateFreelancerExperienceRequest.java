@@ -1,7 +1,7 @@
-package com.workup.users.commands.requests;
+package com.workup.shared.commands.users.requests;
 
 import com.workup.shared.commands.CommandRequest;
-import com.workup.users.db.Experience;
+import java.util.Date;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
@@ -11,5 +11,11 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class UpdateFreelancerExperienceRequest extends CommandRequest {
   String freelancer_id;
-  Experience updatedExperience;
+  String experience_id;
+  String new_company_name;
+  String new_job_title;
+  Date new_employment_start;
+  Date new_employment_end;
+  String new_experience_description;
+  String new_city;
 }
