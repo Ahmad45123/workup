@@ -10,6 +10,10 @@ import com.workup.payments.repositories.WalletRepository;
 import com.workup.payments.repositories.WalletTransactionRepository;
 import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
+import com.workup.shared.commands.payments.wallet.requests.CreateWalletRequest;
+import com.workup.shared.commands.payments.wallet.requests.GetWalletRequest;
+import com.workup.shared.commands.payments.wallet.responses.CreateWalletResponse;
+import com.workup.shared.commands.payments.wallet.responses.GetWalletResponse;
 import com.workup.shared.commands.payments.wallettransaction.requests.CreateWalletTransactionRequest;
 import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionRequest;
 import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionsRequest;
@@ -35,10 +39,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import com.workup.shared.commands.payments.wallet.requests.CreateWalletRequest;
-import com.workup.shared.commands.payments.wallet.responses.CreateWalletResponse;
-import com.workup.shared.commands.payments.wallet.requests.GetWalletRequest;
-import com.workup.shared.commands.payments.wallet.responses.GetWalletResponse;
 
 @SpringBootTest
 @Testcontainers
@@ -46,21 +46,18 @@ import com.workup.shared.commands.payments.wallet.responses.GetWalletResponse;
 class PaymentsApplicationTests {
 
   @Container
-  static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest");
+  static final PostgreSQLContainer<?> postgreSQLContainer =
+      new PostgreSQLContainer<>("postgres:latest");
 
   @Container
-  static final RabbitMQContainer rabbitMQContainer = new RabbitMQContainer("rabbitmq:3.13-management");
+  static final RabbitMQContainer rabbitMQContainer =
+      new RabbitMQContainer("rabbitmq:3.13-management");
 
-  @Autowired
-  private AmqpTemplate template;
-  @Autowired
-  private PaymentRequestRepository paymentRequestRepository;
-  @Autowired
-  private PaymentTransactionRepository paymentTransactionRepository;
-  @Autowired
-  private WalletRepository walletRepository;
-  @Autowired
-  private WalletTransactionRepository walletTransactionRepository;
+  @Autowired private AmqpTemplate template;
+  @Autowired private PaymentRequestRepository paymentRequestRepository;
+  @Autowired private PaymentTransactionRepository paymentTransactionRepository;
+  @Autowired private WalletRepository walletRepository;
+  @Autowired private WalletTransactionRepository walletTransactionRepository;
 
   @BeforeEach
   void clearAll() {
@@ -91,14 +88,16 @@ class PaymentsApplicationTests {
 
   @Test
   void testCreatePaymentRequest() {
-    CreatePaymentRequestRequest createPaymentRequest = CreatePaymentRequestRequest.builder()
-        .withAmount(1200)
-        .withDescription("Payment for services rendered")
-        .withClientId("3")
-        .withFreelancerId("4")
-        .build();
-    CreatePaymentRequestResponse response = (CreatePaymentRequestResponse) template
-        .convertSendAndReceive(ServiceQueueNames.PAYMENTS, createPaymentRequest);
+    CreatePaymentRequestRequest createPaymentRequest =
+        CreatePaymentRequestRequest.builder()
+            .withAmount(1200)
+            .withDescription("Payment for services rendered")
+            .withClientId("3")
+            .withFreelancerId("4")
+            .build();
+    CreatePaymentRequestResponse response =
+        (CreatePaymentRequestResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createPaymentRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
@@ -117,10 +116,7 @@ class PaymentsApplicationTests {
 
   @Test
   void testCreateValidWalletTransactionRequest() {
-    Wallet wallet = Wallet.builder()
-            .withBalance(1000)
-            .withFreelancerId("1")
-            .build();
+    Wallet wallet = Wallet.builder().withBalance(1000).withFreelancerId("1").build();
     walletRepository.save(wallet);
     CreateWalletTransactionRequest createWalletTransactionRequest =
         CreateWalletTransactionRequest.builder()
@@ -155,58 +151,51 @@ class PaymentsApplicationTests {
 
   @Test
   void testCreateInvalidNegativeWalletTransactionRequest() {
-    Wallet wallet = Wallet.builder()
-            .withBalance(1000)
-            .withFreelancerId("1")
-            .build();
+    Wallet wallet = Wallet.builder().withBalance(1000).withFreelancerId("1").build();
     Wallet savedWallet = walletRepository.save(wallet);
 
     CreateWalletTransactionRequest createWalletTransactionRequest =
-            CreateWalletTransactionRequest.builder()
-                    .withAmount(-1000)
-                    .withDescription("Negative Balance")
-                    .withFreelancerId(savedWallet.getFreelancerId()) // wallet ID
-                    .withPaymentTransactionId("2")
-                    .withTransactionType(WalletTransactionType.CREDIT)
-                    .build();
+        CreateWalletTransactionRequest.builder()
+            .withAmount(-1000)
+            .withDescription("Negative Balance")
+            .withFreelancerId(savedWallet.getFreelancerId()) // wallet ID
+            .withPaymentTransactionId("2")
+            .withTransactionType(WalletTransactionType.CREDIT)
+            .build();
 
     CreateWalletTransactionResponse response =
-            (CreateWalletTransactionResponse)
-                    template.convertSendAndReceive(
-                            ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
+        (CreateWalletTransactionResponse)
+            template.convertSendAndReceive(
+                ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.BAD_REQUEST, response.getStatusCode());
-
   }
 
   @Test
   void testCreateNotFoundWalletTransactionRequest() {
 
     CreateWalletTransactionRequest createWalletTransactionRequest =
-            CreateWalletTransactionRequest.builder()
-                    .withAmount(-1000)
-                    .withDescription("Negative Balance")
-                    .withFreelancerId("1") // wallet ID
-                    .withPaymentTransactionId("2")
-                    .withTransactionType(WalletTransactionType.CREDIT)
-                    .build();
+        CreateWalletTransactionRequest.builder()
+            .withAmount(-1000)
+            .withDescription("Negative Balance")
+            .withFreelancerId("1") // wallet ID
+            .withPaymentTransactionId("2")
+            .withTransactionType(WalletTransactionType.CREDIT)
+            .build();
 
     CreateWalletTransactionResponse response =
-            (CreateWalletTransactionResponse)
-                    template.convertSendAndReceive(
-                            ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
+        (CreateWalletTransactionResponse)
+            template.convertSendAndReceive(
+                ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
-
   }
+
   @Test
   void testCreateDuplicatedWalletTransactionRequest() {
-    Wallet wallet = Wallet.builder()
-            .withBalance(1000)
-            .withFreelancerId("1")
-            .build();
+    Wallet wallet = Wallet.builder().withBalance(1000).withFreelancerId("1").build();
     walletRepository.save(wallet);
 
     CreateWalletTransactionRequest createWalletTransactionRequest =
@@ -271,30 +260,36 @@ class PaymentsApplicationTests {
   }
 
   @Test
-  void testGetWalletTransactionsRequest(){
+  void testGetWalletTransactionsRequest() {
     WalletTransaction walletTransaction1 =
-            WalletTransaction.builder()
-                    .withAmount(1000)
-                    .withTransactionType(WalletTransactionType.DEBIT)
-                    .withPaymentTransactionId("1")
-                    .withWalletId("1")
-                    .build();
-    WalletTransaction savedWalletTransaction1 = walletTransactionRepository.save(walletTransaction1);
+        WalletTransaction.builder()
+            .withAmount(1000)
+            .withTransactionType(WalletTransactionType.DEBIT)
+            .withPaymentTransactionId("1")
+            .withWalletId("1")
+            .build();
+    WalletTransaction savedWalletTransaction1 =
+        walletTransactionRepository.save(walletTransaction1);
 
     WalletTransaction walletTransaction2 =
-            WalletTransaction.builder()
-                    .withAmount(800)
-                    .withTransactionType(WalletTransactionType.DEBIT)
-                    .withPaymentTransactionId("1")
-                    .withWalletId(savedWalletTransaction1.getWalletId())
-                    .build();
-    WalletTransaction savedWalletTransaction2 = walletTransactionRepository.save(walletTransaction2);
+        WalletTransaction.builder()
+            .withAmount(800)
+            .withTransactionType(WalletTransactionType.DEBIT)
+            .withPaymentTransactionId("1")
+            .withWalletId(savedWalletTransaction1.getWalletId())
+            .build();
+    WalletTransaction savedWalletTransaction2 =
+        walletTransactionRepository.save(walletTransaction2);
 
-    GetWalletTransactionsRequest getWalletTransactionsRequest = GetWalletTransactionsRequest.builder()
+    GetWalletTransactionsRequest getWalletTransactionsRequest =
+        GetWalletTransactionsRequest.builder()
             .withFreelancerId(savedWalletTransaction1.getWalletId())
             .build();
 
-    GetWalletTransactionsResponse response = (GetWalletTransactionsResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletTransactionsRequest);
+    GetWalletTransactionsResponse response =
+        (GetWalletTransactionsResponse)
+            template.convertSendAndReceive(
+                ServiceQueueNames.PAYMENTS, getWalletTransactionsRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.OK, response.getStatusCode());
@@ -302,169 +297,163 @@ class PaymentsApplicationTests {
   }
 
   @Test
-  void testWithdrawFromWalletRequest(){
+  void testWithdrawFromWalletRequest() {
     double balance = 1000;
     double withdrawAmount = 200;
 
-    Wallet wallet = Wallet.builder()
-            .withBalance(balance)
-            .withFreelancerId("1")
-            .build();
+    Wallet wallet = Wallet.builder().withBalance(balance).withFreelancerId("1").build();
     Wallet savedWallet = walletRepository.save(wallet);
 
-    WithdrawFromWalletRequest withdrawFromWalletRequest = WithdrawFromWalletRequest.builder()
+    WithdrawFromWalletRequest withdrawFromWalletRequest =
+        WithdrawFromWalletRequest.builder()
             .withAmount(withdrawAmount)
             .withFreelancerId("1")
             .withPaymentTransactionId("1")
             .build();
 
-    WithdrawFromWalletResponse response = (WithdrawFromWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
+    WithdrawFromWalletResponse response =
+        (WithdrawFromWalletResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.OK, response.getStatusCode());
 
-    walletRepository.findById(savedWallet.getFreelancerId())
-            .ifPresentOrElse(
-                    foundWallet -> {
-                      assertEquals(balance - withdrawAmount , foundWallet.getBalance());
-                    },
-                    () -> fail("Wallet is not found")
-            );
-
+    walletRepository
+        .findById(savedWallet.getFreelancerId())
+        .ifPresentOrElse(
+            foundWallet -> {
+              assertEquals(balance - withdrawAmount, foundWallet.getBalance());
+            },
+            () -> fail("Wallet is not found"));
   }
 
   @Test
-  void testNotFoundWithdrawFromWalletRequest(){
+  void testNotFoundWithdrawFromWalletRequest() {
 
-    Wallet wallet = Wallet.builder()
-            .withBalance(1000)
-            .withFreelancerId("1")
-            .build();
+    Wallet wallet = Wallet.builder().withBalance(1000).withFreelancerId("1").build();
     Wallet savedWallet = walletRepository.save(wallet);
 
-    WithdrawFromWalletRequest withdrawFromWalletRequest = WithdrawFromWalletRequest.builder()
+    WithdrawFromWalletRequest withdrawFromWalletRequest =
+        WithdrawFromWalletRequest.builder()
             .withAmount(200)
             .withFreelancerId("2")
             .withPaymentTransactionId("1")
             .build();
 
-    WithdrawFromWalletResponse response = (WithdrawFromWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
+    WithdrawFromWalletResponse response =
+        (WithdrawFromWalletResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
-
   }
 
   @Test
-  void testInvalidBiggerAmountWithdrawFromWalletRequest(){
+  void testInvalidBiggerAmountWithdrawFromWalletRequest() {
     double balance = 1000;
     double withdrawAmount = 2000;
 
-    Wallet wallet = Wallet.builder()
-            .withBalance(balance)
-            .withFreelancerId("1")
-            .build();
+    Wallet wallet = Wallet.builder().withBalance(balance).withFreelancerId("1").build();
     Wallet savedWallet = walletRepository.save(wallet);
 
-    WithdrawFromWalletRequest withdrawFromWalletRequest = WithdrawFromWalletRequest.builder()
+    WithdrawFromWalletRequest withdrawFromWalletRequest =
+        WithdrawFromWalletRequest.builder()
             .withAmount(withdrawAmount)
             .withFreelancerId("1")
             .withPaymentTransactionId("1")
             .build();
 
-    WithdrawFromWalletResponse response = (WithdrawFromWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
+    WithdrawFromWalletResponse response =
+        (WithdrawFromWalletResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.BAD_REQUEST, response.getStatusCode());
 
-    walletRepository.findById(savedWallet.getFreelancerId())
-            .ifPresentOrElse(
-                    foundWallet -> {
-                      assertEquals(balance  , foundWallet.getBalance());
-                    },
-                    () -> fail("Wallet is not found")
-            );
-
-
+    walletRepository
+        .findById(savedWallet.getFreelancerId())
+        .ifPresentOrElse(
+            foundWallet -> {
+              assertEquals(balance, foundWallet.getBalance());
+            },
+            () -> fail("Wallet is not found"));
   }
 
   @Test
-  void testInvalidNegativeAmountWithdrawFromWalletRequest(){
+  void testInvalidNegativeAmountWithdrawFromWalletRequest() {
     double balance = 1000;
     double withdrawAmount = -2000;
 
-    Wallet wallet = Wallet.builder()
-            .withBalance(balance)
-            .withFreelancerId("1")
-            .build();
+    Wallet wallet = Wallet.builder().withBalance(balance).withFreelancerId("1").build();
     Wallet savedWallet = walletRepository.save(wallet);
 
-    WithdrawFromWalletRequest withdrawFromWalletRequest = WithdrawFromWalletRequest.builder()
+    WithdrawFromWalletRequest withdrawFromWalletRequest =
+        WithdrawFromWalletRequest.builder()
             .withAmount(withdrawAmount)
             .withFreelancerId("1")
             .withPaymentTransactionId("1")
             .build();
 
-    WithdrawFromWalletResponse response = (WithdrawFromWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
+    WithdrawFromWalletResponse response =
+        (WithdrawFromWalletResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.BAD_REQUEST, response.getStatusCode());
 
-    walletRepository.findById(savedWallet.getFreelancerId())
-            .ifPresentOrElse(
-                    foundWallet -> {
-                      assertEquals(balance  , foundWallet.getBalance());
-                      assertNotEquals(balance + withdrawAmount, foundWallet.getBalance());
-                    },
-                    () -> fail("Wallet is not found")
-            );
-
-
+    walletRepository
+        .findById(savedWallet.getFreelancerId())
+        .ifPresentOrElse(
+            foundWallet -> {
+              assertEquals(balance, foundWallet.getBalance());
+              assertNotEquals(balance + withdrawAmount, foundWallet.getBalance());
+            },
+            () -> fail("Wallet is not found"));
   }
+
   @Test
   void testCreateWalletCommand() {
 
-    CreateWalletRequest createWalletRequest = CreateWalletRequest.builder()
-        .withFreelancerId("1")
-        .build();
-    CreateWalletResponse response = (CreateWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS,
-        createWalletRequest);
+    CreateWalletRequest createWalletRequest =
+        CreateWalletRequest.builder().withFreelancerId("1").build();
+    CreateWalletResponse response =
+        (CreateWalletResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletRequest);
     assertNotNull(response);
     assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
-
   }
 
   @Test
   void testCreateDuplicateWalletIsInvalid() {
-    CreateWalletRequest createWalletRequest = CreateWalletRequest.builder()
-        .withFreelancerId("1")
-        .build();
-    CreateWalletResponse response = (CreateWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS,
-        createWalletRequest);
+    CreateWalletRequest createWalletRequest =
+        CreateWalletRequest.builder().withFreelancerId("1").build();
+    CreateWalletResponse response =
+        (CreateWalletResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletRequest);
     assertNotNull(response);
     assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
 
-    CreateWalletResponse response2 = (CreateWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS,
-        createWalletRequest);
+    CreateWalletResponse response2 =
+        (CreateWalletResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletRequest);
     assertNotNull(response2);
     assertEquals(HttpStatusCode.BAD_REQUEST, response2.getStatusCode());
   }
 
   @Test
   void testGetValidWallet() {
-    CreateWalletRequest createWalletRequest = CreateWalletRequest.builder()
-        .withFreelancerId("1")
-        .build();
-    CreateWalletResponse response = (CreateWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS,
-        createWalletRequest);
+    CreateWalletRequest createWalletRequest =
+        CreateWalletRequest.builder().withFreelancerId("1").build();
+    CreateWalletResponse response =
+        (CreateWalletResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletRequest);
     assertNotNull(response);
     assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
 
-    GetWalletRequest getWalletRequest = GetWalletRequest.builder()
-        .withFreelancerId("1")
-        .build();
-    GetWalletResponse getWalletResponse = (GetWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS,
-        getWalletRequest);
+    GetWalletRequest getWalletRequest = GetWalletRequest.builder().withFreelancerId("1").build();
+    GetWalletResponse getWalletResponse =
+        (GetWalletResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletRequest);
     assertNotNull(getWalletResponse);
     assertEquals(HttpStatusCode.OK, getWalletResponse.getStatusCode());
     assertEquals(0, getWalletResponse.getBalance());
@@ -472,13 +461,11 @@ class PaymentsApplicationTests {
 
   @Test
   void testGetInvalidWallet() {
-    GetWalletRequest getWalletRequest = GetWalletRequest.builder()
-        .withFreelancerId("1")
-        .build();
-    GetWalletResponse getWalletResponse = (GetWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS,
-        getWalletRequest);
+    GetWalletRequest getWalletRequest = GetWalletRequest.builder().withFreelancerId("1").build();
+    GetWalletResponse getWalletResponse =
+        (GetWalletResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletRequest);
     assertNotNull(getWalletResponse);
     assertEquals(HttpStatusCode.NOT_FOUND, getWalletResponse.getStatusCode());
   }
-
 }

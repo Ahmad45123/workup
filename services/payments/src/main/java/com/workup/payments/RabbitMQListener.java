@@ -2,12 +2,18 @@ package com.workup.payments;
 
 import com.workup.payments.commands.PaymentCommandMap;
 import com.workup.payments.commands.paymentrequest.CreatePaymentRequestCommand;
+import com.workup.payments.commands.wallet.CreateWalletCommand;
+import com.workup.payments.commands.wallet.GetWalletCommand;
 import com.workup.payments.commands.wallettransaction.CreateWalletTransactionCommand;
 import com.workup.payments.commands.wallettransaction.GetWalletTransactionCommand;
 import com.workup.payments.commands.wallettransaction.GetWalletTransactionsCommand;
 import com.workup.payments.commands.wallettransaction.WithdrawFromWalletCommand;
 import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
+import com.workup.shared.commands.payments.wallet.requests.CreateWalletRequest;
+import com.workup.shared.commands.payments.wallet.requests.GetWalletRequest;
+import com.workup.shared.commands.payments.wallet.responses.CreateWalletResponse;
+import com.workup.shared.commands.payments.wallet.responses.GetWalletResponse;
 import com.workup.shared.commands.payments.wallettransaction.requests.CreateWalletTransactionRequest;
 import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionRequest;
 import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionsRequest;
@@ -16,12 +22,6 @@ import com.workup.shared.commands.payments.wallettransaction.responses.CreateWal
 import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionResponse;
 import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionsResponse;
 import com.workup.shared.commands.payments.wallettransaction.responses.WithdrawFromWalletResponse;
-import com.workup.payments.commands.wallet.CreateWalletCommand;
-import com.workup.payments.commands.wallet.GetWalletCommand;
-import com.workup.shared.commands.payments.wallet.requests.CreateWalletRequest;
-import com.workup.shared.commands.payments.wallet.requests.GetWalletRequest;
-import com.workup.shared.commands.payments.wallet.responses.CreateWalletResponse;
-import com.workup.shared.commands.payments.wallet.responses.GetWalletResponse;
 import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -32,8 +32,7 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = ServiceQueueNames.PAYMENTS)
 public class RabbitMQListener {
 
-  @Autowired
-  public PaymentCommandMap commandMap;
+  @Autowired public PaymentCommandMap commandMap;
 
   @RabbitHandler
   public CreatePaymentRequestResponse receive(CreatePaymentRequestRequest in) throws Exception {
@@ -56,12 +55,11 @@ public class RabbitMQListener {
   public GetWalletTransactionsResponse receive(GetWalletTransactionsRequest in) throws Exception {
     return ((GetWalletTransactionsCommand) commandMap.getCommand("GetWalletTransactions")).Run(in);
   }
-  @RabbitHandler
 
+  @RabbitHandler
   public WithdrawFromWalletResponse receive(WithdrawFromWalletRequest in) throws Exception {
     return ((WithdrawFromWalletCommand) commandMap.getCommand("WithdrawFromWallet")).Run(in);
   }
-
 
   public CreateWalletResponse receive(CreateWalletRequest in) throws Exception {
     return ((CreateWalletCommand) commandMap.getCommand("CreateWallet")).Run(in);
