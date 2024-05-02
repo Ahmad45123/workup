@@ -241,7 +241,7 @@ class PaymentsApplicationTests {
   void testWithdrawFromWalletRequest(){
     double balance = 1000;
     double withdrawAmount = 200;
-    // First, we need to have a wallet
+
     Wallet wallet = Wallet.builder()
             .withBalance(balance)
             .withFreelancerId("1")
@@ -271,7 +271,7 @@ class PaymentsApplicationTests {
 
   @Test
   void testNotFoundWithdrawFromWalletRequest(){
-    // First, we need to have a wallet
+
     Wallet wallet = Wallet.builder()
             .withBalance(1000)
             .withFreelancerId("1")
@@ -288,6 +288,39 @@ class PaymentsApplicationTests {
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
+
+  }
+
+  @Test
+  void testInvalidAmountWithdrawFromWalletRequest(){
+    double balance = 1000;
+    double withdrawAmount = 2000;
+
+    Wallet wallet = Wallet.builder()
+            .withBalance(balance)
+            .withFreelancerId("1")
+            .build();
+    Wallet savedWallet = walletRepository.save(wallet);
+
+    WithdrawFromWalletRequest withdrawFromWalletRequest = WithdrawFromWalletRequest.builder()
+            .withAmount(withdrawAmount)
+            .withFreelancerId("1")
+            .withPaymentTransactionId("1")
+            .build();
+
+    WithdrawFromWalletResponse response = (WithdrawFromWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.BAD_REQUEST, response.getStatusCode());
+
+    walletRepository.findById(savedWallet.getFreelancerId())
+            .ifPresentOrElse(
+                    foundWallet -> {
+                      assertEquals(balance  , foundWallet.getBalance());
+                    },
+                    () -> fail("Wallet is not found")
+            );
+
 
   }
 }
