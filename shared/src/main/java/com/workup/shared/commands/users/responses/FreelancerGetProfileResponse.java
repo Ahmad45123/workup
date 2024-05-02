@@ -1,4 +1,4 @@
-package com.workup.users.commands;
+package com.workup.shared.commands.users.responses;
 
 import com.workup.shared.commands.CommandResponse;
 import java.util.Date;
@@ -11,12 +11,12 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerGetProfileResponse extends CommandResponse {
-  String email;
-  String full_name;
-  String city;
-  String job_title;
-  String description;
-  Date birth_date;
-  List<String> languages;
-  List<String> skills;
+  public String email;
+  public String full_name;
+  public String city;
+  public String job_title;
+  public String description;
+  public Date birth_date;
+  public List<String> languages;
+  public List<String> skills;
 }

@@ -1,11 +1,101 @@
 package com.workup.users;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.Assert.assertEquals;
 
+import com.workup.shared.commands.users.requests.FreelancerGetProfileBriefRequest;
+import com.workup.shared.commands.users.responses.FreelancerGetProfileBriefResponse;
+import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.users.db.Freelancer;
+import com.workup.users.repositories.ClientRepository;
+import com.workup.users.repositories.ExperienceRepository;
+import com.workup.users.repositories.FreelancerRepository;
+import java.sql.Date;
+import java.time.Instant;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.containers.RabbitMQContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+@Testcontainers
 @SpringBootTest
+@Import(TestConfigBase.class)
 class UsersApplicationTests {
 
+  @Container
+  static final RabbitMQContainer rabbitMQContainer =
+      new RabbitMQContainer("rabbitmq:3.13-management");
+
+  @Container
+  static final MongoDBContainer mongoDBContainer =
+      new MongoDBContainer("mongo:7").withExposedPorts(27017);
+
+  @Autowired private AmqpTemplate template;
+  @Autowired private ClientRepository paymentRequestRepository;
+  @Autowired private ExperienceRepository experienceRepository;
+  @Autowired private FreelancerRepository freelancerRepository;
+
+  @BeforeEach
+  void clearAll() {
+    paymentRequestRepository.deleteAll();
+    experienceRepository.deleteAll();
+    freelancerRepository.deleteAll();
+  }
+
+  @AfterAll
+  static void stopContainers() {
+    mongoDBContainer.stop();
+    rabbitMQContainer.stop();
+  }
+
+  static int mongoport() {
+    return mongoDBContainer.getMappedPort(27017);
+  }
+
+  @DynamicPropertySource
+  static void setDatasourceProperties(DynamicPropertyRegistry registry) {
+    registry.add("spring.data.mongodb.uri", mongoDBContainer::getConnectionString);
+
+    registry.add("spring.rabbitmq.host", rabbitMQContainer::getHost);
+    registry.add("spring.rabbitmq.port", rabbitMQContainer::getFirstMappedPort);
+    registry.add("spring.rabbitmq.username", rabbitMQContainer::getAdminUsername);
+    registry.add("spring.rabbitmq.password", rabbitMQContainer::getAdminPassword);
+  }
+
   @Test
-  void contextLoads() {}
+  void testCreateUser() {
+    var freelancerObj =
+        Freelancer.builder()
+            .withEmail("ahmad45123@gmail.com")
+            .withPassword_hash("verysecurepassword")
+            .withFull_name("Mr. Mamdouh")
+            .withJob_title("Software Engineer")
+            .withCity("Cairo")
+            .withBirthdate(Date.from(Instant.now()))
+            .build();
+
+    freelancerRepository.save(freelancerObj);
+
+    FreelancerGetProfileBriefRequest request =
+        FreelancerGetProfileBriefRequest.builder()
+            .withUser_id(freelancerObj.getId().toString())
+            .build();
+
+    FreelancerGetProfileBriefResponse breifResponse =
+        (FreelancerGetProfileBriefResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    assertEquals(breifResponse.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(breifResponse.getFull_name(), (freelancerObj.getFull_name()));
+    assertEquals(breifResponse.getEmail(), (freelancerObj.getEmail()));
+  }
 }

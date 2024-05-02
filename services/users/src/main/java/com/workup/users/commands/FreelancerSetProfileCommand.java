@@ -1,5 +1,8 @@
 package com.workup.users.commands;
 
+import com.workup.shared.commands.users.requests.FreelancerSetProfileRequest;
+import com.workup.shared.commands.users.responses.FreelancerSetProfileResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.db.Freelancer;
 import java.util.Optional;
 
@@ -41,7 +44,6 @@ public class FreelancerSetProfileCommand
     }
 
     freelancerRepository.save(freelancer);
-
-    return FreelancerSetProfileResponse.builder().withSuccess(true).build();
+    return FreelancerSetProfileResponse.builder().withStatusCode(HttpStatusCode.OK).build();
   }
 }

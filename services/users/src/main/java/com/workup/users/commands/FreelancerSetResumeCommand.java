@@ -1,5 +1,8 @@
 package com.workup.users.commands;
 
+import com.workup.shared.commands.users.requests.FreelancerSetResumeRequest;
+import com.workup.shared.commands.users.responses.FreelancerSetResumeResponse;
+import com.workup.shared.enums.HttpStatusCode;
 import java.io.ByteArrayInputStream;
 import java.util.Base64;
 
@@ -9,15 +12,17 @@ public class FreelancerSetResumeCommand
   @Override
   public FreelancerSetResumeResponse Run(FreelancerSetResumeRequest request) {
 
-    String name = RESUME_BUCKET + request.user_id;
+    String name = RESUME_BUCKET + request.getUser_id();
 
-    byte[] resume_byes_arr = Base64.getDecoder().decode(request.resume_encoded);
+    byte[] resume_byes_arr = Base64.getDecoder().decode(request.getResume_encoded());
 
     try {
       gridFsTemplate.store(new ByteArrayInputStream(resume_byes_arr), name);
     } catch (Exception e) {
-      return FreelancerSetResumeResponse.builder().withSuccess(false).build();
+      return FreelancerSetResumeResponse.builder()
+          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .build();
     }
-    return FreelancerSetResumeResponse.builder().withSuccess(true).build();
+    return FreelancerSetResumeResponse.builder().withStatusCode(HttpStatusCode.OK).build();
   }
 }
