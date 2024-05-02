@@ -11,8 +11,10 @@ import com.workup.shared.commands.payments.paymentrequest.requests.CreatePayment
 import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
 import com.workup.shared.commands.payments.wallettransaction.requests.CreateWalletTransactionRequest;
 import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionRequest;
+import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionsRequest;
 import com.workup.shared.commands.payments.wallettransaction.responses.CreateWalletTransactionResponse;
 import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionResponse;
+import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionsResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.payments.WalletTransactionType;
@@ -199,5 +201,38 @@ class PaymentsApplicationTests {
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
+  }
+
+  @Test
+  void testGetWalletTransactionsRequest(){
+    WalletTransaction walletTransaction1 =
+            WalletTransaction.builder()
+                    .withAmount(1000)
+                    .withTransactionType(WalletTransactionType.DEBIT)
+                    .withPaymentTransactionId("1")
+                    .withWalletId("1")
+                    .build();
+    WalletTransaction savedWalletTransaction1 = walletTransactionRepository.save(walletTransaction1);
+
+    WalletTransaction walletTransaction2 =
+            WalletTransaction.builder()
+                    .withAmount(800)
+                    .withTransactionType(WalletTransactionType.DEBIT)
+                    .withPaymentTransactionId("1")
+                    .withWalletId(savedWalletTransaction1.getWalletId())
+                    .build();
+    WalletTransaction savedWalletTransaction2 = walletTransactionRepository.save(walletTransaction2);
+
+    GetWalletTransactionsRequest getWalletTransactionsRequest = GetWalletTransactionsRequest.builder()
+            .withFreelancerId(savedWalletTransaction1.getWalletId())
+            .build();
+
+    GetWalletTransactionsResponse response = (GetWalletTransactionsResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletTransactionsRequest);
+
+    assertNotNull(response);
+    assertEquals(2, response.getTransactions().size());
+
+
+
   }
 }
