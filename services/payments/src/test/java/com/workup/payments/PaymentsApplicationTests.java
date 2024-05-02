@@ -15,9 +15,8 @@ import com.workup.shared.commands.payments.wallettransaction.responses.CreateWal
 import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
-import java.util.UUID;
-
 import com.workup.shared.enums.payments.WalletTransactionType;
+import java.util.UUID;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -110,57 +109,66 @@ class PaymentsApplicationTests {
   void testCreateValidWalletTransactionRequest() {
     CreateWalletTransactionRequest createWalletTransactionRequest =
         CreateWalletTransactionRequest.builder()
-                .withAmount(1000)
-                .withDescription("Not Empty Description")
-                .withFreelancerId("1") // wallet ID
-                .withPaymentTransactionId("2")
-                .withTransactionType(WalletTransactionType.CREDIT)
-                .build();
+            .withAmount(1000)
+            .withDescription("Not Empty Description")
+            .withFreelancerId("1") // wallet ID
+            .withPaymentTransactionId("2")
+            .withTransactionType(WalletTransactionType.CREDIT)
+            .build();
 
-    CreateWalletTransactionResponse response = (CreateWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
+    CreateWalletTransactionResponse response =
+        (CreateWalletTransactionResponse)
+            template.convertSendAndReceive(
+                ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
 
-    walletTransactionRepository.findById(response.getWalletTransactionId())
-            .ifPresentOrElse(
-                    walletTransaction -> {
-                      System.out.println(walletTransaction.getWalletId());
-                      System.out.println(walletTransaction.getId());
-                      assertEquals(1000, walletTransaction.getAmount());
-                      assertEquals("1", walletTransaction.getWalletId());
-                      assertEquals("2", walletTransaction.getPaymentTransactionId());
-                      assertEquals(WalletTransactionType.CREDIT, walletTransaction.getTransactionType());
-                    },
-                    () -> fail("Wallet Transaction not found")
-            );
+    walletTransactionRepository
+        .findById(response.getWalletTransactionId())
+        .ifPresentOrElse(
+            walletTransaction -> {
+              System.out.println(walletTransaction.getWalletId());
+              System.out.println(walletTransaction.getId());
+              assertEquals(1000, walletTransaction.getAmount());
+              assertEquals("1", walletTransaction.getWalletId());
+              assertEquals("2", walletTransaction.getPaymentTransactionId());
+              assertEquals(WalletTransactionType.CREDIT, walletTransaction.getTransactionType());
+            },
+            () -> fail("Wallet Transaction not found"));
   }
 
   @Test
   void testCreateDuplicatedWalletTransactionRequest() {
     CreateWalletTransactionRequest createWalletTransactionRequest =
-            CreateWalletTransactionRequest.builder()
-                    .withAmount(1000)
-                    .withDescription("Not Empty Description")
-                    .withFreelancerId("1") // wallet ID
-                    .withPaymentTransactionId("2")
-                    .withTransactionType(WalletTransactionType.CREDIT)
-                    .build();
+        CreateWalletTransactionRequest.builder()
+            .withAmount(1000)
+            .withDescription("Not Empty Description")
+            .withFreelancerId("1") // wallet ID
+            .withPaymentTransactionId("2")
+            .withTransactionType(WalletTransactionType.CREDIT)
+            .build();
 
-    CreateWalletTransactionResponse response = (CreateWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
+    CreateWalletTransactionResponse response =
+        (CreateWalletTransactionResponse)
+            template.convertSendAndReceive(
+                ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
     assertNotNull(response);
     assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
     // Should work just fine
-    CreateWalletTransactionResponse response2 = (CreateWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
+    CreateWalletTransactionResponse response2 =
+        (CreateWalletTransactionResponse)
+            template.convertSendAndReceive(
+                ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
     assertNotNull(response2);
     assertEquals(HttpStatusCode.CREATED, response2.getStatusCode());
-
   }
 
   @Test
-  void testGetWalletTransactionRequest(){
+  void testGetWalletTransactionRequest() {
 
-    WalletTransaction walletTransaction = WalletTransaction.builder()
+    WalletTransaction walletTransaction =
+        WalletTransaction.builder()
             .withAmount(1000)
             .withTransactionType(WalletTransactionType.DEBIT)
             .withPaymentTransactionId("1")
@@ -169,28 +177,27 @@ class PaymentsApplicationTests {
     WalletTransaction savedWalletTransaction = walletTransactionRepository.save(walletTransaction);
 
     GetWalletTransactionRequest getWalletTransactionRequest =
-            GetWalletTransactionRequest.builder()
-                    .withWalletTransactionId(savedWalletTransaction.getId())
-                    .build();
+        GetWalletTransactionRequest.builder()
+            .withWalletTransactionId(savedWalletTransaction.getId())
+            .build();
 
-    GetWalletTransactionResponse response = (GetWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletTransactionRequest);
+    GetWalletTransactionResponse response =
+        (GetWalletTransactionResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletTransactionRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.OK, response.getStatusCode());
   }
 
   @Test
-  void testGetNonExistingWalletTransactionRequest(){
+  void testGetNonExistingWalletTransactionRequest() {
     GetWalletTransactionRequest getWalletTransactionRequest =
-            GetWalletTransactionRequest.builder()
-                    .withWalletTransactionId("1")
-                    .build();
-    GetWalletTransactionResponse response = (GetWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletTransactionRequest);
+        GetWalletTransactionRequest.builder().withWalletTransactionId("1").build();
+    GetWalletTransactionResponse response =
+        (GetWalletTransactionResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletTransactionRequest);
 
     assertNotNull(response);
     assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
-
   }
-
-
 }

@@ -28,8 +28,10 @@ public class RabbitMQListener {
   }
 
   @RabbitHandler
-  public CreateWalletTransactionResponse receive(CreateWalletTransactionRequest in) throws Exception {
-    return ((CreateWalletTransactionCommand) commandMap.getCommand("CreateWalletTransaction")).Run(in);
+  public CreateWalletTransactionResponse receive(CreateWalletTransactionRequest in)
+      throws Exception {
+    return ((CreateWalletTransactionCommand) commandMap.getCommand("CreateWalletTransaction"))
+        .Run(in);
   }
 
   @RabbitHandler
