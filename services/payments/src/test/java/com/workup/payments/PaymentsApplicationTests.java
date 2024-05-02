@@ -117,6 +117,11 @@ class PaymentsApplicationTests {
 
   @Test
   void testCreateValidWalletTransactionRequest() {
+    Wallet wallet = Wallet.builder()
+            .withBalance(1000)
+            .withFreelancerId("1")
+            .build();
+    walletRepository.save(wallet);
     CreateWalletTransactionRequest createWalletTransactionRequest =
         CreateWalletTransactionRequest.builder()
             .withAmount(1000)
@@ -198,6 +203,12 @@ class PaymentsApplicationTests {
   }
   @Test
   void testCreateDuplicatedWalletTransactionRequest() {
+    Wallet wallet = Wallet.builder()
+            .withBalance(1000)
+            .withFreelancerId("1")
+            .build();
+    walletRepository.save(wallet);
+
     CreateWalletTransactionRequest createWalletTransactionRequest =
         CreateWalletTransactionRequest.builder()
             .withAmount(1000)
@@ -410,6 +421,7 @@ class PaymentsApplicationTests {
 
 
   }
+  @Test
   void testCreateWalletCommand() {
 
     CreateWalletRequest createWalletRequest = CreateWalletRequest.builder()
