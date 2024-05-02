@@ -268,5 +268,26 @@ class PaymentsApplicationTests {
             );
 
   }
-  
+
+  @Test
+  void testNotFoundWithdrawFromWalletRequest(){
+    // First, we need to have a wallet
+    Wallet wallet = Wallet.builder()
+            .withBalance(1000)
+            .withFreelancerId("1")
+            .build();
+    Wallet savedWallet = walletRepository.save(wallet);
+
+    WithdrawFromWalletRequest withdrawFromWalletRequest = WithdrawFromWalletRequest.builder()
+            .withAmount(200)
+            .withFreelancerId("2")
+            .withPaymentTransactionId("1")
+            .build();
+
+    WithdrawFromWalletResponse response = (WithdrawFromWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
+
+  }
 }
