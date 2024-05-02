@@ -149,12 +149,18 @@ class PaymentsApplicationTests {
   }
 
   @Test
-  void testCreateInvalidWalletTransactionRequest() {
+  void testCreateInvalidNegativeWalletTransactionRequest() {
+    Wallet wallet = Wallet.builder()
+            .withBalance(1000)
+            .withFreelancerId("1")
+            .build();
+    Wallet savedWallet = walletRepository.save(wallet);
+
     CreateWalletTransactionRequest createWalletTransactionRequest =
             CreateWalletTransactionRequest.builder()
                     .withAmount(-1000)
                     .withDescription("Negative Balance")
-                    .withFreelancerId("1") // wallet ID
+                    .withFreelancerId(savedWallet.getFreelancerId()) // wallet ID
                     .withPaymentTransactionId("2")
                     .withTransactionType(WalletTransactionType.CREDIT)
                     .build();
@@ -165,20 +171,8 @@ class PaymentsApplicationTests {
                             ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
 
     assertNotNull(response);
-    assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
+    assertEquals(HttpStatusCode.BAD_REQUEST, response.getStatusCode());
 
-    walletTransactionRepository
-            .findById(response.getWalletTransactionId())
-            .ifPresentOrElse(
-                    walletTransaction -> {
-                      System.out.println(walletTransaction.getWalletId());
-                      System.out.println(walletTransaction.getId());
-                      assertEquals(-1000, walletTransaction.getAmount());
-                      assertEquals("1", walletTransaction.getWalletId());
-                      assertEquals("2", walletTransaction.getPaymentTransactionId());
-                      assertEquals(WalletTransactionType.CREDIT, walletTransaction.getTransactionType());
-                    },
-                    () -> fail("Wallet Transaction not found"));
   }
 
   @Test
