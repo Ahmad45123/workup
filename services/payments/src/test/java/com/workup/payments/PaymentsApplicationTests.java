@@ -176,6 +176,27 @@ class PaymentsApplicationTests {
   }
 
   @Test
+  void testCreateNotFoundWalletTransactionRequest() {
+
+    CreateWalletTransactionRequest createWalletTransactionRequest =
+            CreateWalletTransactionRequest.builder()
+                    .withAmount(-1000)
+                    .withDescription("Negative Balance")
+                    .withFreelancerId("1") // wallet ID
+                    .withPaymentTransactionId("2")
+                    .withTransactionType(WalletTransactionType.CREDIT)
+                    .build();
+
+    CreateWalletTransactionResponse response =
+            (CreateWalletTransactionResponse)
+                    template.convertSendAndReceive(
+                            ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
+
+  }
+  @Test
   void testCreateDuplicatedWalletTransactionRequest() {
     CreateWalletTransactionRequest createWalletTransactionRequest =
         CreateWalletTransactionRequest.builder()
