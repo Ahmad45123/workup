@@ -8,10 +8,10 @@ import com.workup.payments.commands.wallettransaction.CreateWalletTransactionCom
 import com.workup.payments.commands.wallettransaction.GetWalletTransactionCommand;
 import com.workup.payments.commands.wallettransaction.GetWalletTransactionsCommand;
 import com.workup.payments.commands.wallettransaction.WithdrawFromWalletCommand;
-import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
-import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
 import com.workup.shared.commands.payments.paymentrequest.requests.*;
+import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.*;
+import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
 import com.workup.shared.commands.payments.wallet.requests.CreateWalletRequest;
 import com.workup.shared.commands.payments.wallet.requests.GetWalletRequest;
 import com.workup.shared.commands.payments.wallet.responses.CreateWalletResponse;
@@ -44,7 +44,8 @@ public class RabbitMQListener {
   @RabbitHandler
   public CreateWalletTransactionResponse receive(CreateWalletTransactionRequest in)
       throws Exception {
-    return ((CreateWalletTransactionCommand) commandMap.getCommand("CreateWalletTransaction")).Run(in);
+    return ((CreateWalletTransactionCommand) commandMap.getCommand("CreateWalletTransaction"))
+        .Run(in);
   }
 
   @RabbitHandler

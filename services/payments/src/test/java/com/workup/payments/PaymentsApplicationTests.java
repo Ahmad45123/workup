@@ -10,11 +10,11 @@ import com.workup.payments.repositories.PaymentRequestRepository;
 import com.workup.payments.repositories.PaymentTransactionRepository;
 import com.workup.payments.repositories.WalletRepository;
 import com.workup.payments.repositories.WalletTransactionRepository;
-import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
-import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
 import com.workup.shared.commands.payments.dto.PaymentRequestDTO;
 import com.workup.shared.commands.payments.paymentrequest.requests.*;
+import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.*;
+import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
 import com.workup.shared.commands.payments.wallet.requests.CreateWalletRequest;
 import com.workup.shared.commands.payments.wallet.requests.GetWalletRequest;
 import com.workup.shared.commands.payments.wallet.responses.CreateWalletResponse;
@@ -29,9 +29,9 @@ import com.workup.shared.commands.payments.wallettransaction.responses.GetWallet
 import com.workup.shared.commands.payments.wallettransaction.responses.WithdrawFromWalletResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
-import com.workup.shared.enums.payments.WalletTransactionType;
 import com.workup.shared.enums.payments.PaymentRequestStatus;
 import com.workup.shared.enums.payments.PaymentTransactionStatus;
+import com.workup.shared.enums.payments.WalletTransactionType;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterAll;
@@ -418,7 +418,6 @@ class PaymentsApplicationTests {
             },
             () -> fail("Wallet is not found"));
   }
-
 
   @Test
   void testGetClientPaymentRequests() {
