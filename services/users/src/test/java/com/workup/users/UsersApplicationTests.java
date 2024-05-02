@@ -54,9 +54,7 @@ class UsersApplicationTests {
 
   @DynamicPropertySource
   static void setDatasourceProperties(DynamicPropertyRegistry registry) {
-    registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
-    registry.add("spring.data.mongodb.port", UsersApplicationTests::mongoport);
-    // registry.add("spring.data.mongodb.database", mongoDBContainer::getname);
+    registry.add("spring.data.mongodb.uri", mongoDBContainer::getConnectionString);
 
     registry.add("spring.rabbitmq.host", rabbitMQContainer::getHost);
     registry.add("spring.rabbitmq.port", rabbitMQContainer::getFirstMappedPort);
@@ -65,5 +63,7 @@ class UsersApplicationTests {
   }
 
   @Test
-  void testCreateUser() {}
+  void testCreateUser() {
+    assert (true);
+  }
 }
