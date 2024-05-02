@@ -2,6 +2,7 @@ package com.workup.payments;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.workup.payments.models.WalletTransaction;
 import com.workup.payments.repositories.PaymentRequestRepository;
 import com.workup.payments.repositories.PaymentTransactionRepository;
 import com.workup.payments.repositories.WalletRepository;
@@ -121,7 +122,7 @@ class PaymentsApplicationTests {
     assertNotNull(response);
     assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
 
-    walletTransactionRepository.findById(String.valueOf(UUID.fromString(response.getWalletTransactionId())))
+    walletTransactionRepository.findById(response.getWalletTransactionId())
             .ifPresentOrElse(
                     walletTransaction -> {
                       System.out.println(walletTransaction.getWalletId());
@@ -157,11 +158,32 @@ class PaymentsApplicationTests {
   }
 
   @Test
+  void testGetWalletTransactionRequest(){
+
+    WalletTransaction walletTransaction = WalletTransaction.builder()
+            .withAmount(1000)
+            .withTransactionType(WalletTransactionType.DEBIT)
+            .withPaymentTransactionId("1")
+            .withWalletId("1")
+            .build();
+    WalletTransaction savedWalletTransaction = walletTransactionRepository.save(walletTransaction);
+
+    GetWalletTransactionRequest getWalletTransactionRequest =
+            GetWalletTransactionRequest.builder()
+                    .withWalletTransactionId(savedWalletTransaction.getId())
+                    .build();
+
+    GetWalletTransactionResponse response = (GetWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletTransactionRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.OK, response.getStatusCode());
+  }
+
+  @Test
   void testGetNonExistingWalletTransactionRequest(){
     GetWalletTransactionRequest getWalletTransactionRequest =
             GetWalletTransactionRequest.builder()
                     .withWalletTransactionId("1")
-                    .withUserId("1")
                     .build();
     GetWalletTransactionResponse response = (GetWalletTransactionResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletTransactionRequest);
 
