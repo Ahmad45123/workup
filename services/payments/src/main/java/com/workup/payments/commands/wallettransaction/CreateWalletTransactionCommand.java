@@ -17,7 +17,7 @@ public class CreateWalletTransactionCommand
     Optional<Wallet> wallet = getWalletRepository().findById(request.getFreelancerId());
     if (wallet.isEmpty()) {
       return CreateWalletTransactionResponse.builder()
-          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage("Wallet not found")
           .build();
     }

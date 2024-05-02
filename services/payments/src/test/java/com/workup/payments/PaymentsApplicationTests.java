@@ -190,7 +190,7 @@ class PaymentsApplicationTests {
                 ServiceQueueNames.PAYMENTS, createWalletTransactionRequest);
 
     assertNotNull(response);
-    assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
+    assertEquals(HttpStatusCode.INTERNAL_SERVER_ERROR, response.getStatusCode());
   }
 
   @Test
