@@ -9,5 +9,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerGetProfileBriefRequest extends CommandRequest {
-  public String user_id;
+  public final String user_id;
 }

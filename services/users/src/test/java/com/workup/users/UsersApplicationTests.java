@@ -1,8 +1,17 @@
 package com.workup.users;
 
+import static org.junit.Assert.assertEquals;
+
+import com.workup.shared.commands.users.requests.FreelancerGetProfileBriefRequest;
+import com.workup.shared.commands.users.responses.FreelancerGetProfileBriefResponse;
+import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.users.db.Freelancer;
 import com.workup.users.repositories.ClientRepository;
 import com.workup.users.repositories.ExperienceRepository;
 import com.workup.users.repositories.FreelancerRepository;
+import java.sql.Date;
+import java.time.Instant;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,6 +73,29 @@ class UsersApplicationTests {
 
   @Test
   void testCreateUser() {
-    assert (true);
+    var freelancerObj =
+        Freelancer.builder()
+            .withEmail("ahmad45123@gmail.com")
+            .withPassword_hash("verysecurepassword")
+            .withFull_name("Mr. Mamdouh")
+            .withJob_title("Software Engineer")
+            .withCity("Cairo")
+            .withBirthdate(Date.from(Instant.now()))
+            .build();
+
+    freelancerRepository.save(freelancerObj);
+
+    FreelancerGetProfileBriefRequest request =
+        FreelancerGetProfileBriefRequest.builder()
+            .withUser_id(freelancerObj.getId().toString())
+            .build();
+
+    FreelancerGetProfileBriefResponse breifResponse =
+        (FreelancerGetProfileBriefResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    assertEquals(breifResponse.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(breifResponse.getFull_name(), (freelancerObj.getFull_name()));
+    assertEquals(breifResponse.getEmail(), (freelancerObj.getEmail()));
   }
 }
