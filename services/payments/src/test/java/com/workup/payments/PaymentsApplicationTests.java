@@ -292,7 +292,7 @@ class PaymentsApplicationTests {
   }
 
   @Test
-  void testInvalidAmountWithdrawFromWalletRequest(){
+  void testInvalidBiggerAmountWithdrawFromWalletRequest(){
     double balance = 1000;
     double withdrawAmount = 2000;
 
