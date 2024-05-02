@@ -2,6 +2,7 @@ package com.workup.payments;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.workup.payments.models.Wallet;
 import com.workup.payments.models.WalletTransaction;
 import com.workup.payments.repositories.PaymentRequestRepository;
 import com.workup.payments.repositories.PaymentTransactionRepository;
@@ -12,9 +13,11 @@ import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymen
 import com.workup.shared.commands.payments.wallettransaction.requests.CreateWalletTransactionRequest;
 import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionRequest;
 import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionsRequest;
+import com.workup.shared.commands.payments.wallettransaction.requests.WithdrawFromWalletRequest;
 import com.workup.shared.commands.payments.wallettransaction.responses.CreateWalletTransactionResponse;
 import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionResponse;
 import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionsResponse;
+import com.workup.shared.commands.payments.wallettransaction.responses.WithdrawFromWalletResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.payments.WalletTransactionType;
@@ -230,9 +233,40 @@ class PaymentsApplicationTests {
     GetWalletTransactionsResponse response = (GetWalletTransactionsResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletTransactionsRequest);
 
     assertNotNull(response);
+    assertEquals(HttpStatusCode.OK, response.getStatusCode());
     assertEquals(2, response.getTransactions().size());
+  }
 
+  @Test
+  void testWithdrawFromWalletRequest(){
+    double balance = 1000;
+    double withdrawAmount = 200;
+    // First, we need to have a wallet
+    Wallet wallet = Wallet.builder()
+            .withBalance(balance)
+            .withFreelancerId("1")
+            .build();
+    Wallet savedWallet = walletRepository.save(wallet);
 
+    WithdrawFromWalletRequest withdrawFromWalletRequest = WithdrawFromWalletRequest.builder()
+            .withAmount(withdrawAmount)
+            .withFreelancerId("1")
+            .withPaymentTransactionId("1")
+            .build();
+
+    WithdrawFromWalletResponse response = (WithdrawFromWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.OK, response.getStatusCode());
+
+    walletRepository.findById(savedWallet.getFreelancerId())
+            .ifPresentOrElse(
+                    foundWallet -> {
+                      assertEquals(balance - withdrawAmount , foundWallet.getBalance());
+                    },
+                    () -> fail("Wallet is not found")
+            );
 
   }
+  
 }
