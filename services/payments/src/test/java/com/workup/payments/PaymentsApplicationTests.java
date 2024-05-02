@@ -323,4 +323,38 @@ class PaymentsApplicationTests {
 
 
   }
+
+  @Test
+  void testInvalidNegativeAmountWithdrawFromWalletRequest(){
+    double balance = 1000;
+    double withdrawAmount = -2000;
+
+    Wallet wallet = Wallet.builder()
+            .withBalance(balance)
+            .withFreelancerId("1")
+            .build();
+    Wallet savedWallet = walletRepository.save(wallet);
+
+    WithdrawFromWalletRequest withdrawFromWalletRequest = WithdrawFromWalletRequest.builder()
+            .withAmount(withdrawAmount)
+            .withFreelancerId("1")
+            .withPaymentTransactionId("1")
+            .build();
+
+    WithdrawFromWalletResponse response = (WithdrawFromWalletResponse) template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, withdrawFromWalletRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.BAD_REQUEST, response.getStatusCode());
+
+    walletRepository.findById(savedWallet.getFreelancerId())
+            .ifPresentOrElse(
+                    foundWallet -> {
+                      assertEquals(balance  , foundWallet.getBalance());
+                      assertNotEquals(balance + withdrawAmount, foundWallet.getBalance());
+                    },
+                    () -> fail("Wallet is not found")
+            );
+
+
+  }
 }
