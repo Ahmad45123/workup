@@ -23,21 +23,25 @@ public class GetProposalsByJobIdCommand
       List<ProposalModel> proposals = new ArrayList<>();
       for (Proposal proposal : response) {
         ArrayList<ProposalAttachment> attachments = new ArrayList<>();
-        for (Attachment attachment : proposal.getAttachments()) {
-          attachments.add(
-              ProposalAttachment.builder()
-                  .withName(attachment.getName())
-                  .withName(attachment.getUrl())
-                  .build());
+        if (proposal.getAttachments() != null) {
+          for (Attachment attachment : proposal.getAttachments()) {
+            attachments.add(
+                ProposalAttachment.builder()
+                    .withName(attachment.getName())
+                    .withUrl(attachment.getUrl())
+                    .build());
+          }
         }
         ArrayList<ProposalMilestone> milestones = new ArrayList<>();
-        for (Milestone milestone : proposal.getMilestones()) {
-          milestones.add(
-              ProposalMilestone.builder()
-                  .withAmount(milestone.getAmount())
-                  .withDescription(milestone.getDescription())
-                  .withDueDate(milestone.getDueDate())
-                  .build());
+        if (proposal.getMilestones() != null) {
+          for (Milestone milestone : proposal.getMilestones()) {
+            milestones.add(
+                ProposalMilestone.builder()
+                    .withAmount(milestone.getAmount())
+                    .withDescription(milestone.getDescription())
+                    .withDueDate(milestone.getDueDate())
+                    .build());
+          }
         }
         proposals.add(
             ProposalModel.builder()
