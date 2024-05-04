@@ -2,6 +2,7 @@ package com.workup.payments;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.redis.testcontainers.RedisContainer;
 import com.workup.payments.models.PaymentRequest;
 import com.workup.payments.models.PaymentTransaction;
 import com.workup.payments.models.Wallet;
@@ -32,6 +33,7 @@ import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.payments.PaymentRequestStatus;
 import com.workup.shared.enums.payments.PaymentTransactionStatus;
 import com.workup.shared.enums.payments.WalletTransactionType;
+import com.workup.shared.redis.RedisService;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterAll;
@@ -47,6 +49,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
 @Testcontainers
@@ -61,11 +64,16 @@ class PaymentsApplicationTests {
   static final RabbitMQContainer rabbitMQContainer =
       new RabbitMQContainer("rabbitmq:3.13-management");
 
+  @Container
+  static final RedisContainer redisContainer =
+      new RedisContainer(DockerImageName.parse("redis:latest")).withExposedPorts(6379);
+
   @Autowired private AmqpTemplate template;
   @Autowired private PaymentRequestRepository paymentRequestRepository;
   @Autowired private PaymentTransactionRepository paymentTransactionRepository;
   @Autowired private WalletRepository walletRepository;
   @Autowired private WalletTransactionRepository walletTransactionRepository;
+  @Autowired private RedisService redisService;
 
   @BeforeEach
   void clearAll() {
@@ -73,12 +81,15 @@ class PaymentsApplicationTests {
     paymentTransactionRepository.deleteAll();
     walletRepository.deleteAll();
     walletTransactionRepository.deleteAll();
+
+    redisService.clearCache();
   }
 
   @AfterAll
   static void stopContainers() {
     postgreSQLContainer.stop();
     rabbitMQContainer.stop();
+    redisContainer.stop();
   }
 
   @DynamicPropertySource
@@ -92,6 +103,9 @@ class PaymentsApplicationTests {
     registry.add("spring.rabbitmq.port", rabbitMQContainer::getFirstMappedPort);
     registry.add("spring.rabbitmq.username", rabbitMQContainer::getAdminUsername);
     registry.add("spring.rabbitmq.password", rabbitMQContainer::getAdminPassword);
+
+    registry.add("spring.redis.host", redisContainer::getHost);
+    registry.add("spring.redis.port", () -> redisContainer.getMappedPort(6379));
   }
 
   @Test
@@ -738,5 +752,52 @@ class PaymentsApplicationTests {
             template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletRequest);
     assertNotNull(getWalletResponse);
     assertEquals(HttpStatusCode.NOT_FOUND, getWalletResponse.getStatusCode());
+  }
+
+  @Test
+  void testGetPaymentRequestResponseFromCache() {
+    PaymentRequest paymentRequest =
+        PaymentRequest.builder()
+            .withAmount(1200)
+            .withDescription("Payment for services rendered")
+            .withClientId("3")
+            .withFreelancerId("4")
+            .build();
+    paymentRequestRepository.save(paymentRequest);
+
+    GetPaymentRequestRequest getPaymentRequest =
+        GetPaymentRequestRequest.builder().withPaymentRequestId(paymentRequest.getId()).build();
+
+    GetPaymentRequestResponse response =
+        (GetPaymentRequestResponse)
+            template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getPaymentRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.OK, response.getStatusCode());
+
+    GetPaymentRequestResponse cachedResponse =
+        (GetPaymentRequestResponse)
+            redisService.getValue(
+                getPaymentRequest.getPaymentRequestId(), GetPaymentRequestResponse.class);
+
+    assertNotNull(cachedResponse);
+    assertEquals(HttpStatusCode.OK, cachedResponse.getStatusCode());
+
+    assertAll(
+        () -> assertEquals(response.getRequest().getId(), cachedResponse.getRequest().getId()),
+        () ->
+            assertEquals(
+                response.getRequest().getAmount(), cachedResponse.getRequest().getAmount()),
+        () ->
+            assertEquals(
+                response.getRequest().getDescription(),
+                cachedResponse.getRequest().getDescription()),
+        () ->
+            assertEquals(
+                response.getRequest().getClientId(), cachedResponse.getRequest().getClientId()),
+        () ->
+            assertEquals(
+                response.getRequest().getFreelancerId(),
+                cachedResponse.getRequest().getFreelancerId()));
   }
 }
