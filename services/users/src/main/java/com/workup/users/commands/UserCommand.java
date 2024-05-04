@@ -1,9 +1,9 @@
 package com.workup.users.commands;
 
 import com.workup.shared.commands.Command;
-import com.workup.users.db.AchievementRepository;
-import com.workup.users.db.EducationRepository;
+import com.workup.users.repositories.AchievementRepository;
 import com.workup.users.repositories.ClientRepository;
+import com.workup.users.repositories.EducationRepository;
 import com.workup.users.repositories.ExperienceRepository;
 import com.workup.users.repositories.FreelancerRepository;
 import lombok.Setter;
