@@ -22,6 +22,10 @@
                     <IfLastModified age="30d"/>
                 </Delete>
             </DefaultRolloverStrategy>
+            <Filters>
+                <!-- Deny ERROR to avoid duplication in AppLogs -->
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
         </RollingFile>
 
         <RollingFile name="ErrorsLogsFileAppender" fileName="${baseDir}/errors.log"
