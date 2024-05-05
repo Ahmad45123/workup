@@ -12,6 +12,5 @@ import lombok.extern.jackson.Jacksonized;
 public class SearchJobsResponse extends CommandResponse {
 
   private final JobListingItem[] jobs;
-  private final int totalJobs;
   private final String pagingState;
 }
