@@ -16,6 +16,7 @@ import com.workup.payments.repositories.WalletTransactionRepository;
 import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
+import com.workup.shared.redis.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,8 @@ public class PaymentCommandMap
   @Autowired private WalletRepository walletRepository;
 
   @Autowired private WalletTransactionRepository walletTransactionRepository;
+
+  @Autowired private RedisService redisService;
 
   public void registerCommands() {
     /* PaymentRequest commands */
@@ -61,5 +64,7 @@ public class PaymentCommandMap
     command.setPaymentTransactionRepository(paymentTransactionRepository);
     command.setWalletRepository(walletRepository);
     command.setWalletTransactionRepository(walletTransactionRepository);
+
+    command.setRedisService(redisService);
   }
 }
