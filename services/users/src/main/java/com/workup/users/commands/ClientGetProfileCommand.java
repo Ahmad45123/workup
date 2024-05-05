@@ -11,7 +11,7 @@ public class ClientGetProfileCommand
 
   @Override
   public ClientGetProfileResponse Run(ClientGetProfileRequest request) {
-    Optional<Client> clientOptional = clientRepository.findById(request.user_id);
+    Optional<Client> clientOptional = clientRepository.findById(request.getUser_id());
 
     if (!clientOptional.isPresent()) {
       return ClientGetProfileResponse.builder()

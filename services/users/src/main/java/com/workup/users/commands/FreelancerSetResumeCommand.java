@@ -12,9 +12,9 @@ public class FreelancerSetResumeCommand
   @Override
   public FreelancerSetResumeResponse Run(FreelancerSetResumeRequest request) {
 
-    String name = RESUME_BUCKET + request.user_id;
+    String name = RESUME_BUCKET + request.getUser_id();
 
-    byte[] resume_byes_arr = Base64.getDecoder().decode(request.resume_encoded);
+    byte[] resume_byes_arr = Base64.getDecoder().decode(request.getResume_encoded());
 
     try {
       gridFsTemplate.store(new ByteArrayInputStream(resume_byes_arr), name);

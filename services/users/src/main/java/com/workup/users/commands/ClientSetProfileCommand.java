@@ -14,33 +14,33 @@ public class ClientSetProfileCommand
 
     Client client;
 
-    if (request.user_id == null) {
+    if (request.getUser_id() == null) {
       client = Client.builder().build();
     } else {
-      Optional<Client> clientOption = clientRepository.findById(request.user_id);
+      Optional<Client> clientOption = clientRepository.findById(request.getUser_id());
       if (!clientOption.isPresent()) {
         throw new RuntimeException("User not found");
       }
       client = clientOption.get();
     }
 
-    if (request.name != null) {
-      client.setClient_name(request.name);
+    if (request.getName() != null) {
+      client.setClient_name(request.getName());
     }
-    if (request.email != null) {
-      client.setEmail(request.email);
+    if (request.getEmail() != null) {
+      client.setEmail(request.getEmail());
     }
-    if (request.city != null) {
-      client.setCity(request.city);
+    if (request.getCity() != null) {
+      client.setCity(request.getCity());
     }
-    if (request.description != null) {
-      client.setClient_description(request.description);
+    if (request.getDescription() != null) {
+      client.setClient_description(request.getDescription());
     }
-    if (request.industry != null) {
-      client.setIndustry(request.industry);
+    if (request.getIndustry() != null) {
+      client.setIndustry(request.getIndustry());
     }
-    if (request.employee_count != null) {
-      client.setEmployee_count(request.employee_count);
+    if (request.getEmployee_count() != null) {
+      client.setEmployee_count(request.getEmployee_count());
     }
 
     clientRepository.save(client);

@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 @Builder(setterPrefix = "with")
 @Getter
 @Setter
-@Document
+@Document(collection = "Freelancer")
 public class Freelancer {
   @Id private ObjectId id;
   @Indexed private String email;

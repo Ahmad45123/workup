@@ -12,14 +12,14 @@ public class FreelancerGetPhotoCommand
 
   @Override
   public FreelancerGetPhotoResponse Run(FreelancerGetPhotoRequest request) {
-    Optional<Client> clientOptional = clientRepository.findById(request.user_id);
+    Optional<Client> clientOptional = clientRepository.findById(request.getUser_id());
 
     if (!clientOptional.isPresent()) {
       return FreelancerGetPhotoResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .build();
     }
-    String name = PHOTO_BUCKET + request.user_id;
+    String name = PHOTO_BUCKET + request.getUser_id();
 
     byte[] bytesArr;
     try {

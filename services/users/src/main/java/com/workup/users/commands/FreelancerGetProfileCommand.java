@@ -11,7 +11,7 @@ public class FreelancerGetProfileCommand
 
   @Override
   public FreelancerGetProfileResponse Run(FreelancerGetProfileRequest request) {
-    Optional<Freelancer> freelancer = freelancerRepository.findById(request.user_id);
+    Optional<Freelancer> freelancer = freelancerRepository.findById(request.getUser_id());
 
     if (!freelancer.isPresent()) {
       return FreelancerGetProfileResponse.builder()
