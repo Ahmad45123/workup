@@ -12,9 +12,11 @@ import com.workup.payments.repositories.WalletRepository;
 import com.workup.payments.repositories.WalletTransactionRepository;
 import com.workup.shared.commands.payments.dto.PaymentRequestDTO;
 import com.workup.shared.commands.payments.paymentrequest.requests.*;
-import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.*;
-import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
+import com.workup.shared.commands.payments.paymenttransaction.requests.GetClientPaymentTransactionsRequest;
+import com.workup.shared.commands.payments.paymenttransaction.requests.GetFreelancerPaymentTransactionsRequest;
+import com.workup.shared.commands.payments.paymenttransaction.responses.GetClientPaymentTransactionsResponse;
+import com.workup.shared.commands.payments.paymenttransaction.responses.GetFreelancerPaymentTransactionsResponse;
 import com.workup.shared.commands.payments.wallet.requests.CreateWalletRequest;
 import com.workup.shared.commands.payments.wallet.requests.GetWalletRequest;
 import com.workup.shared.commands.payments.wallet.responses.CreateWalletResponse;
@@ -316,7 +318,6 @@ class PaymentsApplicationTests {
         WithdrawFromWalletRequest.builder()
             .withAmount(withdrawAmount)
             .withFreelancerId("1")
-            .withPaymentTransactionId("1")
             .build();
 
     WithdrawFromWalletResponse response =
@@ -342,11 +343,7 @@ class PaymentsApplicationTests {
     Wallet savedWallet = walletRepository.save(wallet);
 
     WithdrawFromWalletRequest withdrawFromWalletRequest =
-        WithdrawFromWalletRequest.builder()
-            .withAmount(200)
-            .withFreelancerId("2")
-            .withPaymentTransactionId("1")
-            .build();
+        WithdrawFromWalletRequest.builder().withAmount(200).withFreelancerId("2").build();
 
     WithdrawFromWalletResponse response =
         (WithdrawFromWalletResponse)
@@ -368,7 +365,6 @@ class PaymentsApplicationTests {
         WithdrawFromWalletRequest.builder()
             .withAmount(withdrawAmount)
             .withFreelancerId("1")
-            .withPaymentTransactionId("1")
             .build();
 
     WithdrawFromWalletResponse response =
@@ -399,7 +395,6 @@ class PaymentsApplicationTests {
         WithdrawFromWalletRequest.builder()
             .withAmount(withdrawAmount)
             .withFreelancerId("1")
-            .withPaymentTransactionId("1")
             .build();
 
     WithdrawFromWalletResponse response =
@@ -738,5 +733,75 @@ class PaymentsApplicationTests {
             template.convertSendAndReceive(ServiceQueueNames.PAYMENTS, getWalletRequest);
     assertNotNull(getWalletResponse);
     assertEquals(HttpStatusCode.NOT_FOUND, getWalletResponse.getStatusCode());
+  }
+
+  @Test
+  void testGetClientPaymentTransactions() {
+    PaymentRequest paymentRequest1 =
+        PaymentRequest.builder().withAmount(1200).withClientId("3").withFreelancerId("4").build();
+    PaymentRequest paymentRequest2 =
+        PaymentRequest.builder().withAmount(3600).withClientId("3").withFreelancerId("1").build();
+    paymentRequestRepository.save(paymentRequest1);
+    paymentRequestRepository.save(paymentRequest2);
+    PaymentTransaction paymentTransaction1 =
+        PaymentTransaction.builder()
+            .withAmount(1200)
+            .withPaymentRequestId(paymentRequest1.getId())
+            .build();
+    PaymentTransaction paymentTransaction2 =
+        PaymentTransaction.builder()
+            .withAmount(3600)
+            .withPaymentRequestId(paymentRequest2.getId())
+            .build();
+    paymentTransactionRepository.save(paymentTransaction1);
+    paymentTransactionRepository.save(paymentTransaction2);
+
+    GetClientPaymentTransactionsRequest getClientPaymentTransactionsRequest =
+        GetClientPaymentTransactionsRequest.builder().withClientId("3").build();
+
+    GetClientPaymentTransactionsResponse response =
+        (GetClientPaymentTransactionsResponse)
+            template.convertSendAndReceive(
+                ServiceQueueNames.PAYMENTS, getClientPaymentTransactionsRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.OK, response.getStatusCode());
+    assertNotNull(response.getTransactions());
+    assertEquals(2, response.getTransactions().size());
+  }
+
+  @Test
+  void testGetFreelancerPaymentTransactions() {
+    PaymentRequest paymentRequest1 =
+        PaymentRequest.builder().withAmount(1200).withClientId("3").withFreelancerId("4").build();
+    PaymentRequest paymentRequest2 =
+        PaymentRequest.builder().withAmount(3600).withClientId("10").withFreelancerId("4").build();
+    paymentRequestRepository.save(paymentRequest1);
+    paymentRequestRepository.save(paymentRequest2);
+    PaymentTransaction paymentTransaction1 =
+        PaymentTransaction.builder()
+            .withAmount(1200)
+            .withPaymentRequestId(paymentRequest1.getId())
+            .build();
+    PaymentTransaction paymentTransaction2 =
+        PaymentTransaction.builder()
+            .withAmount(3600)
+            .withPaymentRequestId(paymentRequest2.getId())
+            .build();
+    paymentTransactionRepository.save(paymentTransaction1);
+    paymentTransactionRepository.save(paymentTransaction2);
+
+    GetFreelancerPaymentTransactionsRequest getFreelancerPaymentTransactionsRequest =
+        GetFreelancerPaymentTransactionsRequest.builder().withFreelancerId("4").build();
+
+    GetFreelancerPaymentTransactionsResponse response =
+        (GetFreelancerPaymentTransactionsResponse)
+            template.convertSendAndReceive(
+                ServiceQueueNames.PAYMENTS, getFreelancerPaymentTransactionsRequest);
+
+    assertNotNull(response);
+    assertEquals(HttpStatusCode.OK, response.getStatusCode());
+    assertNotNull(response.getTransactions());
+    assertEquals(2, response.getTransactions().size());
   }
 }
