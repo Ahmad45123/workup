@@ -2,6 +2,8 @@ package com.workup.payments;
 
 import com.workup.payments.commands.PaymentCommandMap;
 import com.workup.payments.commands.paymentrequest.*;
+import com.workup.payments.commands.paymenttransaction.GetClientPaymentTransactionsCommand;
+import com.workup.payments.commands.paymenttransaction.GetFreelancerPaymentTransactionsCommand;
 import com.workup.payments.commands.wallet.CreateWalletCommand;
 import com.workup.payments.commands.wallet.GetWalletCommand;
 import com.workup.payments.commands.wallettransaction.CreateWalletTransactionCommand;
@@ -9,9 +11,11 @@ import com.workup.payments.commands.wallettransaction.GetWalletTransactionComman
 import com.workup.payments.commands.wallettransaction.GetWalletTransactionsCommand;
 import com.workup.payments.commands.wallettransaction.WithdrawFromWalletCommand;
 import com.workup.shared.commands.payments.paymentrequest.requests.*;
-import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.*;
-import com.workup.shared.commands.payments.paymentrequest.responses.CreatePaymentRequestResponse;
+import com.workup.shared.commands.payments.paymenttransaction.requests.GetClientPaymentTransactionsRequest;
+import com.workup.shared.commands.payments.paymenttransaction.requests.GetFreelancerPaymentTransactionsRequest;
+import com.workup.shared.commands.payments.paymenttransaction.responses.GetClientPaymentTransactionsResponse;
+import com.workup.shared.commands.payments.paymenttransaction.responses.GetFreelancerPaymentTransactionsResponse;
 import com.workup.shared.commands.payments.wallet.requests.CreateWalletRequest;
 import com.workup.shared.commands.payments.wallet.requests.GetWalletRequest;
 import com.workup.shared.commands.payments.wallet.responses.CreateWalletResponse;
@@ -96,5 +100,21 @@ public class RabbitMQListener {
   @RabbitHandler
   public GetWalletResponse receive(GetWalletRequest in) throws Exception {
     return ((GetWalletCommand) commandMap.getCommand("GetWallet")).Run(in);
+  }
+
+  @RabbitHandler
+  public GetClientPaymentTransactionsResponse receive(GetClientPaymentTransactionsRequest in)
+      throws Exception {
+    return ((GetClientPaymentTransactionsCommand)
+            commandMap.getCommand("GetClientPaymentTransactions"))
+        .Run(in);
+  }
+
+  @RabbitHandler
+  public GetFreelancerPaymentTransactionsResponse receive(
+      GetFreelancerPaymentTransactionsRequest in) throws Exception {
+    return ((GetFreelancerPaymentTransactionsCommand)
+            commandMap.getCommand("GetFreelancerPaymentTransactions"))
+        .Run(in);
   }
 }
