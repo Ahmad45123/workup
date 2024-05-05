@@ -12,11 +12,8 @@ services:
       timeout: 30s
       retries: 3
     networks:
-      - microservices
-    # ports:
-    #   - "5672:5672"
-    #   - "15672:15672"
-
+      - default
+    
   service_redis:
     image: redis:latest
     healthcheck:
@@ -25,7 +22,7 @@ services:
       timeout: 30s
       retries: 3
     networks:
-      - microservices
+      - default
     # ports:
     #   - "6379:6379"
 
@@ -36,27 +33,11 @@ services:
       - jobs_db
       - service_mq
     networks:
-      - microservices
+      - default
+      - jobs
+    env_file:
+      - ./services/jobs/.env
 
-  # ----- PAYMENTS MICROSERVICE -------
-  service_payments:
-    image: ahmad45123/workup:service_payments
-    depends_on:
-      - payments_db
-      - service_mq
-      - service_redis
-    networks:
-      - microservices
-
-  # ----- PAYMENTS MICROSERVICE -------
-  service_contracts:
-    image: ahmad45123/workup:service_contracts
-    depends_on:
-      - contracts_db
-      - service_mq
-    networks:
-      - microservices
-      
   jobs_db:
     image: cassandra:4.0.7
     volumes:
@@ -66,6 +47,47 @@ services:
       interval: 20s
       timeout: 10s
       retries: 60
+    networks:
+      - jobs
+
+  # ----- PAYMENTS MICROSERVICE -------
+  service_payments:
+    image: ahmad45123/workup:service_payments
+    depends_on:
+      - payments_db
+      - service_mq
+      - service_redis
+    networks:
+      - default
+      - payments
+    env_file:
+      - ./services/payments/.env
+
+  payments_db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: payments_password
+      POSTGRES_USER: payments_user
+      POSTGRES_DB: payments_database
+    healthcheck:
+      test:  ["CMD", "pg_isready"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+    networks:
+      - payments
+
+  # ----- CONTRACTS MICROSERVICE -------
+  service_contracts:
+    image: ahmad45123/workup:service_contracts
+    depends_on:
+      - contracts_db
+      - service_mq
+    networks:
+      - default
+      - contracts
+    env_file:
+      - ./services/contracts/.env
 
   contracts_db:
     image: cassandra:4.0.7
@@ -74,20 +96,11 @@ services:
       interval: 20s
       timeout: 10s
       retries: 60
-
-  payments_db:
-    image: postgres:latest
-    environment:
-      POSTGRES_PASSWORD: payments_password
-      POSTGRES_USER: payments_user
-      POSTGRES_DB: payments_database
-
-    healthcheck:
-      test:  ["CMD", "pg_isready"]
-      interval: 20s
-      timeout: 10s
-      retries: 10
+    networks:
+      - contracts
 
 networks:
-  microservices:
-    driver: overlay
+  default:
+  jobs:
+  payments:
+  contracts:
