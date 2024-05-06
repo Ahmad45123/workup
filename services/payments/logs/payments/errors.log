@@ -1,0 +1,18 @@
+2024-05-06 16:04:45 [main] ERROR org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 1 of constructor in com.workup.shared.redis.RedisService required a bean of type 'com.fasterxml.jackson.databind.ObjectMapper' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.fasterxml.jackson.databind.ObjectMapper' in your configuration.
+
