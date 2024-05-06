@@ -14,12 +14,6 @@ public class GetClientPaymentRequestsCommand
 
   @Override
   public GetClientPaymentRequestsResponse Run(GetClientPaymentRequestsRequest request) {
-    if (!getPaymentRequestRepository().existsById(request.getClientId())) {
-      return GetClientPaymentRequestsResponse.builder()
-          .withStatusCode(HttpStatusCode.NOT_FOUND)
-          .withErrorMessage("Client not found")
-          .build();
-    }
     List<PaymentRequest> savedRequests =
         getPaymentRequestRepository().findAllByClientId(request.getClientId());
 

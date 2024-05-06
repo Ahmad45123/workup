@@ -18,7 +18,6 @@ public class WithdrawFromWalletCommand
   public WithdrawFromWalletResponse Run(WithdrawFromWalletRequest request) {
     String freelancerId = request.getFreelancerId();
     double amount = request.getAmount();
-    String paymentTransactionId = request.getPaymentTransactionId();
     String description = request.getDescription();
 
     Optional<Wallet> wallet = getWalletRepository().findById(freelancerId);
@@ -50,7 +49,6 @@ public class WithdrawFromWalletCommand
           WalletTransaction.builder()
               .withWalletId(freelancerId)
               .withAmount(amount)
-              .withPaymentTransactionId(paymentTransactionId)
               .withDescription(description)
               .withTransactionType(WalletTransactionType.DEBIT)
               .build();

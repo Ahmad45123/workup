@@ -7,6 +7,7 @@ import com.workup.payments.repositories.WalletTransactionRepository;
 import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
+import com.workup.shared.redis.RedisService;
 import lombok.Data;
 
 @Data
@@ -17,4 +18,5 @@ public abstract class PaymentCommand<T extends CommandRequest, Q extends Command
   private PaymentTransactionRepository paymentTransactionRepository;
   private WalletRepository walletRepository;
   private WalletTransactionRepository walletTransactionRepository;
+  private RedisService redisService;
 }
