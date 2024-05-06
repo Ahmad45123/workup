@@ -14,7 +14,7 @@ public class GetFreelancerEducationsCommand
     extends UserCommand<GetFreelancerEducationsRequest, GetFreelancerEducationsResponse> {
   @Override
   public GetFreelancerEducationsResponse Run(GetFreelancerEducationsRequest request) {
-    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUser_id());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return GetFreelancerEducationsResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)

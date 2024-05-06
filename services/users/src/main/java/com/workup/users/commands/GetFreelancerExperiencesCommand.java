@@ -15,8 +15,7 @@ public class GetFreelancerExperiencesCommand
 
   @Override
   public GetFreelancerExperiencesResponse Run(GetFreelancerExperiencesRequest request) {
-    Optional<Freelancer> freelancerOptional =
-        freelancerRepository.findById(request.getFreelancerId());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return GetFreelancerExperiencesResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)

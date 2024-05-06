@@ -12,7 +12,7 @@ public class GetFreelancerSkillsCommand
 
   @Override
   public GetFreelancerSkillsResponse Run(GetFreelancerSkillsRequest request) {
-    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUser_id());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return GetFreelancerSkillsResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)

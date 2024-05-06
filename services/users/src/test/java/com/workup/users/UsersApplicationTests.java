@@ -242,7 +242,7 @@ class UsersApplicationTests {
   @Test
   void testGetFreelancerEducations() {
     Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
-    Education educationObj = UsersTestUtils.createTestEducation();
+    Education educationObj = educationRepository.save(UsersTestUtils.createTestEducation());
     freelancerObj.getEducations().add(educationObj);
     freelancerRepository.save(freelancerObj);
 
@@ -264,7 +264,7 @@ class UsersApplicationTests {
   @Test
   void testGetFreelancerExperiences() {
     Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
-    Experience experienceObj = UsersTestUtils.createTestExperience();
+    Experience experienceObj = experienceRepository.save(UsersTestUtils.createTestExperience());
     freelancerObj.getExperiences().add(experienceObj);
     freelancerRepository.save(freelancerObj);
 
