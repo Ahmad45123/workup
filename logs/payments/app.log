@@ -1,2 +1,0 @@
-2024-05-06 16:34:35 [main] INFO  com.workup.payments.Test - Info level log message: Greeting endpoint was called
-2024-05-06 16:34:35 [main] WARN  com.workup.payments.Test - Info level log message: Greeting endpoint was called
