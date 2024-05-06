@@ -12,7 +12,7 @@ public class AddFreelancerExperienceCommand
   @Override
   public AddFreelancerExperienceResponse Run(AddFreelancerExperienceRequest request) {
     Optional<Freelancer> freelancerOptional =
-        freelancerRepository.findById(request.getFreelancerId());
+        freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return AddFreelancerExperienceResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)

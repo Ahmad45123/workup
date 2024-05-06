@@ -13,7 +13,7 @@ public class AddFreelancerEducationCommand
   @Override
   public AddFreelancerEducationResponse Run(AddFreelancerEducationRequest request) {
     Optional<Freelancer> freelancerOptional =
-        freelancerRepository.findById(request.getFreelancer_id());
+        freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return AddFreelancerEducationResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)

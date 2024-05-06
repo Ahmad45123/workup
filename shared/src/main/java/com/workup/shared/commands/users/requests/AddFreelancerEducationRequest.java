@@ -10,7 +10,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class AddFreelancerEducationRequest extends CommandRequest {
-  String freelancer_id;
   String school_name;
   String degree;
   Date education_start_date;

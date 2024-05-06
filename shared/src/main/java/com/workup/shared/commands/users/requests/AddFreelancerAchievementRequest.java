@@ -10,7 +10,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class AddFreelancerAchievementRequest extends CommandRequest {
-  String freelancer_id;
   String achievement_name;
   String awarded_by;
   String achievement_description;

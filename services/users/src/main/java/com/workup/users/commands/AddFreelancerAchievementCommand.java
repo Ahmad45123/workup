@@ -12,7 +12,7 @@ public class AddFreelancerAchievementCommand
   @Override
   public AddFreelancerAchievementResponse Run(AddFreelancerAchievementRequest request) {
     Optional<Freelancer> freelancerOptional =
-        freelancerRepository.findById(request.getFreelancer_id());
+        freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return AddFreelancerAchievementResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
