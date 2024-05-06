@@ -4,7 +4,6 @@ import com.workup.shared.commands.users.requests.AddFreelancerLanguageRequest;
 import com.workup.shared.commands.users.responses.AddFreelancerLanguageResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.db.Freelancer;
-
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ public class AddFreelancerLanguageCommand
           .withErrorMessage("Freelancer Doesn't Exist")
           .build();
     Freelancer freelancer = freelancerOptional.get();
-    if(freelancer.getLanguages() == null) freelancer.setLanguages(new ArrayList<>());
+    if (freelancer.getLanguages() == null) freelancer.setLanguages(new ArrayList<>());
     freelancer.getLanguages().add(request.getNewLanguage());
     freelancerRepository.save(freelancer);
     return AddFreelancerLanguageResponse.builder().withStatusCode(HttpStatusCode.CREATED).build();

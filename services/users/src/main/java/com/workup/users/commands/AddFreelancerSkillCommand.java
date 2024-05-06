@@ -4,7 +4,6 @@ import com.workup.shared.commands.users.requests.AddFreelancerSkillRequest;
 import com.workup.shared.commands.users.responses.AddFreelancerSkillResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.db.Freelancer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +21,7 @@ public class AddFreelancerSkillCommand
           .build();
     String newSkill = request.getNewSkill();
     Freelancer freelancer = freelancerOptional.get();
-    if(freelancer.getSkills() == null) freelancer.setSkills(new ArrayList<>());
+    if (freelancer.getSkills() == null) freelancer.setSkills(new ArrayList<>());
     List<String> skills = freelancer.getSkills();
     if (!skills.contains(newSkill)) skills.add(newSkill);
     freelancerRepository.save(freelancer);

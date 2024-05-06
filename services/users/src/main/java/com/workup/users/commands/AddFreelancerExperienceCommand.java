@@ -11,8 +11,7 @@ public class AddFreelancerExperienceCommand
     extends UserCommand<AddFreelancerExperienceRequest, AddFreelancerExperienceResponse> {
   @Override
   public AddFreelancerExperienceResponse Run(AddFreelancerExperienceRequest request) {
-    Optional<Freelancer> freelancerOptional =
-        freelancerRepository.findById(request.getUserId());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return AddFreelancerExperienceResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
