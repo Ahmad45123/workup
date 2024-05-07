@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,13 +35,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class JobsController {
   @Autowired AmqpTemplate rabbitTemplate;
 
-  static String userId = "123";
-
   @GetMapping("/{id}")
-  public ResponseEntity<GetJobByIdResponse> getJobById(@PathVariable String id) {
+  public ResponseEntity<GetJobByIdResponse> getJobById(
+      @PathVariable String id, @RequestAttribute(name = "userId") String userId) {
     // send in queue
+    System.out.println(userId);
     GetJobByIdRequest request = GetJobByIdRequest.builder().withJobId(id).build();
-    // TODO replace with userId  from token
     request.setUserId(userId);
     GetJobByIdResponse response =
         (GetJobByIdResponse) rabbitTemplate.convertSendAndReceive(ServiceQueueNames.JOBS, request);
@@ -49,7 +49,8 @@ public class JobsController {
   }
 
   @PostMapping()
-  public ResponseEntity<CreateJobResponse> createJob(@RequestBody CreateJobRequest request) {
+  public ResponseEntity<CreateJobResponse> createJob(
+      @RequestBody CreateJobRequest request, @RequestAttribute(name = "userId") String userId) {
     request.setUserId(userId);
     CreateJobResponse response =
         (CreateJobResponse) rabbitTemplate.convertSendAndReceive(ServiceQueueNames.JOBS, request);
@@ -73,7 +74,8 @@ public class JobsController {
   }
 
   @GetMapping("/me")
-  public ResponseEntity<GetMyJobsResponse> getMyJobs() {
+  public ResponseEntity<GetMyJobsResponse> getMyJobs(
+      @RequestAttribute(name = "userId") String userId) {
     GetMyJobsRequest request = GetMyJobsRequest.builder().withUserId(userId).build();
     GetMyJobsResponse response =
         (GetMyJobsResponse) rabbitTemplate.convertSendAndReceive(ServiceQueueNames.JOBS, request);
@@ -82,7 +84,9 @@ public class JobsController {
 
   @PostMapping("/{id}/proposals")
   public ResponseEntity<CreateProposalResponse> createProposal(
-      @PathVariable String id, @RequestBody CreateProposalRequest request) {
+      @PathVariable String id,
+      @RequestBody CreateProposalRequest request,
+      @RequestAttribute(name = "userId") String userId) {
     request.setUserId(userId);
     request.setJobId(id);
     CreateProposalResponse response =
@@ -92,7 +96,8 @@ public class JobsController {
   }
 
   @GetMapping("/{id}/proposals")
-  public ResponseEntity<GetProposalsByJobIdResponse> getProposalsByJobId(@PathVariable String id) {
+  public ResponseEntity<GetProposalsByJobIdResponse> getProposalsByJobId(
+      @PathVariable String id, @RequestAttribute(name = "userId") String userId) {
     GetProposalsByJobIdRequest request = GetProposalsByJobIdRequest.builder().withJobId(id).build();
     request.setUserId(userId);
     GetProposalsByJobIdResponse response =
@@ -102,7 +107,8 @@ public class JobsController {
   }
 
   @GetMapping("/me/proposals")
-  public ResponseEntity<GetMyProposalsResponse> getMyProposals() {
+  public ResponseEntity<GetMyProposalsResponse> getMyProposals(
+      @RequestAttribute(name = "userId") String userId) {
     GetMyProposalsRequest request = GetMyProposalsRequest.builder().build();
     request.setUserId(userId);
     GetMyProposalsResponse response =
@@ -114,7 +120,8 @@ public class JobsController {
   @GetMapping("/{jobId}/proposals/{proposalId}/accept")
   public ResponseEntity<AcceptProposalResponse> acceptProposal(
       @PathVariable(name = "jobId") String jobId,
-      @PathVariable(name = "proposalId") String proposalId) {
+      @PathVariable(name = "proposalId") String proposalId,
+      @RequestAttribute(name = "userId") String userId) {
     AcceptProposalRequest request =
         AcceptProposalRequest.builder().withJobId(jobId).withProposalId(proposalId).build();
     request.setUserId(userId);
