@@ -26,7 +26,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     String username = null;
     if (authHeader != null && authHeader.startsWith("Bearer")) {
       token = authHeader.substring(7);
-      System.out.println(token);
+      // System.out.println(token);
       username = jwtService.extractUsername(token);
     }
 
@@ -41,7 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // get userId from claims
         String userId =
             jwtService.extractClaim(token, claims -> claims.get("userId", String.class));
-        System.out.println("userId: " + userId);
+        // System.out.println("userId: " + userId);
         // set it in the request body
         request.setAttribute("userId", userId);
       } else {

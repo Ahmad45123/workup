@@ -1,4 +1,4 @@
-package com.workup.webserver.controller.jobs;
+package com.workup.webserver.controller;
 
 import com.workup.shared.commands.jobs.proposals.requests.AcceptProposalRequest;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;

@@ -1,4 +1,4 @@
-package com.workup.webserver.controller.jobs;
+package com.workup.webserver.controller;
 
 import com.workup.webserver.config.JwtService;
 import lombok.Builder;
