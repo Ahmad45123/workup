@@ -44,7 +44,6 @@ public class FreelancerSetProfileCommand
     }
 
     freelancerRepository.save(freelancer);
-
     return FreelancerSetProfileResponse.builder().withStatusCode(HttpStatusCode.OK).build();
   }
 }

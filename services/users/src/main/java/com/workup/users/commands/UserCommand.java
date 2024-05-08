@@ -1,7 +1,9 @@
 package com.workup.users.commands;
 
 import com.workup.shared.commands.Command;
+import com.workup.users.repositories.AchievementRepository;
 import com.workup.users.repositories.ClientRepository;
+import com.workup.users.repositories.EducationRepository;
 import com.workup.users.repositories.ExperienceRepository;
 import com.workup.users.repositories.FreelancerRepository;
 import lombok.Setter;
@@ -19,6 +21,10 @@ public abstract class UserCommand<
   @Setter FreelancerRepository freelancerRepository;
 
   @Setter ExperienceRepository experienceRepository;
+
+  @Setter EducationRepository educationRepository;
+
+  @Setter AchievementRepository achievementRepository;
 
   @Setter ClientRepository clientRepository;
 
