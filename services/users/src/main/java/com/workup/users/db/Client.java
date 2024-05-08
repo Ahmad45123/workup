@@ -22,7 +22,7 @@ public class Client {
   private String client_name;
   private String industry;
   private String city;
-  private String photo_id;
+  private String photo_link;
   private String client_description;
   private Integer employee_count;
 }

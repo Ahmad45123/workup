@@ -1,6 +1,6 @@
-package com.workup.shared.commands.users.requests;
+package com.workup.shared.commands.users.responses;
 
-import com.workup.shared.commands.CommandRequest;
+import com.workup.shared.commands.CommandResponse;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
@@ -8,7 +8,6 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
-public class FreelancerSetPhotoRequest extends CommandRequest {
-  public String user_id;
+public class ClientGetPhotoResponse extends CommandResponse {
   public String photoLink;
 }

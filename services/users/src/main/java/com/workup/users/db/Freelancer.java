@@ -23,10 +23,10 @@ public class Freelancer {
   private Date created_at;
   private String full_name;
   private Date birthdate;
-  private String resume_id;
+  private String resume_link;
   private String city;
   private String job_title;
-  private String photo_id;
+  private String photo_link;
   private String description;
   private List<String> skills;
   private List<String> languages;
