@@ -13,6 +13,7 @@ import com.workup.shared.commands.jobs.proposals.requests.AcceptProposalRequest;
 import com.workup.shared.commands.jobs.proposals.responses.AcceptProposalResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -99,16 +100,18 @@ public class AcceptProposalCommand
                     .withClientId(acceptedJob.getClientId())
                     .withUserId(request.getUserId())
                     .withJobMilestones(
-                        acceptedProposal.getMilestones().stream()
-                            .map(
-                                milestone -> {
-                                  return Milestone.builder()
-                                      .withAmount(milestone.getAmount())
-                                      .withDescription(milestone.getDescription())
-                                      .withDueDate(milestone.getDueDate())
-                                      .build();
-                                })
-                            .collect(Collectors.toList()))
+                        acceptedProposal.getMilestones() != null
+                            ? acceptedProposal.getMilestones().stream()
+                                .map(
+                                    milestone -> {
+                                      return Milestone.builder()
+                                          .withAmount(milestone.getAmount())
+                                          .withDescription(milestone.getDescription())
+                                          .withDueDate(milestone.getDueDate())
+                                          .build();
+                                    })
+                                .collect(Collectors.toList())
+                            : new ArrayList<>())
                     .build()))
         .getContractId();
   }

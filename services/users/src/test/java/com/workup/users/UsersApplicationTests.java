@@ -1,19 +1,25 @@
 package com.workup.users;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import com.workup.shared.commands.users.requests.*;
 import com.workup.shared.commands.users.responses.*;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.shared.views.users.AchievementView;
+import com.workup.shared.views.users.EducationView;
+import com.workup.shared.views.users.ExperienceView;
+import com.workup.users.db.Achievement;
 import com.workup.users.db.Client;
+import com.workup.users.db.Education;
+import com.workup.users.db.Experience;
 import com.workup.users.db.Freelancer;
-import com.workup.users.repositories.ClientRepository;
-import com.workup.users.repositories.ExperienceRepository;
-import com.workup.users.repositories.FreelancerRepository;
+import com.workup.users.repositories.*;
 import java.sql.Date;
 import java.time.Instant;
+import java.util.List;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -44,6 +50,8 @@ class UsersApplicationTests {
   @Autowired private ClientRepository paymentRequestRepository;
   @Autowired private ExperienceRepository experienceRepository;
   @Autowired private FreelancerRepository freelancerRepository;
+  @Autowired private AchievementRepository achievementRepository;
+  @Autowired private EducationRepository educationRepository;
 
   @BeforeEach
   void clearAll() {
@@ -291,5 +299,223 @@ class UsersApplicationTests {
     assertEquals(getResponse.getDescription(), (setRequest.getDescription()));
     assertEquals(getResponse.getEmployee_count(), (setRequest.getEmployee_count()));
     assertEquals(getResponse.getEmail(), (setRequest.getEmail()));
+  }
+
+  @Test
+  void testAddAchievement() {
+    Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Achievement achievementObj = UsersTestUtils.createTestAchievement();
+    AddFreelancerAchievementRequest request =
+        AddFreelancerAchievementRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .withAchievement_description(achievementObj.getAchievement_description())
+            .withAchievement_name(achievementObj.getAchievement_name())
+            .withAward_date(achievementObj.getAward_date())
+            .withAwarded_by(achievementObj.getAwarded_by())
+            .build();
+    AddFreelancerAchievementResponse response =
+        (AddFreelancerAchievementResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.CREATED);
+    freelancerObj = freelancerRepository.findById(freelancerObj.getId().toString()).get();
+    Achievement addedAchievement = freelancerObj.getAchievements().get(0);
+    UsersTestUtils.assertAchievementEquals(achievementObj, addedAchievement);
+  }
+
+  @Test
+  void testAddEducation() {
+    Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Education educationObj = UsersTestUtils.createTestEducation();
+    AddFreelancerEducationRequest request =
+        AddFreelancerEducationRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .withSchool_name(educationObj.getSchool_name())
+            .withDegree(educationObj.getDegree())
+            .withEducation_start_date(educationObj.getEducation_start_date())
+            .withCity(educationObj.getCity())
+            .withEnd_date(educationObj.getEnd_date())
+            .withMajor(educationObj.getMajor())
+            .withEducation_description(educationObj.getEducation_description())
+            .withGrade(educationObj.getGrade())
+            .build();
+    AddFreelancerEducationResponse response =
+        (AddFreelancerEducationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.CREATED);
+    freelancerObj = freelancerRepository.findById(freelancerObj.getId().toString()).get();
+    Education addedEducation = freelancerObj.getEducations().get(0);
+    UsersTestUtils.assertEducationEquals(educationObj, addedEducation);
+  }
+
+  @Test
+  void testAddExperience() {
+    Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Experience experienceObj = UsersTestUtils.createTestExperience();
+    AddFreelancerExperienceRequest request =
+        AddFreelancerExperienceRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .withCompany_name(experienceObj.getCompany_name())
+            .withJob_title(experienceObj.getJob_title())
+            .withEmployment_start(experienceObj.getEmployment_start())
+            .withEmployment_end(experienceObj.getEmployment_end())
+            .withCity(experienceObj.getCity())
+            .withExperience_description(experienceObj.getExperience_description())
+            .build();
+    AddFreelancerExperienceResponse response =
+        (AddFreelancerExperienceResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.CREATED);
+    freelancerObj = freelancerRepository.findById(freelancerObj.getId().toString()).get();
+    Experience addedExperience = freelancerObj.getExperiences().get(0);
+    UsersTestUtils.assertExperienceEquals(experienceObj, addedExperience);
+  }
+
+  @Test
+  void testAddSkill() {
+    Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    String skill = "Java";
+    AddFreelancerSkillRequest request =
+        AddFreelancerSkillRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .withNewSkill(skill)
+            .build();
+    AddFreelancerSkillResponse response =
+        (AddFreelancerSkillResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.CREATED);
+    freelancerObj = freelancerRepository.findById(freelancerObj.getId().toString()).get();
+    List<String> addedSkills = freelancerObj.getSkills();
+    Assertions.assertTrue(addedSkills.contains(skill));
+  }
+
+  @Test
+  void testAddLanguage() {
+    Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    String language = "English";
+    AddFreelancerLanguageRequest request =
+        AddFreelancerLanguageRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .withNewLanguage(language)
+            .build();
+    AddFreelancerLanguageResponse response =
+        (AddFreelancerLanguageResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.CREATED);
+    freelancerObj = freelancerRepository.findById(freelancerObj.getId().toString()).get();
+    List<String> addedLanguages = freelancerObj.getLanguages();
+    Assertions.assertTrue(addedLanguages.contains(language));
+  }
+
+  @Test
+  void testGetFreelancerAchievements() {
+    Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Achievement achievementObj = achievementRepository.save(UsersTestUtils.createTestAchievement());
+    freelancerObj.getAchievements().add(achievementObj);
+    freelancerRepository.save(freelancerObj);
+
+    GetFreelancerAchievementsRequest request =
+        GetFreelancerAchievementsRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .build();
+
+    GetFreelancerAchievementsResponse response =
+        (GetFreelancerAchievementsResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.OK);
+    List<AchievementView> achievements = response.getAchievements();
+    Assertions.assertEquals(achievements.size(), 1);
+    UsersTestUtils.assertAchievementEquals(achievementObj, achievements.get(0));
+  }
+
+  @Test
+  void testGetFreelancerEducations() {
+    Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Education educationObj = educationRepository.save(UsersTestUtils.createTestEducation());
+    freelancerObj.getEducations().add(educationObj);
+    freelancerRepository.save(freelancerObj);
+
+    GetFreelancerEducationsRequest request =
+        GetFreelancerEducationsRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .build();
+
+    GetFreelancerEducationsResponse response =
+        (GetFreelancerEducationsResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.OK);
+    List<EducationView> educations = response.getEducations();
+    Assertions.assertEquals(educations.size(), 1);
+    UsersTestUtils.assertEducationEquals(educationObj, educations.get(0));
+  }
+
+  @Test
+  void testGetFreelancerExperiences() {
+    Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Experience experienceObj = experienceRepository.save(UsersTestUtils.createTestExperience());
+    freelancerObj.getExperiences().add(experienceObj);
+    freelancerRepository.save(freelancerObj);
+
+    GetFreelancerExperiencesRequest request =
+        GetFreelancerExperiencesRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .build();
+
+    GetFreelancerExperiencesResponse response =
+        (GetFreelancerExperiencesResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.OK);
+    List<ExperienceView> experiences = response.getExperiences();
+    Assertions.assertEquals(experiences.size(), 1);
+    UsersTestUtils.assertExperienceEquals(experienceObj, experiences.getFirst());
+  }
+
+  @Test
+  void testGetFreelancerSkills() {
+    Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    String skill = "Java";
+    freelancerObj.getSkills().add(skill);
+    freelancerRepository.save(freelancerObj);
+
+    GetFreelancerSkillsRequest request =
+        GetFreelancerSkillsRequest.builder().withUserId(freelancerObj.getId().toString()).build();
+
+    GetFreelancerSkillsResponse response =
+        (GetFreelancerSkillsResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.OK);
+    List<String> skills = response.getSkills();
+    Assertions.assertEquals(skills.size(), 1);
+    Assertions.assertEquals(skill, skills.getFirst());
+  }
+
+  @Test
+  void testGetFreelancerLanguages() {
+    Freelancer freelancerObj = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    String language = "English";
+    freelancerObj.getLanguages().add(language);
+    freelancerRepository.save(freelancerObj);
+
+    GetFreelancerLanguagesRequest request =
+        GetFreelancerLanguagesRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .build();
+
+    GetFreelancerLanguagesResponse response =
+        (GetFreelancerLanguagesResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(response.getStatusCode(), HttpStatusCode.OK);
+    List<String> languages = response.getLanguages();
+    Assertions.assertEquals(languages.size(), 1);
+    Assertions.assertEquals(language, languages.getFirst());
   }
 }

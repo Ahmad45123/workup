@@ -16,6 +16,18 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  service_redis:
+    image: redis:latest
+    healthcheck:
+      test: redis-cli ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      - microservices
+    ports:
+      - "6379:6379"
+
   # ----- JOBS MICROSERVICE -------
   service_jobs:
     build: ./services/jobs
@@ -35,7 +47,9 @@ services:
       payments_db:
         condition: service_healthy
       service_mq:
-        condition: service_started
+        condition: service_healthy
+      service_redis:
+        condition: service_healthy
     networks:
       - microservices
       - payments

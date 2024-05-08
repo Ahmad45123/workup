@@ -7,6 +7,7 @@ import com.workup.shared.commands.payments.dto.PaymentRequestDTO;
 import com.workup.shared.commands.payments.paymentrequest.requests.GetPaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.GetPaymentRequestResponse;
 import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.redis.RedisService;
 import java.util.Optional;
 
 public class GetPaymentRequestCommand
@@ -14,6 +15,18 @@ public class GetPaymentRequestCommand
 
   @Override
   public GetPaymentRequestResponse Run(GetPaymentRequestRequest request) {
+    RedisService redisService = getRedisService();
+
+    GetPaymentRequestResponse cachedResponse =
+        (GetPaymentRequestResponse)
+            redisService.getValue(request.getPaymentRequestId(), GetPaymentRequestResponse.class);
+    if (cachedResponse != null) {
+      System.out.println(
+          "[x] Payment request response fetched from cache : " + cachedResponse.getRequest());
+
+      return cachedResponse;
+    }
+
     Optional<PaymentRequest> savedPaymentRequest =
         getPaymentRequestRepository().findById(request.getPaymentRequestId());
 
@@ -30,9 +43,14 @@ public class GetPaymentRequestCommand
     PaymentRequestDTO paymentRequestDTO =
         PaymentRequestMapper.mapToPaymentRequestDTO(savedPaymentRequest.get());
 
-    return GetPaymentRequestResponse.builder()
-        .withStatusCode(HttpStatusCode.OK)
-        .withRequest(paymentRequestDTO)
-        .build();
+    GetPaymentRequestResponse response =
+        GetPaymentRequestResponse.builder()
+            .withStatusCode(HttpStatusCode.OK)
+            .withRequest(paymentRequestDTO)
+            .build();
+
+    redisService.setValue(request.getPaymentRequestId(), response);
+
+    return response;
   }
 }

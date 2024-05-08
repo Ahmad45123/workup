@@ -3,9 +3,7 @@ package com.workup.users.commands;
 import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
-import com.workup.users.repositories.ClientRepository;
-import com.workup.users.repositories.ExperienceRepository;
-import com.workup.users.repositories.FreelancerRepository;
+import com.workup.users.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +13,8 @@ public class UserCommandMap
   @Autowired FreelancerRepository freelancerRepository;
   @Autowired ExperienceRepository experienceRepository;
   @Autowired ClientRepository clientRepository;
+  @Autowired EducationRepository educationRepository;
+  @Autowired AchievementRepository achievementRepository;
 
   public void registerCommands() {
 
@@ -35,6 +35,27 @@ public class UserCommandMap
     commands.put("ClientGetPhoto", ClientGetPhotoCommand.class);
     commands.put("ClientSetPhoto", ClientSetPhotoCommand.class);
 
+    commands.put("AddFreelancerAchievement", AddFreelancerAchievementCommand.class);
+    commands.put("AddFreelancerEducation", AddFreelancerEducationCommand.class);
+    commands.put("AddFreelancerExperience", AddFreelancerExperienceCommand.class);
+    commands.put("AddFreelancerSkill", AddFreelancerSkillCommand.class);
+    commands.put("AddFreelancerLanguage", AddFreelancerLanguageCommand.class);
+
+    commands.put("GetFreelancerAchievements", GetFreelancerAchievementsCommand.class);
+    commands.put("GetFreelancerEducations", GetFreelancerEducationsCommand.class);
+    commands.put("GetFreelancerExperiences", GetFreelancerExperiencesCommand.class);
+    commands.put("GetFreelancerSkills", GetFreelancerSkillsCommand.class);
+    commands.put("GetFreelancerLanguages", GetFreelancerLanguagesCommand.class);
+
+    commands.put("RemoveFreelancerAchievement", RemoveFreelancerAchievementCommand.class);
+    commands.put("RemoveFreelancerEducation", RemoveFreelancerEducationCommand.class);
+    commands.put("RemoveFreelancerExperience", RemoveFreelancerExperienceCommand.class);
+    commands.put("RemoveFreelancerSkill", RemoveFreelancerSkillCommand.class);
+    commands.put("RemoveFreelancerLanguage", RemoveFreelancerLanguageCommand.class);
+
+    commands.put("UpdateFreelancerAchievement", UpdateFreelancerAchievementCommand.class);
+    commands.put("UpdateFreelancerEducation", UpdateFreelancerEducationCommand.class);
+    commands.put("UpdateFreelancerExperience", UpdateFreelancerExperienceCommand.class);
     // NEW_COMMAND_BOILERPLATE
   }
 
@@ -44,5 +65,7 @@ public class UserCommandMap
     command.setFreelancerRepository(freelancerRepository);
     command.setExperienceRepository(experienceRepository);
     command.setClientRepository(clientRepository);
+    command.setEducationRepository(educationRepository);
+    command.setAchievementRepository(achievementRepository);
   }
 }

@@ -11,8 +11,7 @@ public class AddFreelancerAchievementCommand
     extends UserCommand<AddFreelancerAchievementRequest, AddFreelancerAchievementResponse> {
   @Override
   public AddFreelancerAchievementResponse Run(AddFreelancerAchievementRequest request) {
-    Optional<Freelancer> freelancerOptional =
-        freelancerRepository.findById(request.getFreelancer_id());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return AddFreelancerAchievementResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)

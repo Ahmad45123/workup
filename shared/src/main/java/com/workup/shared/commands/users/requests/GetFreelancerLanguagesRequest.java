@@ -8,6 +8,4 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
-public class GetFreelancerLanguagesRequest extends CommandRequest {
-  String user_id;
-}
+public class GetFreelancerLanguagesRequest extends CommandRequest {}

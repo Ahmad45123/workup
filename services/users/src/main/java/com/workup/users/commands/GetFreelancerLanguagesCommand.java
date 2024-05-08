@@ -11,7 +11,7 @@ public class GetFreelancerLanguagesCommand
     extends UserCommand<GetFreelancerLanguagesRequest, GetFreelancerLanguagesResponse> {
   @Override
   public GetFreelancerLanguagesResponse Run(GetFreelancerLanguagesRequest request) {
-    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUser_id());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return GetFreelancerLanguagesResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
