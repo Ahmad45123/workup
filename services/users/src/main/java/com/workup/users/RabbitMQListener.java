@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = ServiceQueueNames.USERS)
 public class RabbitMQListener {
 
-  @Autowired
-  public UserCommandMap commandMap;
+  @Autowired public UserCommandMap commandMap;
 
   @RabbitHandler
   public FreelancerGetProfileBriefResponse receive(FreelancerGetProfileBriefRequest in)
