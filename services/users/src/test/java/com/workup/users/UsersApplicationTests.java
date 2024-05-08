@@ -335,7 +335,7 @@ class UsersApplicationTests {
     String updatedAwardedBy = "New Awarded By";
     UpdateFreelancerAchievementRequest request =
         UpdateFreelancerAchievementRequest.builder()
-            .withFreelancer_id(freelancer.getId().toString())
+            .withUserId(freelancer.getId().toString())
             .withAchievement_id(achievement.getId().toString())
             .withNew_achievement_name(updatedName)
             .withNew_awarded_by(updatedAwardedBy)
@@ -365,7 +365,7 @@ class UsersApplicationTests {
     String updatedDegree = "New Degree";
     UpdateFreelancerEducationRequest request =
         UpdateFreelancerEducationRequest.builder()
-            .withFreelancer_id(freelancer.getId().toString())
+            .withUserId(freelancer.getId().toString())
             .withEducation_id(education.getId().toString())
             .withNew_school_name(updatedSchoolName)
             .withNew_degree(updatedDegree)
@@ -395,7 +395,7 @@ class UsersApplicationTests {
     String updatedJobTitle = "New Job Title";
     UpdateFreelancerExperienceRequest request =
         UpdateFreelancerExperienceRequest.builder()
-            .withFreelancer_id(freelancer.getId().toString())
+            .withUserId(freelancer.getId().toString())
             .withExperience_id(experience.getId().toString())
             .withNew_company_name(updatedCompanyName)
             .withNew_job_title(updatedJobTitle)
