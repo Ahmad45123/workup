@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = ServiceQueueNames.USERS)
 public class RabbitMQListener {
 
-  @Autowired public UserCommandMap commandMap;
+  @Autowired
+  public UserCommandMap commandMap;
 
   @RabbitHandler
   public FreelancerGetProfileBriefResponse receive(FreelancerGetProfileBriefRequest in)
@@ -61,5 +62,15 @@ public class RabbitMQListener {
   @RabbitHandler
   public ClientGetProfileResponse receive(ClientGetProfileRequest in) throws Exception {
     return ((ClientGetProfileCommand) commandMap.getCommand("ClientGetProfile")).Run(in);
+  }
+
+  @RabbitHandler
+  public ClientSetPhotoResponse receive(ClientSetPhotoRequest in) throws Exception {
+    return ((ClientSetPhotoCommand) commandMap.getCommand("ClientSetPhoto")).Run(in);
+  }
+
+  @RabbitHandler
+  public ClientGetPhotoResponse receive(ClientGetPhotoRequest in) throws Exception {
+    return ((ClientGetPhotoCommand) commandMap.getCommand("ClientGetPhoto")).Run(in);
   }
 }

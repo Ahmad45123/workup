@@ -32,6 +32,9 @@ public class UserCommandMap
     commands.put("ClientGetProfile", ClientGetProfileCommand.class);
     commands.put("ClientSetProfile", ClientSetProfileCommand.class);
 
+    commands.put("ClientGetPhoto", ClientGetPhotoCommand.class);
+    commands.put("ClientSetPhoto", ClientSetPhotoCommand.class);
+
     // NEW_COMMAND_BOILERPLATE
   }
 
