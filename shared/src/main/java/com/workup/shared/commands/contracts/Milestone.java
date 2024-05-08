@@ -11,7 +11,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class Milestone {
 
-  private final String milestoneId; // Not Needed when initiating contract, make it null
+  private final String milestoneId; // Not needed when initiating contract, make it null
   private final String contractId; // Not needed when initiating contract, make it null
 
   private final String description;
