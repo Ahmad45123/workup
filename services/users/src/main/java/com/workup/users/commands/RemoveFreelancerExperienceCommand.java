@@ -11,8 +11,7 @@ public class RemoveFreelancerExperienceCommand
     extends UserCommand<RemoveFreelancerExperienceRequest, RemoveFreelancerExperienceResponse> {
   @Override
   public RemoveFreelancerExperienceResponse Run(RemoveFreelancerExperienceRequest request) {
-    Optional<Freelancer> freelancerOptional =
-        freelancerRepository.findById(request.getFreelancer_id());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return RemoveFreelancerExperienceResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)

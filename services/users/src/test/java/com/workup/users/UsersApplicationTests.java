@@ -414,4 +414,114 @@ class UsersApplicationTests {
     Experience updatedExperience = freelancer.getExperiences().get(0);
     UsersTestUtils.assertExperienceEquals(expectedExperience, updatedExperience);
   }
+
+  @Test
+  void testRemoveAchievement() {
+    Freelancer freelancer = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Achievement achievement = achievementRepository.save(UsersTestUtils.createTestAchievement());
+    freelancer.getAchievements().add(achievement);
+    freelancerRepository.save(freelancer);
+
+    RemoveFreelancerAchievementRequest request =
+        RemoveFreelancerAchievementRequest.builder()
+            .withUserId(freelancer.getId().toString())
+            .withAchievementId(achievement.getId().toString())
+            .build();
+    RemoveFreelancerAchievementResponse response =
+        (RemoveFreelancerAchievementResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(HttpStatusCode.OK, response.getStatusCode());
+    freelancer = freelancerRepository.findById(freelancer.getId().toString()).get();
+    Assertions.assertTrue(freelancer.getAchievements().isEmpty());
+  }
+
+  @Test
+  void testRemoveEducation() {
+    Freelancer freelancer = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Education education = educationRepository.save(UsersTestUtils.createTestEducation());
+    freelancer.getEducations().add(education);
+    freelancerRepository.save(freelancer);
+
+    RemoveFreelancerEducationRequest request =
+        RemoveFreelancerEducationRequest.builder()
+            .withUserId(freelancer.getId().toString())
+            .withEducation_id(education.getId().toString())
+            .build();
+    RemoveFreelancerEducationResponse response =
+        (RemoveFreelancerEducationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(HttpStatusCode.OK, response.getStatusCode());
+    freelancer = freelancerRepository.findById(freelancer.getId().toString()).get();
+    Assertions.assertTrue(freelancer.getEducations().isEmpty());
+  }
+
+  @Test
+  void testRemoveExperience() {
+    Freelancer freelancer = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Experience experience = experienceRepository.save(UsersTestUtils.createTestExperience());
+    freelancer.getExperiences().add(experience);
+    freelancerRepository.save(freelancer);
+
+    RemoveFreelancerExperienceRequest request =
+        RemoveFreelancerExperienceRequest.builder()
+            .withUserId(freelancer.getId().toString())
+            .withExperience_id(experience.getId().toString())
+            .build();
+    RemoveFreelancerExperienceResponse response =
+        (RemoveFreelancerExperienceResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(HttpStatusCode.OK, response.getStatusCode());
+    freelancer = freelancerRepository.findById(freelancer.getId().toString()).get();
+    Assertions.assertTrue(freelancer.getExperiences().isEmpty());
+  }
+
+  @Test
+  void testRemoveSkill() {
+    Freelancer freelancer = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    String skill = "Java";
+    freelancer.getSkills().add(skill);
+    freelancerRepository.save(freelancer);
+
+    RemoveFreelancerSkillRequest request =
+        RemoveFreelancerSkillRequest.builder()
+            .withUserId(freelancer.getId().toString())
+            .withSkillToRemove(skill)
+            .build();
+    RemoveFreelancerSkillResponse response =
+        (RemoveFreelancerSkillResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(HttpStatusCode.OK, response.getStatusCode());
+    freelancer = freelancerRepository.findById(freelancer.getId().toString()).get();
+    Assertions.assertTrue(freelancer.getSkills().isEmpty());
+  }
+
+  @Test
+  void testRemoveLanguage() {
+    Freelancer freelancer = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    String language = "English";
+    freelancer.getLanguages().add(language);
+    freelancerRepository.save(freelancer);
+
+    RemoveFreelancerLanguageRequest request =
+        RemoveFreelancerLanguageRequest.builder()
+            .withUserId(freelancer.getId().toString())
+            .withLanguageToRemove(language)
+            .build();
+    RemoveFreelancerLanguageResponse response =
+        (RemoveFreelancerLanguageResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(HttpStatusCode.OK, response.getStatusCode());
+    freelancer = freelancerRepository.findById(freelancer.getId().toString()).get();
+    Assertions.assertTrue(freelancer.getLanguages().isEmpty());
+  }
 }

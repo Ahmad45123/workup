@@ -10,7 +10,7 @@ public class RemoveFreelancerLanguageCommand
     extends UserCommand<RemoveFreelancerLanguageRequest, RemoveFreelancerLanguageResponse> {
   @Override
   public RemoveFreelancerLanguageResponse Run(RemoveFreelancerLanguageRequest request) {
-    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUser_id());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return RemoveFreelancerLanguageResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)

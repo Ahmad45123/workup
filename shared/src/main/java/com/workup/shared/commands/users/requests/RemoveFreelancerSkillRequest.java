@@ -9,6 +9,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class RemoveFreelancerSkillRequest extends CommandRequest {
-  String user_id;
   String skillToRemove;
 }

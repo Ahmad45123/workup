@@ -11,8 +11,7 @@ public class RemoveFreelancerAchievementCommand
     extends UserCommand<RemoveFreelancerAchievementRequest, RemoveFreelancerAchievementResponse> {
   @Override
   public RemoveFreelancerAchievementResponse Run(RemoveFreelancerAchievementRequest request) {
-    Optional<Freelancer> freelancerOptional =
-        freelancerRepository.findById(request.getFreelancerId());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return RemoveFreelancerAchievementResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
