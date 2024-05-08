@@ -10,5 +10,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class GetMilestoneResponse extends CommandResponse {
-    private final Milestone milestone;
+  private final Milestone milestone;
 }
