@@ -324,4 +324,94 @@ class UsersApplicationTests {
     Assertions.assertEquals(languages.size(), 1);
     Assertions.assertEquals(language, languages.getFirst());
   }
+
+  @Test
+  void testUpdateAchievement() {
+    Freelancer freelancer = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Achievement achievement = achievementRepository.save(UsersTestUtils.createTestAchievement());
+    freelancer.getAchievements().add(achievement);
+    freelancerRepository.save(freelancer);
+    String updatedName = "New Achievement Name";
+    String updatedAwardedBy = "New Awarded By";
+    UpdateFreelancerAchievementRequest request =
+        UpdateFreelancerAchievementRequest.builder()
+            .withFreelancer_id(freelancer.getId().toString())
+            .withAchievement_id(achievement.getId().toString())
+            .withNew_achievement_name(updatedName)
+            .withNew_awarded_by(updatedAwardedBy)
+            .build();
+    UpdateFreelancerAchievementResponse response =
+        (UpdateFreelancerAchievementResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Achievement expectedAchievement = UsersTestUtils.createTestAchievement();
+    expectedAchievement.setAchievement_name(updatedName);
+    expectedAchievement.setAwarded_by(updatedAwardedBy);
+    expectedAchievement.setAward_date(achievement.getAward_date());
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(HttpStatusCode.OK, response.getStatusCode());
+    freelancer = freelancerRepository.findById(freelancer.getId().toString()).get();
+    Achievement updatedAchievement = freelancer.getAchievements().get(0);
+    UsersTestUtils.assertAchievementEquals(expectedAchievement, updatedAchievement);
+  }
+
+  @Test
+  void testUpdateEducation() {
+    Freelancer freelancer = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Education education = educationRepository.save(UsersTestUtils.createTestEducation());
+    freelancer.getEducations().add(education);
+    freelancerRepository.save(freelancer);
+
+    String updatedSchoolName = "New School Name";
+    String updatedDegree = "New Degree";
+    UpdateFreelancerEducationRequest request =
+        UpdateFreelancerEducationRequest.builder()
+            .withFreelancer_id(freelancer.getId().toString())
+            .withEducation_id(education.getId().toString())
+            .withNew_school_name(updatedSchoolName)
+            .withNew_degree(updatedDegree)
+            .build();
+    UpdateFreelancerEducationResponse response =
+        (UpdateFreelancerEducationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Education expectedEducation = UsersTestUtils.createTestEducation();
+    expectedEducation.setSchool_name(updatedSchoolName);
+    expectedEducation.setDegree(updatedDegree);
+    expectedEducation.setEducation_start_date(education.getEducation_start_date());
+    expectedEducation.setEnd_date(education.getEnd_date());
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(HttpStatusCode.OK, response.getStatusCode());
+    freelancer = freelancerRepository.findById(freelancer.getId().toString()).get();
+    Education updatedEducation = freelancer.getEducations().get(0);
+    UsersTestUtils.assertEducationEquals(expectedEducation, updatedEducation);
+  }
+
+  @Test
+  void testUpdateExperience() {
+    Freelancer freelancer = freelancerRepository.save(UsersTestUtils.createTestFreelancer());
+    Experience experience = experienceRepository.save(UsersTestUtils.createTestExperience());
+    freelancer.getExperiences().add(experience);
+    freelancerRepository.save(freelancer);
+    String updatedCompanyName = "New Company Name";
+    String updatedJobTitle = "New Job Title";
+    UpdateFreelancerExperienceRequest request =
+        UpdateFreelancerExperienceRequest.builder()
+            .withFreelancer_id(freelancer.getId().toString())
+            .withExperience_id(experience.getId().toString())
+            .withNew_company_name(updatedCompanyName)
+            .withNew_job_title(updatedJobTitle)
+            .build();
+    UpdateFreelancerExperienceResponse response =
+        (UpdateFreelancerExperienceResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    Assertions.assertNotNull(response);
+    Assertions.assertEquals(HttpStatusCode.OK, response.getStatusCode());
+    Experience expectedExperience = UsersTestUtils.createTestExperience();
+    expectedExperience.setCompany_name(updatedCompanyName);
+    expectedExperience.setJob_title(updatedJobTitle);
+    expectedExperience.setEmployment_start(experience.getEmployment_start());
+    expectedExperience.setEmployment_end(experience.getEmployment_end());
+    freelancer = freelancerRepository.findById(freelancer.getId().toString()).get();
+    Experience updatedExperience = freelancer.getExperiences().get(0);
+    UsersTestUtils.assertExperienceEquals(expectedExperience, updatedExperience);
+  }
 }
