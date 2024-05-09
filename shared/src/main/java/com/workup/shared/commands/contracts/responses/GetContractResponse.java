@@ -12,11 +12,11 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class GetContractResponse extends CommandResponse {
   private final String contractId;
-  private String jobTitle;
-  private String jobId;
-  private String proposalId;
-  private String freelancerId;
-  private String clientId;
-  private List<String> milestonesIds;
-  private ContractState status;
+  private final String jobTitle;
+  private final String jobId;
+  private final String proposalId;
+  private final String freelancerId;
+  private final String clientId;
+  private final List<String> milestonesIds;
+  private final ContractState status;
 }

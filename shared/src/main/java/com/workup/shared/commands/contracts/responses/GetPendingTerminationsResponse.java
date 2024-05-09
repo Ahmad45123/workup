@@ -10,11 +10,11 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class GetPendingTerminationsResponse extends CommandResponse {
-  private String requestId;
+  private final String requestId;
 
-  private String contractId;
-  private String requesterId;
-  private String reason;
+  private final String contractId;
+  private final String requesterId;
+  private final String reason;
 
-  private TerminationRequestStatus status;
+  private final TerminationRequestStatus status;
 }

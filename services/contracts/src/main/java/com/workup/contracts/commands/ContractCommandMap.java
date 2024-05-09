@@ -6,6 +6,7 @@ import com.workup.contracts.repositories.TerminationRequestRepository;
 import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
+import com.workup.shared.redis.RedisService;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,12 +15,16 @@ import org.springframework.stereotype.Component;
 public class ContractCommandMap
     extends CommandMap<ContractCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
-  @Autowired AmqpTemplate rabbitTemplate;
+
   @Autowired ContractRepository contractRepository;
 
   @Autowired ContractMilestoneRepository contractMilestoneRepository;
 
   @Autowired TerminationRequestRepository terminationRequestRepository;
+
+  @Autowired AmqpTemplate rabbitTemplate;
+
+  @Autowired RedisService redisService;
 
   public void registerCommands() {
     commands.put("InitiateContract", InitiateContractCommand.class);
@@ -36,5 +41,7 @@ public class ContractCommandMap
     command.setContractRepository(contractRepository);
     command.setContractMilestoneRepository(contractMilestoneRepository);
     command.setTerminationRequestRepository(terminationRequestRepository);
+    command.setRabbitTemplate(rabbitTemplate);
+    command.setRedisService(redisService);
   }
 }

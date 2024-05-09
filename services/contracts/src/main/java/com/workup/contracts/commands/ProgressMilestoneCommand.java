@@ -11,16 +11,16 @@ import java.util.UUID;
 public class ProgressMilestoneCommand
     extends ContractCommand<ProgressMilestoneRequest, ProgressMilestoneResponse> {
 
-  private ProgressMilestoneResponse isValid(ProgressMilestoneRequest request) {
-    Optional<ContractMilestone> milestone =
-        contractMilestoneRepository.findById(UUID.fromString(request.getMilestoneId()));
-    if (milestone.isEmpty())
+  private ProgressMilestoneResponse isValid(Optional<ContractMilestone> milestoneOptional) {
+    if (milestoneOptional.isEmpty())
       return ProgressMilestoneResponse.builder()
           .withStatusCode(HttpStatusCode.BAD_REQUEST)
           .withErrorMessage("Milestone is not found")
           .build();
-    if (milestone.get().getStatus() != MilestoneState.OPEN
-        && milestone.get().getStatus() != MilestoneState.IN_PROGRESS)
+
+    MilestoneState milestoneState = milestoneOptional.get().getStatus();
+    if (milestoneState != MilestoneState.OPEN
+        && milestoneState != MilestoneState.IN_PROGRESS)
       return ProgressMilestoneResponse.builder()
           .withStatusCode(HttpStatusCode.BAD_REQUEST)
           .withErrorMessage("Milestone cannot be progressed through this command")
@@ -30,22 +30,15 @@ public class ProgressMilestoneCommand
 
   @Override
   public ProgressMilestoneResponse Run(ProgressMilestoneRequest request) {
-    ProgressMilestoneResponse checkerResponse = isValid(request);
+    Optional<ContractMilestone> milestoneOptional =
+            contractMilestoneRepository.findById(UUID.fromString(request.getMilestoneId()));
+
+    ProgressMilestoneResponse checkerResponse = isValid(milestoneOptional);
     if (checkerResponse != null) return checkerResponse;
 
-    Optional<ContractMilestone> milestone =
-        contractMilestoneRepository.findById(UUID.fromString(request.getMilestoneId()));
-    ContractMilestone updatedMilestone = milestone.get();
-    if (updatedMilestone.getStatus() == MilestoneState.OPEN) {
-      updatedMilestone.setStatus(MilestoneState.IN_PROGRESS);
-    } else if (updatedMilestone.getStatus() == MilestoneState.IN_PROGRESS) {
-      updatedMilestone.setStatus(MilestoneState.IN_REVIEW);
-      // Send to payments here
+    ContractMilestone updatedMilestone = milestoneOptional.get();
 
-      // get required data from milestone
-      //      milestoneContract =
-      //          contractRepository.findById(UUID.fromString(updatedMilestone.getContractId()));
-    }
+    progress(updatedMilestone);
 
     try {
       contractMilestoneRepository.save(updatedMilestone);
@@ -62,5 +55,12 @@ public class ProgressMilestoneCommand
           .withErrorMessage(e.getMessage())
           .build();
     }
+  }
+
+  private void progress(ContractMilestone milestone) {
+    if (milestone.getStatus() == MilestoneState.OPEN)
+      milestone.setStatus(MilestoneState.IN_PROGRESS);
+    else if (milestone.getStatus() == MilestoneState.IN_PROGRESS)
+      milestone.setStatus(MilestoneState.IN_REVIEW);
   }
 }
