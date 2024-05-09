@@ -190,4 +190,19 @@ public class RabbitMQListener {
     return ((RemoveFreelancerLanguageCommand) commandMap.getCommand("RemoveFreelancerLanguage"))
         .Run(in);
   }
+
+  @RabbitHandler
+  public SignUpAndInResponse receive(LoginRequest in) throws Exception {
+    return ((LoginCommand) commandMap.getCommand("Login")).Run(in);
+  }
+
+  @RabbitHandler
+  public SignUpAndInResponse receive(FreelancerRegisterRequest in) throws Exception {
+    return ((FreelancerRegisterCommand) commandMap.getCommand("FreelancerRegister")).Run(in);
+  }
+
+  @RabbitHandler
+  public SignUpAndInResponse receive(ClientRegisterRequest in) throws Exception {
+    return ((ClientRegisterCommand) commandMap.getCommand("ClientRegister")).Run(in);
+  }
 }

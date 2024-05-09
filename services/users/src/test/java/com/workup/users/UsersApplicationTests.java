@@ -1,18 +1,17 @@
 package com.workup.users;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import com.workup.shared.commands.users.requests.*;
 import com.workup.shared.commands.users.responses.*;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.shared.enums.users.UserType;
 import com.workup.shared.views.users.AchievementView;
 import com.workup.shared.views.users.EducationView;
 import com.workup.shared.views.users.ExperienceView;
-import com.workup.users.db.Achievement;
-import com.workup.users.db.Education;
-import com.workup.users.db.Experience;
-import com.workup.users.db.Freelancer;
+import com.workup.users.commands.utils.PasswordHasher;
+import com.workup.users.db.*;
 import com.workup.users.repositories.*;
 import java.sql.Date;
 import java.time.Instant;
@@ -51,6 +50,7 @@ class UsersApplicationTests {
   @Autowired private FreelancerRepository freelancerRepository;
   @Autowired private AchievementRepository achievementRepository;
   @Autowired private EducationRepository educationRepository;
+  @Autowired private ClientRepository clientRepository;
 
   @BeforeEach
   void clearAll() {
@@ -77,6 +77,69 @@ class UsersApplicationTests {
     registry.add("spring.rabbitmq.port", rabbitMQContainer::getFirstMappedPort);
     registry.add("spring.rabbitmq.username", rabbitMQContainer::getAdminUsername);
     registry.add("spring.rabbitmq.password", rabbitMQContainer::getAdminPassword);
+  }
+
+  @Test
+  public void testFreelancerRegister() {
+    Freelancer freelancer = UsersTestUtils.generateRandomFreelancer();
+    FreelancerRegisterRequest request =
+        FreelancerRegisterRequest.builder()
+            .withEmail(freelancer.getEmail())
+            .withPassword(freelancer.getPassword_hash())
+            .withFullName(freelancer.getFull_name())
+            .withCity(freelancer.getCity())
+            .withJobTitle(freelancer.getJob_title())
+            .withBirthDate(freelancer.getBirthdate())
+            .build();
+    SignUpAndInResponse response =
+        (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    UsersTestUtils.verifySignUpAndInResponse(response, freelancer.getEmail(), UserType.FREELANCER);
+  }
+
+  @Test
+  public void testFreelancerLogin() {
+    String password = "password";
+    String hashedPassword = PasswordHasher.hashPassword(password);
+    Freelancer randomFreelancer = UsersTestUtils.generateRandomFreelancer();
+    randomFreelancer.setPassword_hash(hashedPassword);
+    Freelancer freelancer = freelancerRepository.save(randomFreelancer);
+    LoginRequest request =
+        LoginRequest.builder().withEmail(freelancer.getEmail()).withPassword(password).build();
+    SignUpAndInResponse response =
+        (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    UsersTestUtils.verifySignUpAndInResponse(response, freelancer.getEmail(), UserType.FREELANCER);
+  }
+
+  @Test
+  public void testClientRegister() {
+    Client client = UsersTestUtils.generateRandomClient();
+    ClientRegisterRequest request =
+        ClientRegisterRequest.builder()
+            .withEmail(client.getEmail())
+            .withPassword(client.getPassword_hash())
+            .withCity(client.getCity())
+            .withDescription(client.getClient_description())
+            .withClientName(client.getClient_name())
+            .withEmployeeCount(client.getEmployee_count())
+            .withIndustry(client.getIndustry())
+            .build();
+    SignUpAndInResponse response =
+        (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    UsersTestUtils.verifySignUpAndInResponse(response, client.getEmail(), UserType.CLIENT);
+  }
+
+  @Test
+  public void testClientLogin() {
+    String password = "password";
+    String hashedPassword = PasswordHasher.hashPassword(password);
+    Client randomClient = UsersTestUtils.generateRandomClient();
+    randomClient.setPassword_hash(hashedPassword);
+    Client client = clientRepository.save(randomClient);
+    LoginRequest request =
+        LoginRequest.builder().withEmail(client.getEmail()).withPassword(password).build();
+    SignUpAndInResponse response =
+        (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    UsersTestUtils.verifySignUpAndInResponse(response, client.getEmail(), UserType.CLIENT);
   }
 
   @Test

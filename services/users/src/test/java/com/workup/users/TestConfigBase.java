@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 public class TestConfigBase {
 
   @Bean
-  public Queue usersQueueMock() {
-    return new Queue(ServiceQueueNames.USERS);
+  public Queue payementQueueMock() {
+    return new Queue(ServiceQueueNames.PAYMENTS);
   }
 }

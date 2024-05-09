@@ -15,7 +15,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Client {
   @Id private ObjectId id;
-  @Indexed private String email;
+
+  @Indexed(unique = true)
+  private String email;
 
   private String password_hash;
   private Date created_at;
