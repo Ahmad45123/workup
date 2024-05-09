@@ -7,6 +7,7 @@ import com.workup.users.repositories.EducationRepository;
 import com.workup.users.repositories.ExperienceRepository;
 import com.workup.users.repositories.FreelancerRepository;
 import lombok.Setter;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 
@@ -28,5 +29,6 @@ public abstract class UserCommand<
 
   @Setter ClientRepository clientRepository;
 
+  @Setter AmqpTemplate rabbitTemplate;
   @Autowired GridFsTemplate gridFsTemplate;
 }

@@ -17,7 +17,9 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 @Document(collection = "Freelancer")
 public class Freelancer {
   @Id private ObjectId id;
-  @Indexed private String email;
+
+  @Indexed(unique = true)
+  private String email;
 
   private String password_hash;
   private Date created_at;

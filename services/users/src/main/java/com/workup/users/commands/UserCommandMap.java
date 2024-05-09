@@ -4,6 +4,7 @@ import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
 import com.workup.users.repositories.*;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ public class UserCommandMap
   @Autowired ClientRepository clientRepository;
   @Autowired EducationRepository educationRepository;
   @Autowired AchievementRepository achievementRepository;
+  @Autowired AmqpTemplate rabbitTemplate;
 
   public void registerCommands() {
 
@@ -56,6 +58,10 @@ public class UserCommandMap
     commands.put("UpdateFreelancerAchievement", UpdateFreelancerAchievementCommand.class);
     commands.put("UpdateFreelancerEducation", UpdateFreelancerEducationCommand.class);
     commands.put("UpdateFreelancerExperience", UpdateFreelancerExperienceCommand.class);
+
+    commands.put("Login", LoginCommand.class);
+    commands.put("FreelancerRegister", FreelancerRegisterCommand.class);
+    commands.put("ClientRegister", ClientRegisterCommand.class);
     // NEW_COMMAND_BOILERPLATE
   }
 
@@ -67,5 +73,6 @@ public class UserCommandMap
     command.setClientRepository(clientRepository);
     command.setEducationRepository(educationRepository);
     command.setAchievementRepository(achievementRepository);
+    command.setRabbitTemplate(rabbitTemplate);
   }
 }

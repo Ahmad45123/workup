@@ -14,7 +14,6 @@ public class ClientRegisterRequest extends CommandRequest {
   private String clientName;
   private String industry;
   private String city;
-  private String photoId;
   private String description;
   private Integer employeeCount;
 }
