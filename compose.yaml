@@ -15,7 +15,7 @@ services:
       - default
     
   service_redis:
-    image: redis:latest
+    image: redis:7.2.4
     healthcheck:
       test: redis-cli ping
       interval: 30s
@@ -64,7 +64,7 @@ services:
       - ./services/payments/.env
 
   payments_db:
-    image: postgres:latest
+    image: postgres:12.18
     environment:
       POSTGRES_PASSWORD: payments_password
       POSTGRES_USER: payments_user
