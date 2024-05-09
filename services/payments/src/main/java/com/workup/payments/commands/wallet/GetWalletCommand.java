@@ -6,14 +6,17 @@ import com.workup.shared.commands.payments.wallet.requests.GetWalletRequest;
 import com.workup.shared.commands.payments.wallet.responses.GetWalletResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetWalletCommand extends PaymentCommand<GetWalletRequest, GetWalletResponse> {
+  private static final Logger logger = LogManager.getLogger(GetWalletCommand.class);
 
   @Override
   public GetWalletResponse Run(GetWalletRequest request) {
     Optional<Wallet> wallet = getWalletRepository().findById(request.getFreelancerId());
     if (wallet.isPresent()) {
-      System.out.println("[x] Wallet fetched : " + wallet.get());
+      logger.info("[x] Wallet fetched : " + wallet.get());
 
       return GetWalletResponse.builder()
           .withStatusCode(HttpStatusCode.OK)
