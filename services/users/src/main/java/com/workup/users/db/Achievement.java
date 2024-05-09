@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder(setterPrefix = "with")
 @Getter
 @Setter
-@Document
+@Document(collection = "Achievements")
 public class Achievement {
   @Id private ObjectId id;
 

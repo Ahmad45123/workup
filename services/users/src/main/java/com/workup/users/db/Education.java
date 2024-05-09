@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder(setterPrefix = "with")
 @Getter
 @Setter
-@Document
+@Document(collection = "Education")
 public class Education {
   @Id private ObjectId id;
 
