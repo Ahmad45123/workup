@@ -6,8 +6,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Collections;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -33,9 +36,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       if (jwtService.validateToken(token)) {
         // Create a simple authentication token based on the username
+        String role = jwtService.extractClaim(token, claims -> claims.get("role", String.class));
+        List<GrantedAuthority> authorities =
+            Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
+
         UsernamePasswordAuthenticationToken authToken =
             new UsernamePasswordAuthenticationToken(
-                username, null, Collections.emptyList() // No granted authorities
+                username, null, authorities // No granted authorities
                 );
         SecurityContextHolder.getContext().setAuthentication(authToken);
         // get userId from claims

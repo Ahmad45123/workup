@@ -35,6 +35,8 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/jobs/search")
                     .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/jobs")
+                    .hasAuthority("ROLE_CLIENT")
                     .anyRequest()
                     .authenticated())
         .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
