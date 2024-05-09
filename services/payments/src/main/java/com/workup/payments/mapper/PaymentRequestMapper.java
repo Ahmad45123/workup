@@ -15,7 +15,7 @@ public class PaymentRequestMapper {
         .withClientId(paymentRequest.getClientId())
         .withFreelancerId(paymentRequest.getFreelancerId())
         .withAmount(paymentRequest.getAmount())
-        .withDescription(paymentRequest.getDescription())
+        .withReferenceId(paymentRequest.getReferenceId())
         .withCreatedAt(paymentRequest.getCreatedAt())
         .withUpdatedAt(paymentRequest.getUpdatedAt())
         .withStatus(paymentRequest.getStatus())

@@ -16,7 +16,7 @@ public class CreatePaymentRequestCommand
             .withClientId(request.getClientId())
             .withFreelancerId(request.getFreelancerId())
             .withAmount(request.getAmount())
-            .withDescription(request.getDescription())
+            .withReferenceId(request.getReferenceId())
             .build();
     try {
       PaymentRequest savedPaymentRequest = getPaymentRequestRepository().save(paymentRequest);

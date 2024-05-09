@@ -103,7 +103,7 @@ class PaymentsApplicationTests {
     CreatePaymentRequestRequest createPaymentRequest =
         CreatePaymentRequestRequest.builder()
             .withAmount(1200)
-            .withDescription("Payment for services rendered")
+            .withReferenceId("Payment for services rendered")
             .withClientId("3")
             .withFreelancerId("4")
             .build();
@@ -119,7 +119,7 @@ class PaymentsApplicationTests {
         .ifPresentOrElse(
             paymentRequest -> {
               assertEquals(1200, paymentRequest.getAmount());
-              assertEquals("Payment for services rendered", paymentRequest.getDescription());
+              assertEquals("Payment for services rendered", paymentRequest.getReferenceId());
               assertEquals("3", paymentRequest.getClientId());
               assertEquals("4", paymentRequest.getFreelancerId());
             },
@@ -421,7 +421,7 @@ class PaymentsApplicationTests {
     PaymentRequest paymentRequest1 =
         PaymentRequest.builder()
             .withAmount(1200)
-            .withDescription("Payment for services rendered")
+            .withReferenceId("Payment for services rendered")
             .withClientId("3")
             .withFreelancerId("4")
             .build();
@@ -430,7 +430,7 @@ class PaymentsApplicationTests {
     PaymentRequest paymentRequest2 =
         PaymentRequest.builder()
             .withAmount(3600)
-            .withDescription("Payment for translation services")
+            .withReferenceId("Payment for translation services")
             .withClientId("3")
             .withFreelancerId("10")
             .build();
@@ -455,12 +455,12 @@ class PaymentsApplicationTests {
     assertAll(
         () -> assertEquals(paymentRequest1.getId(), requestDTO1.getId()),
         () -> assertEquals(paymentRequest1.getAmount(), requestDTO1.getAmount()),
-        () -> assertEquals(paymentRequest1.getDescription(), requestDTO1.getDescription()),
+        () -> assertEquals(paymentRequest1.getReferenceId(), requestDTO1.getReferenceId()),
         () -> assertEquals(paymentRequest1.getClientId(), requestDTO1.getClientId()),
         () -> assertEquals(paymentRequest1.getFreelancerId(), requestDTO1.getFreelancerId()),
         () -> assertEquals(paymentRequest2.getId(), requestDTO2.getId()),
         () -> assertEquals(paymentRequest2.getAmount(), requestDTO2.getAmount()),
-        () -> assertEquals(paymentRequest2.getDescription(), requestDTO2.getDescription()),
+        () -> assertEquals(paymentRequest2.getReferenceId(), requestDTO2.getReferenceId()),
         () -> assertEquals(paymentRequest2.getClientId(), requestDTO2.getClientId()),
         () -> assertEquals(paymentRequest2.getFreelancerId(), requestDTO2.getFreelancerId()));
   }
@@ -470,7 +470,7 @@ class PaymentsApplicationTests {
     PaymentRequest paymentRequest1 =
         PaymentRequest.builder()
             .withAmount(1200)
-            .withDescription("Payment for services rendered")
+            .withReferenceId("Payment for services rendered")
             .withClientId("3")
             .withFreelancerId("4")
             .build();
@@ -479,7 +479,7 @@ class PaymentsApplicationTests {
     PaymentRequest paymentRequest2 =
         PaymentRequest.builder()
             .withAmount(3600)
-            .withDescription("Payment for translation services")
+            .withReferenceId("Payment for translation services")
             .withClientId("10")
             .withFreelancerId("4")
             .build();
@@ -505,12 +505,12 @@ class PaymentsApplicationTests {
     assertAll(
         () -> assertEquals(paymentRequest1.getId(), requestDTO1.getId()),
         () -> assertEquals(paymentRequest1.getAmount(), requestDTO1.getAmount()),
-        () -> assertEquals(paymentRequest1.getDescription(), requestDTO1.getDescription()),
+        () -> assertEquals(paymentRequest1.getReferenceId(), requestDTO1.getReferenceId()),
         () -> assertEquals(paymentRequest1.getClientId(), requestDTO1.getClientId()),
         () -> assertEquals(paymentRequest1.getFreelancerId(), requestDTO1.getFreelancerId()),
         () -> assertEquals(paymentRequest2.getId(), requestDTO2.getId()),
         () -> assertEquals(paymentRequest2.getAmount(), requestDTO2.getAmount()),
-        () -> assertEquals(paymentRequest2.getDescription(), requestDTO2.getDescription()),
+        () -> assertEquals(paymentRequest2.getReferenceId(), requestDTO2.getReferenceId()),
         () -> assertEquals(paymentRequest2.getClientId(), requestDTO2.getClientId()),
         () -> assertEquals(paymentRequest2.getFreelancerId(), requestDTO2.getFreelancerId()));
   }
@@ -520,7 +520,7 @@ class PaymentsApplicationTests {
     PaymentRequest paymentRequest =
         PaymentRequest.builder()
             .withAmount(1200)
-            .withDescription("Payment for services rendered")
+            .withReferenceId("Payment for services rendered")
             .withClientId("3")
             .withFreelancerId("4")
             .build();
@@ -589,7 +589,6 @@ class PaymentsApplicationTests {
         () -> assertEquals(paymentRequest.getFreelancerId(), walletTransaction.getWalletId()),
         () -> assertEquals(paymentRequest.getAmount(), walletTransaction.getAmount()),
         () -> assertEquals(paymentTransaction.getId(), walletTransaction.getPaymentTransactionId()),
-        () -> assertEquals(paymentRequest.getDescription(), walletTransaction.getDescription()),
         () -> assertEquals(WalletTransactionType.CREDIT, walletTransaction.getTransactionType()));
   }
 
@@ -613,7 +612,7 @@ class PaymentsApplicationTests {
     PaymentRequest paymentRequest =
         PaymentRequest.builder()
             .withAmount(1200)
-            .withDescription("Payment for services rendered")
+            .withReferenceId("Payment for services rendered")
             .withClientId("3")
             .withFreelancerId("4")
             .build();

@@ -63,7 +63,6 @@ public class PayPaymentRequestCommand
               .withWalletId(paymentRequest.get().getFreelancerId())
               .withAmount(paymentRequest.get().getAmount())
               .withPaymentTransactionId(savedPaymentTransaction.getId())
-              .withDescription(paymentRequest.get().getDescription())
               .withTransactionType(WalletTransactionType.CREDIT)
               .build();
       WalletTransaction savedWalletTransaction =
