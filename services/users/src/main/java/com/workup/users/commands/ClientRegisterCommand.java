@@ -38,7 +38,7 @@ public class ClientRegisterCommand extends UserCommand<ClientRegisterRequest, Si
           .withSuccess(true)
           .withUserName(savedClient.getEmail())
           .withUserId(savedClient.getId().toString())
-          .withUserType(UserType.FREELANCER)
+          .withUserType(UserType.CLIENT)
           .withStatusCode(HttpStatusCode.OK)
           .build();
     } catch (Exception e) {

@@ -180,7 +180,7 @@ public class UsersTestUtils {
       SignUpAndInResponse response, String email, UserType userType) {
     assertNotNull(response);
     assertNotNull(response.getUserName());
-    assertEquals(response.getUserName(), email);
-    assertEquals(response.getUserType(), userType);
+    assertEquals(email, response.getUserName());
+    assertEquals(userType, response.getUserType());
   }
 }

@@ -10,6 +10,7 @@ import com.workup.shared.enums.users.UserType;
 import com.workup.shared.views.users.AchievementView;
 import com.workup.shared.views.users.EducationView;
 import com.workup.shared.views.users.ExperienceView;
+import com.workup.users.commands.utils.PasswordHasher;
 import com.workup.users.db.*;
 import com.workup.users.repositories.*;
 import java.sql.Date;
@@ -97,12 +98,13 @@ class UsersApplicationTests {
 
   @Test
   public void testFreelancerLogin() {
-    Freelancer freelancer = freelancerRepository.save(UsersTestUtils.generateRandomFreelancer());
+    String password = "password";
+    String hashedPassword = PasswordHasher.hashPassword(password);
+    Freelancer randomFreelancer = UsersTestUtils.generateRandomFreelancer();
+    randomFreelancer.setPassword_hash(hashedPassword);
+    Freelancer freelancer = freelancerRepository.save(randomFreelancer);
     LoginRequest request =
-        LoginRequest.builder()
-            .withEmail(freelancer.getEmail())
-            .withPassword(freelancer.getPassword_hash())
-            .build();
+        LoginRequest.builder().withEmail(freelancer.getEmail()).withPassword(password).build();
     SignUpAndInResponse response =
         (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
     UsersTestUtils.verifySignUpAndInResponse(response, freelancer.getEmail(), UserType.FREELANCER);
@@ -128,12 +130,13 @@ class UsersApplicationTests {
 
   @Test
   public void testClientLogin() {
-    Client client = clientRepository.save(UsersTestUtils.generateRandomClient());
+    String password = "password";
+    String hashedPassword = PasswordHasher.hashPassword(password);
+    Client randomClient = UsersTestUtils.generateRandomClient();
+    randomClient.setPassword_hash(hashedPassword);
+    Client client = clientRepository.save(randomClient);
     LoginRequest request =
-        LoginRequest.builder()
-            .withEmail(client.getEmail())
-            .withPassword(client.getPassword_hash())
-            .build();
+        LoginRequest.builder().withEmail(client.getEmail()).withPassword(password).build();
     SignUpAndInResponse response =
         (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
     UsersTestUtils.verifySignUpAndInResponse(response, client.getEmail(), UserType.CLIENT);
