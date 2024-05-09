@@ -11,7 +11,7 @@ public class FreelancerGetPhotoCommand
 
   @Override
   public FreelancerGetPhotoResponse Run(FreelancerGetPhotoRequest request) {
-    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.user_id);
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
 
     if (!freelancerOptional.isPresent()) {
       return FreelancerGetPhotoResponse.builder()

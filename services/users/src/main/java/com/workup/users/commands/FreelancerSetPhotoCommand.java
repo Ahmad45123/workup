@@ -12,7 +12,7 @@ public class FreelancerSetPhotoCommand
   @Override
   public FreelancerSetPhotoResponse Run(FreelancerSetPhotoRequest request) {
 
-    Optional<Freelancer> freelancerOption = freelancerRepository.findById(request.user_id);
+    Optional<Freelancer> freelancerOption = freelancerRepository.findById(request.getUserId());
 
     if (!freelancerOption.isPresent()) {
       throw new RuntimeException("User not found");

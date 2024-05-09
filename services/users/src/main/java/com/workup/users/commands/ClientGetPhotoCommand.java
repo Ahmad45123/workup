@@ -11,7 +11,7 @@ public class ClientGetPhotoCommand
 
   @Override
   public ClientGetPhotoResponse Run(ClientGetPhotoRequest request) {
-    Optional<Client> clientOptional = clientRepository.findById(request.user_id);
+    Optional<Client> clientOptional = clientRepository.findById(request.getUserId());
 
     if (!clientOptional.isPresent()) {
       return ClientGetPhotoResponse.builder()

@@ -20,7 +20,7 @@ public class UsersTestUtils {
     return Freelancer.builder()
         .withEmail("ahmad45123@gmail.com")
         .withPassword_hash("verysecurepassword")
-        .withFull_name("Mr. Mamdouh")
+        .withFullName("Mr. Mamdouh")
         .withJob_title("Software Engineer")
         .withCity("Cairo")
         .withBirthdate(Date.from(Instant.now()))
@@ -131,7 +131,7 @@ public class UsersTestUtils {
   public static Freelancer generateRandomFreelancer() {
     return Freelancer.builder()
         .withEmail(generateRandomString() + "@gmail.com")
-        .withFull_name(generateRandomString())
+        .withFullName(generateRandomString())
         .withJob_title(generateRandomString())
         .withCity(generateRandomString())
         .withBirthdate(Date.from(Instant.now()))
@@ -154,7 +154,7 @@ public class UsersTestUtils {
 
   public static void assertEqualFreelancer(Freelancer freelancer, Freelancer freelancerObj) {
     assertEquals(freelancer.getEmail(), freelancerObj.getEmail());
-    assertEquals(freelancer.getFull_name(), freelancerObj.getFull_name());
+    assertEquals(freelancer.getFullName(), freelancerObj.getFullName());
     assertEquals(freelancer.getJob_title(), freelancerObj.getJob_title());
     assertEquals(freelancer.getCity(), freelancerObj.getCity());
     assertEquals(freelancer.getBirthdate(), freelancerObj.getBirthdate());

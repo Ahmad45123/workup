@@ -21,7 +21,7 @@ public class Freelancer {
 
   private String password_hash;
   private Date created_at;
-  private String full_name;
+  private String fullName;
   private Date birthdate;
   private String resume_link;
   private String city;

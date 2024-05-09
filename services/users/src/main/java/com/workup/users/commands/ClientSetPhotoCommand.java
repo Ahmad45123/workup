@@ -12,7 +12,7 @@ public class ClientSetPhotoCommand
   @Override
   public ClientSetPhotoResponse Run(ClientSetPhotoRequest request) {
 
-    Optional<Client> clientOption = clientRepository.findById(request.user_id);
+    Optional<Client> clientOption = clientRepository.findById(request.getUserId());
 
     if (!clientOption.isPresent()) {
       throw new RuntimeException("User not found");

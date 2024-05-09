@@ -11,7 +11,7 @@ public class FreelancerGetResumeCommand
 
   @Override
   public FreelancerGetResumeResponse Run(FreelancerGetResumeRequest request) {
-    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.user_id);
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
 
     if (!freelancerOptional.isPresent()) {
       return FreelancerGetResumeResponse.builder()

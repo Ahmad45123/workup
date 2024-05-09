@@ -85,7 +85,7 @@ class UsersApplicationTests {
 
     FreelancerGetProfileBriefRequest request =
         FreelancerGetProfileBriefRequest.builder()
-            .withUser_id(freelancerObj.getId().toString())
+            .withUserId(freelancerObj.getId().toString())
             .build();
 
     FreelancerGetProfileBriefResponse breifResponse =
@@ -93,7 +93,7 @@ class UsersApplicationTests {
             template.convertSendAndReceive(ServiceQueueNames.USERS, request);
 
     assertEquals(breifResponse.getStatusCode(), (HttpStatusCode.OK));
-    assertEquals(breifResponse.getFull_name(), (freelancerObj.getFull_name()));
+    assertEquals(breifResponse.getFullName(), (freelancerObj.getFullName()));
     assertEquals(breifResponse.getEmail(), (freelancerObj.getEmail()));
   }
 
@@ -104,7 +104,7 @@ class UsersApplicationTests {
     var freelancerObj = freelancerRepository.save(UsersTestUtils.generateRandomFreelancer());
 
     FreelancerGetPhotoRequest request =
-        FreelancerGetPhotoRequest.builder().withUser_id(freelancerObj.getId().toString()).build();
+        FreelancerGetPhotoRequest.builder().withUserId(freelancerObj.getId().toString()).build();
 
     FreelancerGetPhotoResponse photoResponse1 =
         (FreelancerGetPhotoResponse)
@@ -130,12 +130,12 @@ class UsersApplicationTests {
 
     FreelancerSetProfileRequest setRequest =
         FreelancerSetProfileRequest.builder()
-            .withUser_id(freelancerObj.getId().toString())
-            .withFull_name("John Doe")
-            .withJob_title("Software Engineer")
+            .withUserId(freelancerObj.getId().toString())
+            .withFullName("John Doe")
+            .withJobTitle("Software Engineer")
             .withCity("New York")
             .withDescription("I am a software engineer")
-            .withBirth_date(Date.from(Instant.now()))
+            .withBirthDate(Date.from(Instant.now()))
             .withEmail("test@gmail.com")
             .build();
 
@@ -144,7 +144,7 @@ class UsersApplicationTests {
             template.convertSendAndReceive(ServiceQueueNames.USERS, setRequest);
 
     FreelancerGetProfileRequest getRequest =
-        FreelancerGetProfileRequest.builder().withUser_id(freelancerObj.getId().toString()).build();
+        FreelancerGetProfileRequest.builder().withUserId(freelancerObj.getId().toString()).build();
 
     FreelancerGetProfileResponse getResponse =
         (FreelancerGetProfileResponse)
@@ -152,11 +152,11 @@ class UsersApplicationTests {
 
     assertEquals(setResponse.getStatusCode(), (HttpStatusCode.OK));
     assertEquals(getResponse.getStatusCode(), (HttpStatusCode.OK));
-    assertEquals(getResponse.getFull_name(), (setRequest.getFull_name()));
-    assertEquals(getResponse.getJob_title(), (setRequest.getJob_title()));
+    assertEquals(getResponse.getFullName(), (setRequest.getFullName()));
+    assertEquals(getResponse.getJobTitle(), (setRequest.getJobTitle()));
     assertEquals(getResponse.getCity(), (setRequest.getCity()));
     assertEquals(getResponse.getDescription(), (setRequest.getDescription()));
-    assertEquals(getResponse.getBirth_date(), (setRequest.getBirth_date()));
+    assertEquals(getResponse.getBirthDate(), (setRequest.getBirthDate()));
     assertEquals(getResponse.getEmail(), (setRequest.getEmail()));
   }
 
@@ -168,7 +168,7 @@ class UsersApplicationTests {
 
     FreelancerSetResumeRequest setRequest =
         FreelancerSetResumeRequest.builder()
-            .withUser_id(freelancerObj.getId().toString())
+            .withUserId(freelancerObj.getId().toString())
             .withResumeLink(resumeLink)
             .build();
 
@@ -179,7 +179,7 @@ class UsersApplicationTests {
     assertEquals(setResponse.getStatusCode(), (HttpStatusCode.OK));
 
     FreelancerGetResumeRequest getRequest =
-        FreelancerGetResumeRequest.builder().withUser_id(freelancerObj.getId().toString()).build();
+        FreelancerGetResumeRequest.builder().withUserId(freelancerObj.getId().toString()).build();
 
     FreelancerGetResumeResponse getResponse =
         (FreelancerGetResumeResponse)
@@ -196,7 +196,7 @@ class UsersApplicationTests {
     var clientObj = paymentRequestRepository.save(UsersTestUtils.generateRandomClient());
 
     ClientGetPhotoRequest request =
-        ClientGetPhotoRequest.builder().withUser_id(clientObj.getId().toString()).build();
+        ClientGetPhotoRequest.builder().withUserId(clientObj.getId().toString()).build();
 
     ClientGetPhotoResponse photoResponse1 =
         (ClientGetPhotoResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
@@ -220,12 +220,12 @@ class UsersApplicationTests {
 
     ClientSetProfileRequest setRequest =
         ClientSetProfileRequest.builder()
-            .withUser_id(clientObj.getId().toString())
+            .withUserId(clientObj.getId().toString())
             .withName("John Doe")
             .withCity("New York")
             .withIndustry("Software")
             .withDescription("I am a software engineer")
-            .withEmployee_count(10)
+            .withEmployeeCount(10)
             .withEmail("test@gmail.com")
             .build();
 
@@ -234,7 +234,7 @@ class UsersApplicationTests {
             template.convertSendAndReceive(ServiceQueueNames.USERS, setRequest);
 
     ClientGetProfileRequest getRequest =
-        ClientGetProfileRequest.builder().withUser_id(clientObj.getId().toString()).build();
+        ClientGetProfileRequest.builder().withUserId(clientObj.getId().toString()).build();
 
     ClientGetProfileResponse getResponse =
         (ClientGetProfileResponse)
@@ -246,7 +246,7 @@ class UsersApplicationTests {
     assertEquals(getResponse.getCity(), (setRequest.getCity()));
     assertEquals(getResponse.getIndustry(), (setRequest.getIndustry()));
     assertEquals(getResponse.getDescription(), (setRequest.getDescription()));
-    assertEquals(getResponse.getEmployee_count(), (setRequest.getEmployee_count()));
+    assertEquals(getResponse.getEmployeeCount(), (setRequest.getEmployeeCount()));
     assertEquals(getResponse.getEmail(), (setRequest.getEmail()));
   }
 

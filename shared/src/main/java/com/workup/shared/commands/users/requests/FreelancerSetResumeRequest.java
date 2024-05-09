@@ -9,6 +9,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerSetResumeRequest extends CommandRequest {
-  public String user_id;
   public String resumeLink;
 }
