@@ -1,0 +1,11 @@
+
+version: '3.7'
+services:
+  service_jobs:
+    image: workup:service_jobs
+
+  service_payments:
+    image: workup:service_payments
+
+  service_contracts:
+    image: workup:service_contracts
