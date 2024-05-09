@@ -61,7 +61,7 @@ public class EvaluateMilestoneCommand
                 .withFreelancerId(milestoneContract.getFreelancerId())
                 .withDescription(updatedMilestone.getMilestoneId().toString())
                 .build();
-        rabbitTemplate.convertAndSend(ServiceQueueNames.PAYMENTS, externalRequest);
+        rabbitTemplate.convertSendAndReceive(ServiceQueueNames.PAYMENTS, externalRequest);
       }
 
       System.out.println(" [x] Payment request sent ");
