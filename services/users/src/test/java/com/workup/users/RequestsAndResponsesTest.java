@@ -4,13 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.workup.shared.commands.users.requests.AuthenticationRequest;
+import com.workup.shared.commands.users.requests.ClientRegisterRequest;
 import com.workup.shared.commands.users.requests.FreelancerRegisterRequest;
-import com.workup.shared.commands.users.responses.FreelancerRegisterResponse;
+import com.workup.shared.commands.users.requests.LoginRequest;
+import com.workup.shared.commands.users.responses.SignUpAndInResponse;
 import org.junit.jupiter.api.Test;
 
 public class RequestsAndResponsesTest {
   private static Object[] testObjects = { // all requests/responses to be tested
-    FreelancerRegisterRequest.builder().build(), FreelancerRegisterResponse.builder().build(),
+    FreelancerRegisterRequest.builder().build(),
+    SignUpAndInResponse.builder().build(),
+    AuthenticationRequest.builder().build(),
+    ClientRegisterRequest.builder().build(),
+    LoginRequest.builder().build()
   };
 
   @Test
