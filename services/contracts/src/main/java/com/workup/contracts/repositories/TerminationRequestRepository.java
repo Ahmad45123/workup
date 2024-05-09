@@ -1,6 +1,5 @@
 package com.workup.contracts.repositories;
 
-import com.workup.contracts.models.ContractMilestone;
 import com.workup.contracts.models.TerminationRequest;
 import com.workup.shared.enums.contracts.TerminationRequestStatus;
 import java.util.List;
@@ -19,5 +18,4 @@ public interface TerminationRequestRepository
 
   @Query("SELECT * FROM contracts_data.termination_requests WHERE contractid = ?0")
   List<TerminationRequest> findByContractId(String contractId);
-
 }

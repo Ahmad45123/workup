@@ -1,16 +1,11 @@
 package com.workup.contracts.commands;
 
 import com.workup.contracts.logger.ContractsLogger;
-import com.workup.contracts.models.ContractMilestone;
 import com.workup.contracts.models.TerminationRequest;
 import com.workup.shared.commands.contracts.requests.GetPendingTerminationsRequest;
-import com.workup.shared.commands.contracts.responses.GetMilestoneResponse;
 import com.workup.shared.commands.contracts.responses.GetPendingTerminationsResponse;
 import com.workup.shared.enums.HttpStatusCode;
-
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public class GetPendingTerminationsCommand
     extends ContractCommand<GetPendingTerminationsRequest, GetPendingTerminationsResponse> {
@@ -20,27 +15,29 @@ public class GetPendingTerminationsCommand
     String cachingKey = request.getContractId() + "/pending_terminations";
 
     GetPendingTerminationsResponse cachedResponse =
-            (GetPendingTerminationsResponse)
-                    redisService.getValue(cachingKey, GetPendingTerminationsResponse.class);
+        (GetPendingTerminationsResponse)
+            redisService.getValue(cachingKey, GetPendingTerminationsResponse.class);
     if (cachedResponse != null) {
-      ContractsLogger.print("[x] Contract terminations response fetched from cache: " + cachedResponse.toString());
+      ContractsLogger.print(
+          "[x] Contract terminations response fetched from cache: " + cachedResponse.toString());
 
       return cachedResponse;
     }
 
-    List<TerminationRequest> terminationsList = terminationRequestRepository.findByContractId(request.getContractId());
+    List<TerminationRequest> terminationsList =
+        terminationRequestRepository.findByContractId(request.getContractId());
 
     if (terminationsList.isEmpty()) {
       return GetPendingTerminationsResponse.builder()
-              .withStatusCode(HttpStatusCode.NOT_FOUND)
-              .withErrorMessage("No pending terminations exist")
-              .build();
+          .withStatusCode(HttpStatusCode.NOT_FOUND)
+          .withErrorMessage("No pending terminations exist")
+          .build();
     }
 
     TerminationRequest terminationRequest = terminationsList.getFirst();
 
-    GetPendingTerminationsResponse response = GetPendingTerminationsResponse
-            .builder()
+    GetPendingTerminationsResponse response =
+        GetPendingTerminationsResponse.builder()
             .withRequestId(terminationRequest.getRequestId().toString())
             .withRequesterId(terminationRequest.getRequesterId())
             .withContractId(terminationRequest.getContractId())

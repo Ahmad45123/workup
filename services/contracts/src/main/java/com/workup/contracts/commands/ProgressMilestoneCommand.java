@@ -19,8 +19,7 @@ public class ProgressMilestoneCommand
           .build();
 
     MilestoneState milestoneState = milestoneOptional.get().getStatus();
-    if (milestoneState != MilestoneState.OPEN
-        && milestoneState != MilestoneState.IN_PROGRESS)
+    if (milestoneState != MilestoneState.OPEN && milestoneState != MilestoneState.IN_PROGRESS)
       return ProgressMilestoneResponse.builder()
           .withStatusCode(HttpStatusCode.BAD_REQUEST)
           .withErrorMessage("Milestone cannot be progressed through this command")
@@ -31,7 +30,7 @@ public class ProgressMilestoneCommand
   @Override
   public ProgressMilestoneResponse Run(ProgressMilestoneRequest request) {
     Optional<ContractMilestone> milestoneOptional =
-            contractMilestoneRepository.findById(UUID.fromString(request.getMilestoneId()));
+        contractMilestoneRepository.findById(UUID.fromString(request.getMilestoneId()));
 
     ProgressMilestoneResponse checkerResponse = isValid(milestoneOptional);
     if (checkerResponse != null) return checkerResponse;

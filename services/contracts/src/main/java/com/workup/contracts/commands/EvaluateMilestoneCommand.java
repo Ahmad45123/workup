@@ -3,14 +3,11 @@ package com.workup.contracts.commands;
 import com.workup.contracts.models.Contract;
 import com.workup.contracts.models.ContractMilestone;
 import com.workup.shared.commands.contracts.requests.EvaluateMilestoneRequest;
-import com.workup.shared.commands.contracts.requests.ProgressMilestoneRequest;
 import com.workup.shared.commands.contracts.responses.EvaluateMilestoneResponse;
-import com.workup.shared.commands.contracts.responses.ProgressMilestoneResponse;
 import com.workup.shared.commands.payments.paymentrequest.requests.CreatePaymentRequestRequest;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.contracts.MilestoneState;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,20 +16,21 @@ public class EvaluateMilestoneCommand
   private EvaluateMilestoneResponse isValid(Optional<ContractMilestone> milestoneOptional) {
     if (milestoneOptional.isEmpty())
       return EvaluateMilestoneResponse.builder()
-              .withStatusCode(HttpStatusCode.BAD_REQUEST)
-              .withErrorMessage("Milestone is not found")
-              .build();
+          .withStatusCode(HttpStatusCode.BAD_REQUEST)
+          .withErrorMessage("Milestone is not found")
+          .build();
     if (milestoneOptional.get().getStatus() != MilestoneState.IN_REVIEW)
       return EvaluateMilestoneResponse.builder()
-              .withStatusCode(HttpStatusCode.BAD_REQUEST)
-              .withErrorMessage("Milestone cannot be evaluated as it has not progressed enough")
-              .build();
+          .withStatusCode(HttpStatusCode.BAD_REQUEST)
+          .withErrorMessage("Milestone cannot be evaluated as it has not progressed enough")
+          .build();
     return null;
   }
+
   @Override
   public EvaluateMilestoneResponse Run(EvaluateMilestoneRequest request) {
     Optional<ContractMilestone> milestoneOptional =
-            contractMilestoneRepository.findById(UUID.fromString(request.getMilestoneId()));
+        contractMilestoneRepository.findById(UUID.fromString(request.getMilestoneId()));
 
     EvaluateMilestoneResponse checkerResponse = isValid(milestoneOptional);
     if (checkerResponse != null) return checkerResponse;
@@ -49,37 +47,35 @@ public class EvaluateMilestoneCommand
       {
         // Getting the contract as we need to send the freelancer and client id since they are
         // in the payment request parameters.
-        Optional<Contract> contractOptional = contractRepository.findById(UUID.fromString(updatedMilestone.getContractId()));
-        if(contractOptional.isEmpty())
+        Optional<Contract> contractOptional =
+            contractRepository.findById(UUID.fromString(updatedMilestone.getContractId()));
+        if (contractOptional.isEmpty())
           throw new Exception("Contract Optional was empty, therefore unable to fetch data");
 
         Contract milestoneContract = contractOptional.get();
 
-        CreatePaymentRequestRequest externalRequest = CreatePaymentRequestRequest
-                .builder()
+        CreatePaymentRequestRequest externalRequest =
+            CreatePaymentRequestRequest.builder()
                 .withAmount(updatedMilestone.getAmount())
                 .withClientId(milestoneContract.getClientId())
                 .withFreelancerId(milestoneContract.getFreelancerId())
                 .withDescription(updatedMilestone.getMilestoneId().toString())
                 .build();
-        rabbitTemplate.convertAndSend(ServiceQueueNames.PAYMENTS,externalRequest);
+        rabbitTemplate.convertAndSend(ServiceQueueNames.PAYMENTS, externalRequest);
       }
 
       System.out.println(" [x] Payment request sent ");
       return EvaluateMilestoneResponse.builder()
-              .withStatusCode(HttpStatusCode.OK)
-              .withErrorMessage("")
-              .build();
+          .withStatusCode(HttpStatusCode.OK)
+          .withErrorMessage("")
+          .build();
 
     } catch (Exception e) {
       e.printStackTrace();
       return EvaluateMilestoneResponse.builder()
-              .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-              .withErrorMessage(e.getMessage())
-              .build();
+          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .withErrorMessage(e.getMessage())
+          .build();
     }
-
   }
-
-
 }

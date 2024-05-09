@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 public class ContractCommandMap
     extends CommandMap<ContractCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
-
   @Autowired ContractRepository contractRepository;
 
   @Autowired ContractMilestoneRepository contractMilestoneRepository;
