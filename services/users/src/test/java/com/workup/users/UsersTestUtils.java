@@ -1,7 +1,10 @@
 package com.workup.users;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.workup.shared.commands.users.responses.SignUpAndInResponse;
+import com.workup.shared.enums.users.UserType;
 import com.workup.shared.views.users.AchievementView;
 import com.workup.shared.views.users.EducationView;
 import com.workup.shared.views.users.ExperienceView;
@@ -171,5 +174,13 @@ public class UsersTestUtils {
     assertEquals(client.getClient_description(), clientObj.getClient_description());
     assertEquals(client.getEmployee_count(), clientObj.getEmployee_count());
     assertEquals(client.getPassword_hash(), clientObj.getPassword_hash());
+  }
+
+  public static void verifySignUpAndInResponse(
+      SignUpAndInResponse response, String email, UserType userType) {
+    assertNotNull(response);
+    assertNotNull(response.getUserName());
+    assertEquals(response.getUserName(), email);
+    assertEquals(response.getUserType(), userType);
   }
 }
