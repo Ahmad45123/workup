@@ -10,7 +10,6 @@ import com.workup.shared.views.users.AchievementView;
 import com.workup.shared.views.users.EducationView;
 import com.workup.shared.views.users.ExperienceView;
 import com.workup.users.db.Achievement;
-import com.workup.users.db.Client;
 import com.workup.users.db.Education;
 import com.workup.users.db.Experience;
 import com.workup.users.db.Freelancer;
@@ -80,59 +79,9 @@ class UsersApplicationTests {
     registry.add("spring.rabbitmq.password", rabbitMQContainer::getAdminPassword);
   }
 
-  String randomString() {
-    return java.util.UUID.randomUUID().toString();
-  }
-
-  // generate a freelancer with random details
-  Freelancer generateFreelancer() {
-    return Freelancer.builder()
-        .withEmail(randomString() + "@gmail.com")
-        .withFull_name(randomString())
-        .withJob_title(randomString())
-        .withCity(randomString())
-        .withBirthdate(Date.from(Instant.now()))
-        .withPassword_hash(randomString())
-        .build();
-  }
-
-  Client generateClient() {
-    return Client.builder()
-        .withEmail(randomString() + "@gmail.com")
-        .withClient_name(randomString())
-        .withCity(randomString())
-        .withIndustry(randomString())
-        .withPhoto_link(randomString())
-        .withClient_description(randomString())
-        .withEmployee_count(10)
-        .withPassword_hash(randomString())
-        .build();
-  }
-
-  void assertEqualFreelancer(Freelancer freelancer, Freelancer freelancerObj) {
-    assertEquals(freelancer.getEmail(), freelancerObj.getEmail());
-    assertEquals(freelancer.getFull_name(), freelancerObj.getFull_name());
-    assertEquals(freelancer.getJob_title(), freelancerObj.getJob_title());
-    assertEquals(freelancer.getCity(), freelancerObj.getCity());
-    assertEquals(freelancer.getBirthdate(), freelancerObj.getBirthdate());
-    assertEquals(freelancer.getResume_link(), freelancerObj.getResume_link());
-    assertEquals(freelancer.getPassword_hash(), freelancerObj.getPassword_hash());
-  }
-
-  void assertEqualClient(Client client, Client clientObj) {
-    assertEquals(client.getEmail(), clientObj.getEmail());
-    assertEquals(client.getClient_name(), clientObj.getClient_name());
-    assertEquals(client.getCity(), clientObj.getCity());
-    assertEquals(client.getIndustry(), clientObj.getIndustry());
-    assertEquals(client.getPhoto_link(), clientObj.getPhoto_link());
-    assertEquals(client.getClient_description(), clientObj.getClient_description());
-    assertEquals(client.getEmployee_count(), clientObj.getEmployee_count());
-    assertEquals(client.getPassword_hash(), clientObj.getPassword_hash());
-  }
-
   @Test
   void testGetProfileBrief() {
-    var freelancerObj = freelancerRepository.save(generateFreelancer());
+    var freelancerObj = freelancerRepository.save(UsersTestUtils.generateRandomFreelancer());
 
     FreelancerGetProfileBriefRequest request =
         FreelancerGetProfileBriefRequest.builder()
@@ -152,7 +101,7 @@ class UsersApplicationTests {
   void testFreelancerPhoto() {
     String photoLink = "https://www.google.com";
 
-    var freelancerObj = freelancerRepository.save(generateFreelancer());
+    var freelancerObj = freelancerRepository.save(UsersTestUtils.generateRandomFreelancer());
 
     FreelancerGetPhotoRequest request =
         FreelancerGetPhotoRequest.builder().withUser_id(freelancerObj.getId().toString()).build();
@@ -177,7 +126,7 @@ class UsersApplicationTests {
 
   @Test
   void testFreelancerProfile() {
-    var freelancerObj = freelancerRepository.save(generateFreelancer());
+    var freelancerObj = freelancerRepository.save(UsersTestUtils.generateRandomFreelancer());
 
     FreelancerSetProfileRequest setRequest =
         FreelancerSetProfileRequest.builder()
@@ -215,7 +164,7 @@ class UsersApplicationTests {
   void testFreelancerResume() {
     String resumeLink = "https://www.google.com";
 
-    var freelancerObj = freelancerRepository.save(generateFreelancer());
+    var freelancerObj = freelancerRepository.save(UsersTestUtils.generateRandomFreelancer());
 
     FreelancerSetResumeRequest setRequest =
         FreelancerSetResumeRequest.builder()
@@ -244,7 +193,7 @@ class UsersApplicationTests {
   void testClientPhoto() {
     String photoLink = "https://www.google.com";
 
-    var clientObj = paymentRequestRepository.save(generateClient());
+    var clientObj = paymentRequestRepository.save(UsersTestUtils.generateRandomClient());
 
     ClientGetPhotoRequest request =
         ClientGetPhotoRequest.builder().withUser_id(clientObj.getId().toString()).build();
@@ -267,7 +216,7 @@ class UsersApplicationTests {
 
   @Test
   void testClientProfile() {
-    var clientObj = paymentRequestRepository.save(generateClient());
+    var clientObj = paymentRequestRepository.save(UsersTestUtils.generateRandomClient());
 
     ClientSetProfileRequest setRequest =
         ClientSetProfileRequest.builder()
