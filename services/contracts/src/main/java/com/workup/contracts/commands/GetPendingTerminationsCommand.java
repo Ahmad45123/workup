@@ -1,6 +1,5 @@
 package com.workup.contracts.commands;
 
-
 import com.workup.shared.commands.contracts.requests.GetPendingTerminationsRequest;
 import com.workup.shared.commands.contracts.responses.GetPendingTerminationsResponse;
 

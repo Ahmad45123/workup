@@ -43,8 +43,8 @@ public class ProgressMilestoneCommand
       // Send to payments here
 
       // get required data from milestone
-      milestoneContract =
-          contractRepository.findById(UUID.fromString(updatedMilestone.getContractId()));
+      //      milestoneContract =
+      //          contractRepository.findById(UUID.fromString(updatedMilestone.getContractId()));
     }
 
     try {

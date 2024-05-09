@@ -1,6 +1,5 @@
 package com.workup.contracts.commands;
 
-
 import com.workup.shared.commands.contracts.requests.GetContractRequest;
 import com.workup.shared.commands.contracts.responses.GetContractResponse;
 
