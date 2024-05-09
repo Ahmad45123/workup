@@ -8,9 +8,6 @@ build:
 	docker build ./services/contracts --tag workup:service_contracts
 
 up: 
-	docker compose up -c compose.yaml -c compose.override.yaml --force-recreate
-
-upswarm: 
 	docker stack deploy -c compose.yaml -c compose.override.yaml workup
 
 portainer:

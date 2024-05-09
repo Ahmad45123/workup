@@ -23,8 +23,6 @@ services:
       retries: 3
     networks:
       - default
-    # ports:
-    #   - "6379:6379"
 
   # ----- JOBS MICROSERVICE -------
   service_jobs:
