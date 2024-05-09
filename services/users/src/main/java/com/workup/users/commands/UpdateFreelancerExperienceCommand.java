@@ -11,8 +11,7 @@ public class UpdateFreelancerExperienceCommand
     extends UserCommand<UpdateFreelancerExperienceRequest, UpdateFreelancerExperienceResponse> {
   @Override
   public UpdateFreelancerExperienceResponse Run(UpdateFreelancerExperienceRequest request) {
-    Optional<Freelancer> freelancerOptional =
-        freelancerRepository.findById(request.getFreelancer_id());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return UpdateFreelancerExperienceResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)

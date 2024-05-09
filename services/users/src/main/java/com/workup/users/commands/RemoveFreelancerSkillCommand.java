@@ -10,7 +10,7 @@ public class RemoveFreelancerSkillCommand
     extends UserCommand<RemoveFreelancerSkillRequest, RemoveFreelancerSkillResponse> {
   @Override
   public RemoveFreelancerSkillResponse Run(RemoveFreelancerSkillRequest request) {
-    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUser_id());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty())
       return RemoveFreelancerSkillResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
