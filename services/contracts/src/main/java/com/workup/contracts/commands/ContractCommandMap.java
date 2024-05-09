@@ -6,6 +6,7 @@ import com.workup.contracts.repositories.TerminationRequestRepository;
 import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class ContractCommandMap
     extends CommandMap<ContractCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
+  @Autowired AmqpTemplate rabbitTemplate;
   @Autowired ContractRepository contractRepository;
 
   @Autowired ContractMilestoneRepository contractMilestoneRepository;

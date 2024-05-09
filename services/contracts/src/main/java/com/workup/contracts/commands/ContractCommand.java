@@ -7,9 +7,12 @@ import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
 import lombok.Setter;
+import org.springframework.amqp.core.AmqpTemplate;
 
 public abstract class ContractCommand<T extends CommandRequest, Q extends CommandResponse>
     implements Command<T, Q> {
+
+  @Setter AmqpTemplate rabbitTemplate;
 
   @Setter ContractRepository contractRepository;
 
