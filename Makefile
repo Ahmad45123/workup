@@ -11,7 +11,7 @@ up:
 	docker stack deploy -c compose.yaml -c compose.override.yaml workup
 
 portainer:
-	docker stack deploy -c portainer-agent-stack.yml
+	docker stack deploy -c portainer-agent-stack.yml portainer
 
 reload:
 	mvn -DskipTests package
