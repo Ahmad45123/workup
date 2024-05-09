@@ -12,10 +12,13 @@ import com.workup.shared.enums.payments.PaymentRequestStatus;
 import com.workup.shared.enums.payments.PaymentTransactionStatus;
 import com.workup.shared.enums.payments.WalletTransactionType;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 public class PayPaymentRequestCommand
     extends PaymentCommand<PayPaymentRequestRequest, PayPaymentRequestResponse> {
+  private static final Logger logger = LogManager.getLogger(PayPaymentRequestCommand.class);
 
   @Override
   @Transactional
@@ -43,8 +46,8 @@ public class PayPaymentRequestCommand
       paymentRequest.get().setStatus(PaymentRequestStatus.PAID);
       PaymentRequest savedPaymentRequest = getPaymentRequestRepository().save(paymentRequest.get());
 
-      System.out.println("[x] Payment request paid : " + savedPaymentRequest);
-      System.out.println("[x] Payment transaction saved : " + savedPaymentTransaction);
+      logger.info("[x] Payment request paid : " + savedPaymentRequest);
+      logger.info("[x] Payment transaction saved : " + savedPaymentTransaction);
 
       Optional<Wallet> freelancerWallet =
           getWalletRepository().findById(paymentRequest.get().getFreelancerId());
@@ -56,7 +59,7 @@ public class PayPaymentRequestCommand
           .setBalance(freelancerWallet.get().getBalance() + paymentRequest.get().getAmount());
       Wallet savedWallet = getWalletRepository().save(freelancerWallet.get());
 
-      System.out.println("[x] Wallet updated : " + savedWallet);
+      logger.info("[x] Wallet updated : " + savedWallet);
 
       WalletTransaction walletTransaction =
           WalletTransaction.builder()
@@ -69,14 +72,14 @@ public class PayPaymentRequestCommand
       WalletTransaction savedWalletTransaction =
           getWalletTransactionRepository().save(walletTransaction);
 
-      System.out.println("[x] Wallet transaction saved : " + savedWalletTransaction);
+      logger.info("[x] Wallet transaction saved : " + savedWalletTransaction);
       return PayPaymentRequestResponse.builder()
           .withStatusCode(HttpStatusCode.OK)
           .withTransactionId(savedPaymentTransaction.getId())
           .withTransactionStatus(PaymentTransactionStatus.SUCCESS)
           .build();
     } catch (Exception e) {
-      System.out.println("[x] Payment request failed : " + e.getMessage());
+      logger.error("[x] Payment request failed : " + e.getMessage());
       // TODO: Handle payment transaction failure (Retry mechanism ?)
       return PayPaymentRequestResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)

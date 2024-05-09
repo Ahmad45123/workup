@@ -8,10 +8,14 @@ import com.workup.shared.commands.payments.paymentrequest.requests.GetFreelancer
 import com.workup.shared.commands.payments.paymentrequest.responses.GetFreelancerPaymentRequestsResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetFreelancerPaymentRequestsCommand
     extends PaymentCommand<
         GetFreelancerPaymentRequestsRequest, GetFreelancerPaymentRequestsResponse> {
+  private static final Logger logger =
+      LogManager.getLogger(GetFreelancerPaymentRequestsCommand.class);
 
   @Override
   public GetFreelancerPaymentRequestsResponse Run(GetFreelancerPaymentRequestsRequest request) {
@@ -21,7 +25,7 @@ public class GetFreelancerPaymentRequestsCommand
     List<PaymentRequestDTO> paymentRequestDTOS =
         PaymentRequestMapper.mapToPaymentRequestDTOs(savedRequests);
 
-    System.out.println("[x] Payment requests fetched : " + paymentRequestDTOS);
+    logger.info("[x] Payment requests fetched : " + paymentRequestDTOS);
 
     return GetFreelancerPaymentRequestsResponse.builder()
         .withStatusCode(HttpStatusCode.OK)

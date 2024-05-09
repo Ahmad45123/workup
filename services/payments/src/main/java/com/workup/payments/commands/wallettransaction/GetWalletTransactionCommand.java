@@ -8,9 +8,12 @@ import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletT
 import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetWalletTransactionCommand
     extends PaymentCommand<GetWalletTransactionRequest, GetWalletTransactionResponse> {
+  private static final Logger logger = LogManager.getLogger(GetWalletTransactionCommand.class);
 
   @Override
   public GetWalletTransactionResponse Run(GetWalletTransactionRequest request) {
@@ -29,7 +32,7 @@ public class GetWalletTransactionCommand
     WalletTransactionDTO walletTransactionDTO =
         WalletTransactionMapper.mapToWalletTransactionDTO(savedWalletTransaction.get());
 
-    System.out.println("[x] Wallet transaction fetched : " + walletTransactionDTO);
+    logger.info("[x] Wallet transaction fetched : " + walletTransactionDTO);
 
     return GetWalletTransactionResponse.builder()
         .withStatusCode(HttpStatusCode.OK)
