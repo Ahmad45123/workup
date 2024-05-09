@@ -10,3 +10,6 @@ up:
 reload:
 	mvn -DskipTests package
 	docker compose up --detach --build 
+
+format:
+	mvn git-code-format:format-code -Dgcf.globPattern=**/*
