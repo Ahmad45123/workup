@@ -12,11 +12,11 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class FreelancerGetProfileResponse extends CommandResponse {
   public String email;
-  public String full_name;
+  public String fullName;
   public String city;
-  public String job_title;
+  public String jobTitle;
   public String description;
-  public Date birth_date;
+  public Date birthDate;
   public List<String> languages;
   public List<String> skills;
 }

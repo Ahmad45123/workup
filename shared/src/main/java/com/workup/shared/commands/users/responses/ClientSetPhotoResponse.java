@@ -8,6 +8,4 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
-public class FreelancerGetResumeResponse extends CommandResponse {
-  public String resumeLink;
-}
+public class ClientSetPhotoResponse extends CommandResponse {}

@@ -14,10 +14,10 @@ public class ClientSetProfileCommand
 
     Client client;
 
-    if (request.getUser_id() == null) {
+    if (request.getUserId() == null) {
       client = Client.builder().build();
     } else {
-      Optional<Client> clientOption = clientRepository.findById(request.getUser_id());
+      Optional<Client> clientOption = clientRepository.findById(request.getUserId());
       if (!clientOption.isPresent()) {
         throw new RuntimeException("User not found");
       }
@@ -39,8 +39,8 @@ public class ClientSetProfileCommand
     if (request.getIndustry() != null) {
       client.setIndustry(request.getIndustry());
     }
-    if (request.getEmployee_count() != null) {
-      client.setEmployee_count(request.getEmployee_count());
+    if (request.getEmployeeCount() != null) {
+      client.setEmployee_count(request.getEmployeeCount());
     }
 
     clientRepository.save(client);

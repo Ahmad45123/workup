@@ -15,14 +15,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Client {
   @Id private ObjectId id;
-  @Indexed private String email;
+
+  @Indexed(unique = true)
+  private String email;
 
   private String password_hash;
   private Date created_at;
   private String client_name;
   private String industry;
   private String city;
-  private String photo_id;
+  private String photo_link;
   private String client_description;
   private Integer employee_count;
 }

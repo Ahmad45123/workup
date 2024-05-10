@@ -1,18 +1,17 @@
 package com.workup.users;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import com.workup.shared.commands.users.requests.*;
 import com.workup.shared.commands.users.responses.*;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.shared.enums.users.UserType;
 import com.workup.shared.views.users.AchievementView;
 import com.workup.shared.views.users.EducationView;
 import com.workup.shared.views.users.ExperienceView;
-import com.workup.users.db.Achievement;
-import com.workup.users.db.Education;
-import com.workup.users.db.Experience;
-import com.workup.users.db.Freelancer;
+import com.workup.users.commands.utils.PasswordHasher;
+import com.workup.users.db.*;
 import com.workup.users.repositories.*;
 import java.sql.Date;
 import java.time.Instant;
@@ -51,6 +50,7 @@ class UsersApplicationTests {
   @Autowired private FreelancerRepository freelancerRepository;
   @Autowired private AchievementRepository achievementRepository;
   @Autowired private EducationRepository educationRepository;
+  @Autowired private ClientRepository clientRepository;
 
   @BeforeEach
   void clearAll() {
@@ -80,22 +80,75 @@ class UsersApplicationTests {
   }
 
   @Test
-  void testCreateUser() {
-    var freelancerObj =
-        Freelancer.builder()
-            .withEmail("ahmad45123@gmail.com")
-            .withPassword_hash("verysecurepassword")
-            .withFull_name("Mr. Mamdouh")
-            .withJob_title("Software Engineer")
-            .withCity("Cairo")
-            .withBirthdate(Date.from(Instant.now()))
+  public void testFreelancerRegister() {
+    Freelancer freelancer = UsersTestUtils.generateRandomFreelancer();
+    FreelancerRegisterRequest request =
+        FreelancerRegisterRequest.builder()
+            .withEmail(freelancer.getEmail())
+            .withPassword(freelancer.getPassword_hash())
+            .withFullName(freelancer.getFullName())
+            .withCity(freelancer.getCity())
+            .withJobTitle(freelancer.getJob_title())
+            .withBirthDate(freelancer.getBirthdate())
             .build();
+    SignUpAndInResponse response =
+        (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    UsersTestUtils.verifySignUpAndInResponse(response, freelancer.getEmail(), UserType.FREELANCER);
+  }
 
-    freelancerRepository.save(freelancerObj);
+  @Test
+  public void testFreelancerLogin() {
+    String password = "password";
+    String hashedPassword = PasswordHasher.hashPassword(password);
+    Freelancer randomFreelancer = UsersTestUtils.generateRandomFreelancer();
+    randomFreelancer.setPassword_hash(hashedPassword);
+    Freelancer freelancer = freelancerRepository.save(randomFreelancer);
+    LoginRequest request =
+        LoginRequest.builder().withEmail(freelancer.getEmail()).withPassword(password).build();
+    SignUpAndInResponse response =
+        (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    UsersTestUtils.verifySignUpAndInResponse(response, freelancer.getEmail(), UserType.FREELANCER);
+  }
+
+  @Test
+  public void testClientRegister() {
+    Client client = UsersTestUtils.generateRandomClient();
+    ClientRegisterRequest request =
+        ClientRegisterRequest.builder()
+            .withEmail(client.getEmail())
+            .withPassword(client.getPassword_hash())
+            .withCity(client.getCity())
+            .withDescription(client.getClient_description())
+            .withClientName(client.getClient_name())
+            .withEmployeeCount(client.getEmployee_count())
+            .withIndustry(client.getIndustry())
+            .build();
+    SignUpAndInResponse response =
+        (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    UsersTestUtils.verifySignUpAndInResponse(response, client.getEmail(), UserType.CLIENT);
+  }
+
+  @Test
+  public void testClientLogin() {
+    String password = "password";
+    String hashedPassword = PasswordHasher.hashPassword(password);
+    Client randomClient = UsersTestUtils.generateRandomClient();
+    randomClient.setPassword_hash(hashedPassword);
+    Client client = clientRepository.save(randomClient);
+    LoginRequest request =
+        LoginRequest.builder().withEmail(client.getEmail()).withPassword(password).build();
+    SignUpAndInResponse response =
+        (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    UsersTestUtils.verifySignUpAndInResponse(response, client.getEmail(), UserType.CLIENT);
+  }
+
+  @Test
+  void testGetProfileBrief() {
+    var freelancerObj = freelancerRepository.save(UsersTestUtils.generateRandomFreelancer());
 
     FreelancerGetProfileBriefRequest request =
         FreelancerGetProfileBriefRequest.builder()
-            .withUser_id(freelancerObj.getId().toString())
+            .withUserId(freelancerObj.getId().toString())
             .build();
 
     FreelancerGetProfileBriefResponse breifResponse =
@@ -103,8 +156,161 @@ class UsersApplicationTests {
             template.convertSendAndReceive(ServiceQueueNames.USERS, request);
 
     assertEquals(breifResponse.getStatusCode(), (HttpStatusCode.OK));
-    assertEquals(breifResponse.getFull_name(), (freelancerObj.getFull_name()));
+    assertEquals(breifResponse.getFullName(), (freelancerObj.getFullName()));
     assertEquals(breifResponse.getEmail(), (freelancerObj.getEmail()));
+  }
+
+  @Test
+  void testFreelancerPhoto() {
+    String photoLink = "https://www.google.com";
+
+    var freelancerObj = freelancerRepository.save(UsersTestUtils.generateRandomFreelancer());
+
+    FreelancerGetPhotoRequest request =
+        FreelancerGetPhotoRequest.builder().withUserId(freelancerObj.getId().toString()).build();
+
+    FreelancerGetPhotoResponse photoResponse1 =
+        (FreelancerGetPhotoResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    assertEquals(photoResponse1.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(photoResponse1.getPhotoLink(), (freelancerObj.getPhoto_link()));
+
+    freelancerObj.setPhoto_link(photoLink);
+    freelancerRepository.save(freelancerObj);
+
+    FreelancerGetPhotoResponse photoResponse2 =
+        (FreelancerGetPhotoResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    assertEquals(photoResponse2.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(photoResponse2.getPhotoLink(), (photoLink));
+  }
+
+  @Test
+  void testFreelancerProfile() {
+    var freelancerObj = freelancerRepository.save(UsersTestUtils.generateRandomFreelancer());
+
+    FreelancerSetProfileRequest setRequest =
+        FreelancerSetProfileRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .withFullName("John Doe")
+            .withJobTitle("Software Engineer")
+            .withCity("New York")
+            .withDescription("I am a software engineer")
+            .withBirthDate(Date.from(Instant.now()))
+            .withEmail("test@gmail.com")
+            .build();
+
+    FreelancerSetProfileResponse setResponse =
+        (FreelancerSetProfileResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, setRequest);
+
+    FreelancerGetProfileRequest getRequest =
+        FreelancerGetProfileRequest.builder().withUserId(freelancerObj.getId().toString()).build();
+
+    FreelancerGetProfileResponse getResponse =
+        (FreelancerGetProfileResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, getRequest);
+
+    assertEquals(setResponse.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(getResponse.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(getResponse.getFullName(), (setRequest.getFullName()));
+    assertEquals(getResponse.getJobTitle(), (setRequest.getJobTitle()));
+    assertEquals(getResponse.getCity(), (setRequest.getCity()));
+    assertEquals(getResponse.getDescription(), (setRequest.getDescription()));
+    assertEquals(getResponse.getBirthDate(), (setRequest.getBirthDate()));
+    assertEquals(getResponse.getEmail(), (setRequest.getEmail()));
+  }
+
+  @Test
+  void testFreelancerResume() {
+    String resumeLink = "https://www.google.com";
+
+    var freelancerObj = freelancerRepository.save(UsersTestUtils.generateRandomFreelancer());
+
+    FreelancerSetResumeRequest setRequest =
+        FreelancerSetResumeRequest.builder()
+            .withUserId(freelancerObj.getId().toString())
+            .withResumeLink(resumeLink)
+            .build();
+
+    FreelancerSetResumeResponse setResponse =
+        (FreelancerSetResumeResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, setRequest);
+
+    assertEquals(setResponse.getStatusCode(), (HttpStatusCode.OK));
+
+    FreelancerGetResumeRequest getRequest =
+        FreelancerGetResumeRequest.builder().withUserId(freelancerObj.getId().toString()).build();
+
+    FreelancerGetResumeResponse getResponse =
+        (FreelancerGetResumeResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, getRequest);
+
+    assertEquals(getResponse.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(getResponse.getResumeLink(), (resumeLink));
+  }
+
+  @Test
+  void testClientPhoto() {
+    String photoLink = "https://www.google.com";
+
+    var clientObj = paymentRequestRepository.save(UsersTestUtils.generateRandomClient());
+
+    ClientGetPhotoRequest request =
+        ClientGetPhotoRequest.builder().withUserId(clientObj.getId().toString()).build();
+
+    ClientGetPhotoResponse photoResponse1 =
+        (ClientGetPhotoResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    assertEquals(photoResponse1.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(photoResponse1.getPhotoLink(), (clientObj.getPhoto_link()));
+
+    clientObj.setPhoto_link(photoLink);
+    paymentRequestRepository.save(clientObj);
+
+    ClientGetPhotoResponse photoResponse2 =
+        (ClientGetPhotoResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+
+    assertEquals(photoResponse2.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(photoResponse2.getPhotoLink(), (photoLink));
+  }
+
+  @Test
+  void testClientProfile() {
+    var clientObj = paymentRequestRepository.save(UsersTestUtils.generateRandomClient());
+
+    ClientSetProfileRequest setRequest =
+        ClientSetProfileRequest.builder()
+            .withUserId(clientObj.getId().toString())
+            .withName("John Doe")
+            .withCity("New York")
+            .withIndustry("Software")
+            .withDescription("I am a software engineer")
+            .withEmployeeCount(10)
+            .withEmail("test@gmail.com")
+            .build();
+
+    ClientSetProfileResponse setResponse =
+        (ClientSetProfileResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, setRequest);
+
+    ClientGetProfileRequest getRequest =
+        ClientGetProfileRequest.builder().withUserId(clientObj.getId().toString()).build();
+
+    ClientGetProfileResponse getResponse =
+        (ClientGetProfileResponse)
+            template.convertSendAndReceive(ServiceQueueNames.USERS, getRequest);
+
+    assertEquals(setResponse.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(getResponse.getStatusCode(), (HttpStatusCode.OK));
+    assertEquals(getResponse.getName(), (setRequest.getName()));
+    assertEquals(getResponse.getCity(), (setRequest.getCity()));
+    assertEquals(getResponse.getIndustry(), (setRequest.getIndustry()));
+    assertEquals(getResponse.getDescription(), (setRequest.getDescription()));
+    assertEquals(getResponse.getEmployeeCount(), (setRequest.getEmployeeCount()));
+    assertEquals(getResponse.getEmail(), (setRequest.getEmail()));
   }
 
   @Test

@@ -17,16 +17,18 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 @Document(collection = "Freelancer")
 public class Freelancer {
   @Id private ObjectId id;
-  @Indexed private String email;
+
+  @Indexed(unique = true)
+  private String email;
 
   private String password_hash;
   private Date created_at;
-  private String full_name;
+  private String fullName;
   private Date birthdate;
-  private String resume_id;
+  private String resume_link;
   private String city;
   private String job_title;
-  private String photo_id;
+  private String photo_link;
   private String description;
   private List<String> skills;
   private List<String> languages;

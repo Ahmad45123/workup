@@ -9,5 +9,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerGetPhotoResponse extends CommandResponse {
-  public String photoEncoded; // Base64 encoded photo
+  public String photoLink;
 }

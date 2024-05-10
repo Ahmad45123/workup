@@ -3,8 +3,7 @@ package com.workup.users.commands;
 import com.workup.shared.commands.users.requests.FreelancerGetPhotoRequest;
 import com.workup.shared.commands.users.responses.FreelancerGetPhotoResponse;
 import com.workup.shared.enums.HttpStatusCode;
-import com.workup.users.db.Client;
-import java.util.Base64;
+import com.workup.users.db.Freelancer;
 import java.util.Optional;
 
 public class FreelancerGetPhotoCommand
@@ -12,29 +11,19 @@ public class FreelancerGetPhotoCommand
 
   @Override
   public FreelancerGetPhotoResponse Run(FreelancerGetPhotoRequest request) {
-    Optional<Client> clientOptional = clientRepository.findById(request.getUser_id());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
 
-    if (!clientOptional.isPresent()) {
-      return FreelancerGetPhotoResponse.builder()
-          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .build();
-    }
-    String name = PHOTO_BUCKET + request.getUser_id();
-
-    byte[] bytesArr;
-    try {
-      bytesArr = gridFsTemplate.getResource(name).getInputStream().readAllBytes();
-    } catch (Exception e) {
+    if (!freelancerOptional.isPresent()) {
       return FreelancerGetPhotoResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .build();
     }
 
-    String base64Encoded = Base64.getEncoder().encodeToString(bytesArr);
+    Freelancer freelancer = freelancerOptional.get();
 
     return FreelancerGetPhotoResponse.builder()
         .withStatusCode(HttpStatusCode.OK)
-        .withPhotoEncoded(base64Encoded)
+        .withPhotoLink(freelancer.getPhoto_link())
         .build();
   }
 }
