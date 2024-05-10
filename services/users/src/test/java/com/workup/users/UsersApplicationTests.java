@@ -86,7 +86,7 @@ class UsersApplicationTests {
         FreelancerRegisterRequest.builder()
             .withEmail(freelancer.getEmail())
             .withPassword(freelancer.getPassword_hash())
-            .withFullName(freelancer.getFull_name())
+            .withFullName(freelancer.getFullName())
             .withCity(freelancer.getCity())
             .withJobTitle(freelancer.getJob_title())
             .withBirthDate(freelancer.getBirthdate())

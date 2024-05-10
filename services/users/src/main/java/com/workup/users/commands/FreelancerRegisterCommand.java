@@ -29,7 +29,7 @@ public class FreelancerRegisterCommand
           Freelancer.builder()
               .withEmail(request.getEmail())
               .withPassword_hash(hashPassword(request.getPassword()))
-              .withFull_name(request.getFullName())
+              .withFullName(request.getFullName())
               .withJob_title(request.getJobTitle())
               .withCity(request.getCity())
               .build();
