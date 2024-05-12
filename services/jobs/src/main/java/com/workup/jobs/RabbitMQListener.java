@@ -26,9 +26,7 @@ import com.workup.shared.commands.jobs.responses.GetJobByIdResponse;
 import com.workup.shared.commands.jobs.responses.GetMyJobsResponse;
 import com.workup.shared.commands.jobs.responses.SearchJobsResponse;
 import com.workup.shared.enums.ServiceQueueNames;
-
 import java.util.concurrent.CompletableFuture;
-
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +48,8 @@ public class RabbitMQListener {
 
   @RabbitHandler
   @Async
-  public CompletableFuture<CreateProposalResponse> receive(CreateProposalRequest in) throws Exception {
+  public CompletableFuture<CreateProposalResponse> receive(CreateProposalRequest in)
+      throws Exception {
     CreateProposalResponse response =
         ((CreateProposalCommand) commandMap.getCommand("CreateProposal")).Run(in);
     return CompletableFuture.completedFuture(response);
@@ -82,7 +81,8 @@ public class RabbitMQListener {
 
   @RabbitHandler
   @Async
-  public CompletableFuture<AcceptProposalResponse> receive(AcceptProposalRequest request) throws Exception {
+  public CompletableFuture<AcceptProposalResponse> receive(AcceptProposalRequest request)
+      throws Exception {
     AcceptProposalResponse response =
         ((AcceptProposalCommand) commandMap.getCommand("AcceptProposal")).Run(request);
     return CompletableFuture.completedFuture(response);
@@ -90,7 +90,8 @@ public class RabbitMQListener {
 
   @RabbitHandler
   @Async
-  public CompletableFuture<GetProposalsByJobIdResponse> receive(GetProposalsByJobIdRequest request) throws Exception {
+  public CompletableFuture<GetProposalsByJobIdResponse> receive(GetProposalsByJobIdRequest request)
+      throws Exception {
     GetProposalsByJobIdResponse response =
         ((GetProposalsByJobIdCommand) commandMap.getCommand("GetProposalsByJobId")).Run(request);
     return CompletableFuture.completedFuture(response);
@@ -98,7 +99,8 @@ public class RabbitMQListener {
 
   @RabbitHandler
   @Async
-  public CompletableFuture<GetMyProposalsResponse> receive(GetMyProposalsRequest request) throws Exception {
+  public CompletableFuture<GetMyProposalsResponse> receive(GetMyProposalsRequest request)
+      throws Exception {
     GetMyProposalsResponse response =
         ((GetMyProposalsCommand) commandMap.getCommand("GetMyProposals")).Run(request);
     return CompletableFuture.completedFuture(response);

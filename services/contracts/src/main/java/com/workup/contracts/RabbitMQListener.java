@@ -20,9 +20,7 @@ import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedRespon
 import com.workup.shared.commands.contracts.responses.ProgressMilestoneResponse;
 import com.workup.shared.commands.contracts.responses.ViewContractMilestonesResponse;
 import com.workup.shared.enums.ServiceQueueNames;
-
 import java.util.concurrent.CompletableFuture;
-
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +35,8 @@ public class RabbitMQListener {
 
   @RabbitHandler
   @Async
-  public CompletableFuture<InitiateContractResponse> receive(InitiateContractRequest in) throws Exception {
+  public CompletableFuture<InitiateContractResponse> receive(InitiateContractRequest in)
+      throws Exception {
     InitiateContractResponse response =
         ((InitiateContractCommand) commandMap.getCommand("InitiateContract")).Run(in);
     return CompletableFuture.completedFuture(response);
@@ -45,29 +44,36 @@ public class RabbitMQListener {
 
   @RabbitHandler
   @Async
-  public CompletableFuture<ContractTerminationResponse> receive(ContractTerminationRequest in) throws Exception {
-    return CompletableFuture.completedFuture(((RequestContractTerminationCommand) commandMap.getCommand("RequestContractTermination"))
-        .Run(in));
+  public CompletableFuture<ContractTerminationResponse> receive(ContractTerminationRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((RequestContractTerminationCommand) commandMap.getCommand("RequestContractTermination"))
+            .Run(in));
   }
 
   @RabbitHandler
   @Async
-  public CompletableFuture<HandleTerminationResponse> receive(HandleTerminationRequest in) throws Exception {
-    return CompletableFuture.completedFuture(((HandleTerminationRequestCommand) commandMap.getCommand("HandleTerminationRequest"))
-        .Run(in));
+  public CompletableFuture<HandleTerminationResponse> receive(HandleTerminationRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((HandleTerminationRequestCommand) commandMap.getCommand("HandleTerminationRequest"))
+            .Run(in));
   }
 
   @RabbitHandler
   @Async
-  public CompletableFuture<MarkPaymentCompletedResponse> receive(MarkPaymentCompletedRequest in) throws Exception {
-    return CompletableFuture.completedFuture(((MarkMilestoneAsPaidCommand) commandMap.getCommand("MarkMilestoneAsPaid")).Run(in));
+  public CompletableFuture<MarkPaymentCompletedResponse> receive(MarkPaymentCompletedRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((MarkMilestoneAsPaidCommand) commandMap.getCommand("MarkMilestoneAsPaid")).Run(in));
   }
 
   @RabbitHandler
   @Async
-  public CompletableFuture<ViewContractMilestonesResponse> receive(ViewContractMilestonesRequest in) throws Exception {
-    return CompletableFuture.completedFuture(((ViewContractMilestonesCommand) commandMap.getCommand("ViewContractMilestones"))
-        .Run(in));
+  public CompletableFuture<ViewContractMilestonesResponse> receive(ViewContractMilestonesRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((ViewContractMilestonesCommand) commandMap.getCommand("ViewContractMilestones")).Run(in));
   }
 
   @RabbitHandler
