@@ -1,5 +1,6 @@
-package com.workup.shared.commands.contracts;
+package com.workup.shared.commands.contracts.responses;
 
+import com.workup.shared.commands.CommandResponse;
 import com.workup.shared.enums.contracts.MilestoneState;
 import java.util.Date;
 import lombok.Getter;
@@ -9,13 +10,13 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
-public class Milestone {
+public class GetMilestoneResponse extends CommandResponse {
+  private final String milestoneId;
 
-  private final String milestoneId; // Not needed when initiating contract, make it null
-  private final String contractId; // Not needed when initiating contract, make it null
+  private final String contractId;
 
   private final String description;
   private final Date dueDate;
   private final double amount;
-  private final MilestoneState status; // Not needed with initiating contract, make it null
+  private final MilestoneState status;
 }

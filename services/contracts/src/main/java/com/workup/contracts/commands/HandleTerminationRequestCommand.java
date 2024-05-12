@@ -1,5 +1,6 @@
 package com.workup.contracts.commands;
 
+import com.workup.contracts.logger.ContractsLogger;
 import com.workup.contracts.models.Contract;
 import com.workup.contracts.models.TerminationRequest;
 import com.workup.shared.commands.contracts.requests.HandleTerminationRequest;
@@ -41,7 +42,7 @@ public class HandleTerminationRequestCommand
     }
     try {
       TerminationRequest updatedRequest = terminationRequestRepository.save(terminationRequest);
-      System.out.println(" [x] Updated Termination Request " + updatedRequest);
+      ContractsLogger.print(" [x] Updated Termination Request " + updatedRequest);
       return HandleTerminationResponse.builder()
           .withRequestStatus(updatedRequest.getStatus())
           .withStatusCode(HttpStatusCode.OK)
@@ -67,7 +68,7 @@ public class HandleTerminationRequestCommand
     updatedContract.setStatus(ContractState.TERMINATED);
     try {
       updatedContract = contractRepository.save(updatedContract);
-      System.out.println(" [x] Updated Contract Status to Terminated " + updatedContract);
+      ContractsLogger.print(" [x] Updated Contract Status to Terminated " + updatedContract);
     } catch (Exception e) {
       e.printStackTrace();
       return HandleTerminationResponse.builder()
