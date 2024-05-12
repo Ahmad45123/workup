@@ -39,8 +39,7 @@ public class RabbitMQListener {
 
   @RabbitHandler
   public CreateJobResponse receive(CreateJobRequest in) throws Exception {
-    CreateJobResponse response = ((CreateJobCommand) commandMap.getCommand("CreateJob")).Run(in);
-    return response;
+    return ((CreateJobCommand) commandMap.getCommand("CreateJob")).Run(in);
   }
 
   @RabbitHandler
