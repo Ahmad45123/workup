@@ -9,3 +9,6 @@ services:
 
   service_contracts:
     image: workup:service_contracts
+
+  service_users:
+    image: workup:service_users

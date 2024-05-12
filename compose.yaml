@@ -97,8 +97,31 @@ services:
     networks:
       - contracts
 
+  # ----- USERS MICROSERVICE -------
+  service_users:
+    image: ahmad45123/workup:service_users
+    depends_on:
+      - users_db
+      - service_mq
+    networks:
+      - default
+      - users
+    env_file:
+      - ./services/users/.env
+  
+  users_db:
+    image: mongo:7.0
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+    networks:
+      - users
+
+
 networks:
   default:
   jobs:
   payments:
   contracts:
+  users:
