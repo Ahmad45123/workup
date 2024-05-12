@@ -33,7 +33,10 @@ jobs:
       run: mvn -DskipTests verify
 
     - name: Check Tests
-      run: mvn test
+      run: cd services/jobs && mvn test;
+           cd services/payments && mvn test;
+           cd services/users && mvn test
+
 
     - name: Submit Dependency Snapshot
       uses: advanced-security/maven-dependency-submission-action@v3
