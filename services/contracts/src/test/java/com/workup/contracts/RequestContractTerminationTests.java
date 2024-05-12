@@ -1,4 +1,4 @@
-package com.workup.contracts.tests;
+package com.workup.contracts;
 
 import com.workup.shared.commands.contracts.Milestone;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;

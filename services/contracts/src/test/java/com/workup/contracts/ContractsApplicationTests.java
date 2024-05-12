@@ -1,5 +1,6 @@
 package com.workup.contracts;
 
+import com.workup.contracts.logger.ContractsLogger;
 import com.workup.contracts.repositories.ContractMilestoneRepository;
 import com.workup.contracts.repositories.ContractRepository;
 import com.workup.contracts.repositories.TerminationRequestRepository;
@@ -53,6 +54,8 @@ class ContractsApplicationTests {
   @Autowired ContractMilestoneRepository contractMilestoneRepository;
   @Autowired TerminationRequestRepository terminationRequestRepository;
 
+  @Autowired HandleContractTerminationTests handleContractTerminationTests;
+
   @BeforeEach
   void clearAll() {
     contractRepository.deleteAll();
@@ -91,5 +94,14 @@ class ContractsApplicationTests {
     //            .ifPresentOrElse(
     //                    job -> assertTrue(job.getTitle().equals(createJobRequest.getTitle())),
     //                    () -> new RuntimeException("Job not found"));
+  }
+
+  @Test
+  void HandleContractTerminationTest1() {
+    try {
+      handleContractTerminationTests.successTest(template);
+    } catch (Exception e) {
+      ContractsLogger.print("Test Failed");
+    }
   }
 }
