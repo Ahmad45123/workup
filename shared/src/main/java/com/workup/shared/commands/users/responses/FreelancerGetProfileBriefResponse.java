@@ -10,5 +10,5 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class FreelancerGetProfileBriefResponse extends CommandResponse {
   public String email;
-  public String full_name;
+  public String fullName;
 }

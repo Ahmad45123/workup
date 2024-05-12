@@ -11,7 +11,7 @@ public class ClientGetProfileCommand
 
   @Override
   public ClientGetProfileResponse Run(ClientGetProfileRequest request) {
-    Optional<Client> clientOptional = clientRepository.findById(request.getUser_id());
+    Optional<Client> clientOptional = clientRepository.findById(request.getUserId());
 
     if (!clientOptional.isPresent()) {
       return ClientGetProfileResponse.builder()
@@ -28,7 +28,7 @@ public class ClientGetProfileCommand
         .withCity(client.getCity())
         .withDescription(client.getClient_description())
         .withIndustry(client.getIndustry())
-        .withEmployee_count(client.getEmployee_count())
+        .withEmployeeCount(client.getEmployee_count())
         .build();
   }
 }

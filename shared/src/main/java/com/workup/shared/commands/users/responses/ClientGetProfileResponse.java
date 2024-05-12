@@ -14,5 +14,5 @@ public class ClientGetProfileResponse extends CommandResponse {
   public String city;
   public String description;
   public String industry;
-  public Integer employee_count;
+  public Integer employeeCount;
 }

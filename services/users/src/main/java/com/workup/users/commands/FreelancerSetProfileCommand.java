@@ -13,31 +13,31 @@ public class FreelancerSetProfileCommand
   public FreelancerSetProfileResponse Run(FreelancerSetProfileRequest request) {
 
     Freelancer freelancer;
-    if (request.user_id == null) {
+    if (request.getUserId() == null) {
       freelancer = Freelancer.builder().withId(null).build();
     } else {
 
-      Optional<Freelancer> freelancerOption = freelancerRepository.findById(request.user_id);
+      Optional<Freelancer> freelancerOption = freelancerRepository.findById(request.getUserId());
       if (!freelancerOption.isPresent()) {
         throw new RuntimeException("User not found");
       }
       freelancer = freelancerOption.get();
     }
 
-    if (request.birth_date != null) {
-      freelancer.setBirthdate(request.birth_date);
+    if (request.getBirthDate() != null) {
+      freelancer.setBirthdate(request.getBirthDate());
     }
     if (request.description != null) {
       freelancer.setDescription(request.description);
     }
-    if (request.job_title != null) {
-      freelancer.setJob_title(request.job_title);
+    if (request.getJobTitle() != null) {
+      freelancer.setJob_title(request.getJobTitle());
     }
     if (request.city != null) {
       freelancer.setCity(request.city);
     }
-    if (request.full_name != null) {
-      freelancer.setFull_name(request.full_name);
+    if (request.fullName != null) {
+      freelancer.setFullName(request.fullName);
     }
     if (request.email != null) {
       freelancer.setEmail(request.email);

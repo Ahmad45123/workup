@@ -10,11 +10,10 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerSetProfileRequest extends CommandRequest {
-  public String user_id;
   public String email;
-  public String full_name;
+  public String fullName;
   public String city;
-  public String job_title;
+  public String jobTitle;
   public String description;
-  public Date birth_date;
+  public Date birthDate;
 }

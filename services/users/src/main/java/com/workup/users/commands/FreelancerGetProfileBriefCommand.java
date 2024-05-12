@@ -11,7 +11,7 @@ public class FreelancerGetProfileBriefCommand
 
   @Override
   public FreelancerGetProfileBriefResponse Run(FreelancerGetProfileBriefRequest request) {
-    Optional<Freelancer> freelancer = freelancerRepository.findById(request.getUser_id());
+    Optional<Freelancer> freelancer = freelancerRepository.findById(request.getUserId());
 
     if (!freelancer.isPresent()) {
       return FreelancerGetProfileBriefResponse.builder()
@@ -22,7 +22,7 @@ public class FreelancerGetProfileBriefCommand
     return FreelancerGetProfileBriefResponse.builder()
         .withStatusCode(HttpStatusCode.OK)
         .withEmail(freelancer.get().getEmail())
-        .withFull_name(freelancer.get().getFull_name())
+        .withFullName(freelancer.get().getFullName())
         .build();
   }
 }
