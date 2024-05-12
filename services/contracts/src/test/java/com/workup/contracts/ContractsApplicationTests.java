@@ -1,6 +1,5 @@
 package com.workup.contracts;
 
-import com.workup.contracts.logger.ContractsLogger;
 import com.workup.contracts.repositories.ContractMilestoneRepository;
 import com.workup.contracts.repositories.ContractRepository;
 import com.workup.contracts.repositories.TerminationRequestRepository;
@@ -55,6 +54,8 @@ class ContractsApplicationTests {
   @Autowired TerminationRequestRepository terminationRequestRepository;
 
   @Autowired HandleContractTerminationTests handleContractTerminationTests;
+  @Autowired RequestContractTerminationTests requestContractTerminationTests;
+  @Autowired MarkMilestoneAsPaidTests markMilestoneAsPaidTests;
 
   @BeforeEach
   void clearAll() {
@@ -97,11 +98,52 @@ class ContractsApplicationTests {
   }
 
   @Test
-  void HandleContractTerminationTest1() {
-    try {
-      handleContractTerminationTests.successTest(template);
-    } catch (Exception e) {
-      ContractsLogger.print("Test Failed");
-    }
+  void HandleContractTerminationTest1() throws ParseException {
+    handleContractTerminationTests.acceptingRequest(template);
+  }
+
+  @Test
+  void HandleContractTerminationTest2() {
+    handleContractTerminationTests.requestNotFoundTest(template);
+  }
+
+  @Test
+  void HandleContractTerminationTest3() throws ParseException {
+    handleContractTerminationTests.rejectingRequest(template);
+  }
+
+  @Test
+  void RequestTerminationTest1() {
+    requestContractTerminationTests.contractNotFoundTest(template);
+  }
+
+  @Test
+  void RequestTerminationTest2() throws ParseException {
+    requestContractTerminationTests.requestedBeforeTest(template);
+  }
+
+  @Test
+  void RequestTerminationTest3() throws ParseException {
+    requestContractTerminationTests.unAuthorizedRequestTest(template);
+  }
+
+  @Test
+  void RequestTerminationTest4() throws ParseException {
+    requestContractTerminationTests.sucessTest(template);
+  }
+
+  @Test
+  void MarkMilestoneAsPaidTest1() throws ParseException {
+    markMilestoneAsPaidTests.nonExistingMilestone(template);
+  }
+
+  @Test
+  void MarkMilestoneAsPaidTest2() throws ParseException {
+    markMilestoneAsPaidTests.nonAcceptedMilestone(template);
+  }
+
+  @Test
+  void MarkMilestoneAsPaidTest3() throws ParseException {
+    markMilestoneAsPaidTests.successTest(template);
   }
 }

@@ -26,7 +26,9 @@ public class InitiateContractCommand
 
     final UUID contractId = UUID.randomUUID();
     for (Milestone m : request.getJobMilestones()) {
-      UUID currentContractMilestoneId = UUID.randomUUID();
+      UUID currentContractMilestoneId =
+          m.getMilestoneId() != null ? UUID.fromString(m.getMilestoneId()) : UUID.randomUUID();
+      MilestoneState status = m.getStatus() != null ? m.getStatus() : MilestoneState.OPEN;
 
       ContractMilestone contractMilestone =
           ContractMilestone.builder()
@@ -35,7 +37,7 @@ public class InitiateContractCommand
               .withDescription(m.getDescription())
               .withContractId(contractId.toString())
               .withDueDate(m.getDueDate())
-              .withStatus(MilestoneState.OPEN)
+              .withStatus(status)
               .build();
 
       milestoneIds.add(currentContractMilestoneId.toString());

@@ -2,7 +2,6 @@ package com.workup.contracts;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.workup.contracts.logger.ContractsLogger;
 import com.workup.contracts.repositories.ContractRepository;
 import com.workup.contracts.repositories.TerminationRequestRepository;
 import com.workup.shared.commands.contracts.Milestone;
@@ -32,7 +31,6 @@ public class HandleContractTerminationTests {
   @Autowired TerminationRequestRepository terminationRequestRepository;
 
   public void requestNotFoundTest(AmqpTemplate template) {
-    System.out.println("[ ] Running HandleContractTermination Request NotFound Test...");
 
     HandleTerminationRequest request =
         HandleTerminationRequest.builder()
@@ -43,19 +41,16 @@ public class HandleContractTerminationTests {
     HandleTerminationResponse response =
         (HandleTerminationResponse)
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
-    assert response != null;
-    if (response.getErrorMessage().equals("No Termination Requests Found"))
-      System.out.println(" [x] Request Not Found Test has Passed");
-    else System.out.println(" [x] Request Not Found Test has Failed");
 
-    System.out.println("[x] Finished RequestContractTermination Request NotFound Test .....\n");
+    assertNotNull(response);
+
+    assertEquals(response.getStatusCode(), HttpStatusCode.BAD_REQUEST);
   }
 
   // TODO: Add a test for checking if the contract is not active before applying termination AFTER
   // HAVING ENDPOINT FOR UPDATING CONTRACT STATUS
 
-  public void successTest(AmqpTemplate template) throws ParseException {
-    ContractsLogger.print("[ ] Running HandleContractTermination Success Test...");
+  public void acceptingRequest(AmqpTemplate template) throws ParseException {
     // create a contract
     Milestone milestone =
         Milestone.builder()
@@ -121,6 +116,77 @@ public class HandleContractTerminationTests {
         .findById(UUID.fromString(contractResponse.getContractId()))
         .ifPresentOrElse(
             x -> assertEquals(x.getStatus(), ContractState.TERMINATED),
+            () -> new RuntimeException("Contract wasn't found"));
+
+    assertEquals(response.getStatusCode(), HttpStatusCode.OK);
+  }
+
+  public void rejectingRequest(AmqpTemplate template) throws ParseException {
+    // create a contract
+    Milestone milestone =
+        Milestone.builder()
+            .withDescription("make sure the students hate your admin system")
+            .withDueDate(new SimpleDateFormat("yyyy-MM-dd").parse("2025-01-01"))
+            .withAmount(30000)
+            .build();
+
+    List<Milestone> milestones = new ArrayList<>();
+    milestones.add(milestone);
+
+    String clientId = UUID.randomUUID().toString(), freelancerId = UUID.randomUUID().toString();
+    InitiateContractRequest initiateContractRequest =
+        InitiateContractRequest.builder()
+            .withClientId(clientId)
+            .withFreelancerId(freelancerId)
+            .withJobId("789")
+            .withProposalId("bruh")
+            .withJobTitle("very happy guc worker :)")
+            .withJobMilestones(milestones)
+            .build();
+    InitiateContractResponse contractResponse =
+        (InitiateContractResponse)
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
+
+    assertNotNull(contractResponse);
+
+    // create termination request
+    String terminationRequestID = UUID.randomUUID().toString();
+    ContractTerminationRequest terminationRequest =
+        ContractTerminationRequest.builder()
+            .withUserId(clientId)
+            .withContractId(contractResponse.getContractId())
+            .withReason("M4 3agebni l 4o8l da")
+            .build();
+
+    ContractTerminationResponse terminationResponse =
+        (ContractTerminationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, terminationRequest);
+
+    assertNotNull(terminationResponse);
+
+    // check over the functionality
+    HandleTerminationRequest request =
+        HandleTerminationRequest.builder()
+            .withChosenStatus(TerminationRequestStatus.REJECTED)
+            .withContractTerminationRequestId(terminationResponse.getRequestId())
+            .build();
+
+    HandleTerminationResponse response =
+        (HandleTerminationResponse)
+            template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
+
+    assertNotNull(response);
+
+    terminationRequestRepository
+        .findById(UUID.fromString(terminationResponse.getRequestId()))
+        .ifPresentOrElse(
+            x -> assertEquals(x.getStatus(), TerminationRequestStatus.REJECTED),
+            () -> new RuntimeException("Termination Request wasn't found"));
+
+    contractRepository
+        .findById(UUID.fromString(contractResponse.getContractId()))
+        .ifPresentOrElse(
+            x -> assertEquals(x.getStatus(), ContractState.ACTIVE),
             () -> new RuntimeException("Contract wasn't found"));
 
     assertEquals(response.getStatusCode(), HttpStatusCode.OK);
