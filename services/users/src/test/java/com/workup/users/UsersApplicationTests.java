@@ -72,8 +72,6 @@ class UsersApplicationTests {
   @DynamicPropertySource
   static void setDatasourceProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.data.mongodb.uri", mongoDBContainer::getConnectionString);
-    registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
-    registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
 
     registry.add("spring.rabbitmq.host", rabbitMQContainer::getHost);
     registry.add("spring.rabbitmq.port", rabbitMQContainer::getFirstMappedPort);

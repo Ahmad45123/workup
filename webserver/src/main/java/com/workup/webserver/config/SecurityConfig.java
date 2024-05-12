@@ -31,7 +31,11 @@ public class SecurityConfig {
                 authorize
                     .requestMatchers(HttpMethod.OPTIONS)
                     .permitAll()
-                    .requestMatchers(HttpMethod.POST, "api/v1/users/login")
+                    .requestMatchers(HttpMethod.POST, "/api/v1/users/login")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/users/clients/register")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/users/freelancers/register")
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/jobs/search")
                     .permitAll()

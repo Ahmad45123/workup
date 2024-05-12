@@ -46,8 +46,11 @@ public class LoginCommand extends UserCommand<LoginRequest, SignUpAndInResponse>
       return SignUpAndInResponse.builder()
           .withSuccess(false)
           .withStatusCode(HttpStatusCode.UNAUTHORIZED)
+          .withErrorMessage("Invalid email or password")
           .build();
     } catch (Exception e) {
+      System.out.println(e.getMessage());
+      e.printStackTrace();
       return SignUpAndInResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withSuccess(false)
