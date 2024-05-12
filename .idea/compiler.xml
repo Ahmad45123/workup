@@ -10,6 +10,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="shared" />
+        <module name="controller" />
         <module name="contracts" />
         <module name="users" />
         <module name="jobs" />
@@ -20,6 +21,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="contracts" options="-parameters" />
+      <module name="controller" options="-parameters" />
       <module name="jobs" options="-parameters" />
       <module name="payments" options="-parameters" />
       <module name="users" options="-parameters" />
