@@ -1,5 +1,6 @@
 package com.workup.contracts.commands;
 
+import com.workup.contracts.logger.ContractsLogger;
 import com.workup.contracts.models.ContractMilestone;
 import com.workup.shared.commands.contracts.requests.ProgressMilestoneRequest;
 import com.workup.shared.commands.contracts.responses.ProgressMilestoneResponse;
@@ -41,7 +42,7 @@ public class ProgressMilestoneCommand
 
     try {
       contractMilestoneRepository.save(updatedMilestone);
-      System.out.println(" [x] Milestone Progressed " + updatedMilestone);
+      ContractsLogger.print(" [x] Milestone Progressed " + updatedMilestone);
       return ProgressMilestoneResponse.builder()
           .withStatusCode(HttpStatusCode.OK)
           .withErrorMessage("")
