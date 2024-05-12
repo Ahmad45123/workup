@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Bean;
 
 @TestConfiguration
 public class TestConfigBase {
-    @Bean
-    public Queue contractsQueueMock() {
-        return new Queue(ServiceQueueNames.CONTRACTS);
-    }
+  @Bean
+  public Queue contractsQueueMock() {
+    return new Queue(ServiceQueueNames.CONTRACTS);
+  }
 }
