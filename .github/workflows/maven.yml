@@ -34,8 +34,8 @@ jobs:
 
     - name: Check Tests
       run: cd services/jobs && mvn test;
-           cd services/payments && mvn test;
-           cd services/users && mvn test
+           cd ../services/payments && mvn test;
+           cd ../services/users && mvn test
 
 
     - name: Submit Dependency Snapshot
