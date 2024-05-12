@@ -1,5 +1,6 @@
 package com.workup.webserver.controller;
 
+import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.users.requests.*;
 import com.workup.shared.commands.users.responses.*;
 import com.workup.shared.enums.ServiceQueueNames;
@@ -30,6 +31,10 @@ public class UserController {
   public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
 
     // use jwy service to authenticate user assume usernameand password is right
+    return getAuthResponse(request);
+  }
+
+  private ResponseEntity<AuthResponse> getAuthResponse(CommandRequest request) {
     SignUpAndInResponse response =
         (SignUpAndInResponse)
             rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
@@ -61,7 +66,7 @@ public class UserController {
   }
 
   @PostMapping("/freelancers/register")
-  public ResponseEntity<AuthResponse> postMethodName(
+  public ResponseEntity<AuthResponse> registerAsFreelancer(
       @RequestBody FreelancerRegisterRequest request) {
     // use jwy service to authenticate user assume usernameand password is right
     SignUpAndInResponse response =
@@ -368,6 +373,7 @@ public class UserController {
     return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
   }
 
+  @GetMapping("path")
   @PutMapping("/freelancer/achievements")
   public ResponseEntity<UpdateFreelancerAchievementResponse> putFreelancerAchievements(
       @RequestAttribute(name = "userId") String userId,
