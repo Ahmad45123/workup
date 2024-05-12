@@ -59,7 +59,7 @@ class PaymentsApplicationTests {
 
   @Container
   static final PostgreSQLContainer<?> postgreSQLContainer =
-      new PostgreSQLContainer<>("postgres:latest");
+      new PostgreSQLContainer<>("postgres:12.18");
 
   @Container
   static final RabbitMQContainer rabbitMQContainer =

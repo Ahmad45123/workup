@@ -42,7 +42,7 @@ class UsersApplicationTests {
 
   @Container
   static final MongoDBContainer mongoDBContainer =
-      new MongoDBContainer("mongo:7").withExposedPorts(27017);
+      new MongoDBContainer("mongo:7.0").withExposedPorts(27017);
 
   @Autowired private AmqpTemplate template;
   @Autowired private ClientRepository paymentRequestRepository;
@@ -72,6 +72,8 @@ class UsersApplicationTests {
   @DynamicPropertySource
   static void setDatasourceProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.data.mongodb.uri", mongoDBContainer::getConnectionString);
+    registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
+    registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
 
     registry.add("spring.rabbitmq.host", rabbitMQContainer::getHost);
     registry.add("spring.rabbitmq.port", rabbitMQContainer::getFirstMappedPort);
