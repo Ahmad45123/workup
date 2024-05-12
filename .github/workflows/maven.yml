@@ -32,11 +32,14 @@ jobs:
     - name: Check Formatting
       run: mvn -DskipTests verify
 
-    - name: Check Tests
-      run: cd services/jobs && mvn test;
-           cd ../services/payments && mvn test;
-           cd ../services/users && mvn test
+    - name: Check Jobs Tests
+      run: cd services/jobs && mvn test
 
+    - name: Check Users Tests
+      run: cd services/users && mvn test
+
+    - name: Check Payments Tests
+      run: cd services/payments && mvn test
 
     - name: Submit Dependency Snapshot
       uses: advanced-security/maven-dependency-submission-action@v3
