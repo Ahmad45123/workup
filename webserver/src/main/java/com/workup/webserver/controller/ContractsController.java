@@ -77,7 +77,7 @@ public class ContractsController {
     return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
   }
 
-  @PostMapping("/{id}/termination/handle")
+  @PostMapping("/{id}/terminations/request")
   public ResponseEntity<ContractTerminationResponse> submitTerminationRequest(
       @RequestBody ContractTerminationRequest request,
       @PathVariable String id,

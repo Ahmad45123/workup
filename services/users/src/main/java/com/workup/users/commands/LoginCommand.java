@@ -10,12 +10,21 @@ import com.workup.users.db.Freelancer;
 import java.util.Optional;
 
 public class LoginCommand extends UserCommand<LoginRequest, SignUpAndInResponse> {
-
   @Override
   public SignUpAndInResponse Run(LoginRequest request) {
     String email = request.getEmail();
     String password = request.getPassword();
     try {
+      if (email.equals(adminUserCredentials.getADMIN_EMAIL())
+          && password.equals(adminUserCredentials.getADMIN_PASSWORD())) {
+        return SignUpAndInResponse.builder()
+            .withSuccess(true)
+            .withUserName(adminUserCredentials.getADMIN_EMAIL())
+            .withUserId(adminUserCredentials.getADMIN_USERID())
+            .withUserType(UserType.ADMIN)
+            .withStatusCode(HttpStatusCode.OK)
+            .build();
+      }
       Optional<Client> client = clientRepository.findByEmail(email);
       if (client.isPresent()) {
         if (PasswordHasher.checkPassword(password, client.get().getPassword_hash())) {
