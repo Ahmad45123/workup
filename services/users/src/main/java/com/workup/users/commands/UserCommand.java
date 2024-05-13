@@ -1,7 +1,6 @@
 package com.workup.users.commands;
 
 import com.workup.shared.commands.Command;
-import com.workup.users.config.AdminUserCredentials;
 import com.workup.users.repositories.AchievementRepository;
 import com.workup.users.repositories.ClientRepository;
 import com.workup.users.repositories.EducationRepository;
@@ -31,6 +30,5 @@ public abstract class UserCommand<
   @Setter ClientRepository clientRepository;
 
   @Setter AmqpTemplate rabbitTemplate;
-  @Setter AdminUserCredentials adminUserCredentials;
   @Autowired GridFsTemplate gridFsTemplate;
 }

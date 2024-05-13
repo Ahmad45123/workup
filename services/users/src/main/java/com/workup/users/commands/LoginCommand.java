@@ -2,6 +2,7 @@ package com.workup.users.commands;
 
 import com.workup.shared.commands.users.requests.LoginRequest;
 import com.workup.shared.commands.users.responses.SignUpAndInResponse;
+import com.workup.shared.enums.AdminUserCredentials;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.users.UserType;
 import com.workup.users.commands.utils.PasswordHasher;
@@ -15,12 +16,12 @@ public class LoginCommand extends UserCommand<LoginRequest, SignUpAndInResponse>
     String email = request.getEmail();
     String password = request.getPassword();
     try {
-      if (email.equals(adminUserCredentials.getADMIN_EMAIL())
-          && password.equals(adminUserCredentials.getADMIN_PASSWORD())) {
+      if (email.equals(AdminUserCredentials.ADMIN_EMAIL)
+          && password.equals(AdminUserCredentials.ADMIN_PASSWORD)) {
         return SignUpAndInResponse.builder()
             .withSuccess(true)
-            .withUserName(adminUserCredentials.getADMIN_EMAIL())
-            .withUserId(adminUserCredentials.getADMIN_USERID())
+            .withUserName(AdminUserCredentials.ADMIN_EMAIL)
+            .withUserId(AdminUserCredentials.ADMIN_ID)
             .withUserType(UserType.ADMIN)
             .withStatusCode(HttpStatusCode.OK)
             .build();

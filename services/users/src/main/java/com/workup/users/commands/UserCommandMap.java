@@ -3,7 +3,6 @@ package com.workup.users.commands;
 import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
-import com.workup.users.config.AdminUserCredentials;
 import com.workup.users.repositories.*;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ public class UserCommandMap
   @Autowired EducationRepository educationRepository;
   @Autowired AchievementRepository achievementRepository;
   @Autowired AmqpTemplate rabbitTemplate;
-  @Autowired AdminUserCredentials adminUserCredentials;
 
   public void registerCommands() {
 
@@ -76,6 +74,5 @@ public class UserCommandMap
     command.setEducationRepository(educationRepository);
     command.setAchievementRepository(achievementRepository);
     command.setRabbitTemplate(rabbitTemplate);
-    command.setAdminUserCredentials(adminUserCredentials);
   }
 }
