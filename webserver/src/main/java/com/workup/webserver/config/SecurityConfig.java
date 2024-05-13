@@ -22,10 +22,6 @@ public class SecurityConfig {
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
     http.csrf(AbstractHttpConfigurer::disable)
-        .exceptionHandling(
-            exceptionHandling ->
-                exceptionHandling.authenticationEntryPoint(
-                    new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
         .authorizeHttpRequests(
             authorize ->
                 authorize
@@ -43,7 +39,11 @@ public class SecurityConfig {
                     .hasAuthority("ROLE_CLIENT")
                     .anyRequest()
                     .authenticated())
-        .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling(
+            exceptionHandling ->
+                exceptionHandling.authenticationEntryPoint(
+                    new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
 
     return http.build();
   }
