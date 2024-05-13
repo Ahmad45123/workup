@@ -1,5 +1,7 @@
 package com.workup.webserver.controller;
 
+import com.workup.shared.commands.CommandRequest;
+import com.workup.shared.commands.CommandResponse;
 import com.workup.shared.commands.payments.paymentrequest.requests.GetClientPaymentRequestsRequest;
 import com.workup.shared.commands.payments.paymentrequest.requests.GetFreelancerPaymentRequestsRequest;
 import com.workup.shared.commands.payments.paymentrequest.requests.PayPaymentRequestRequest;
@@ -31,15 +33,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class PaymentsController {
   @Autowired private AmqpTemplate rabbitTemplate;
 
+  private <Response extends CommandResponse> ResponseEntity<Response> processRequest(
+      CommandRequest request) {
+    Response response =
+        (Response) rabbitTemplate.convertSendAndReceive(ServiceQueueNames.PAYMENTS, request);
+    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+  }
+
   @GetMapping("/clients/me/requests")
   public ResponseEntity<GetClientPaymentRequestsResponse> getClientPaymentRequest(
       @RequestAttribute(name = "userId") String userId) {
     GetClientPaymentRequestsRequest request =
         GetClientPaymentRequestsRequest.builder().withClientId(userId).withUserId(userId).build();
-    GetClientPaymentRequestsResponse response =
-        (GetClientPaymentRequestsResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.PAYMENTS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return processRequest(request);
   }
 
   @GetMapping("/clients/me/transactions")
@@ -50,10 +56,7 @@ public class PaymentsController {
             .withClientId(userId)
             .withUserId(userId)
             .build();
-    GetClientPaymentTransactionsResponse response =
-        (GetClientPaymentTransactionsResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.PAYMENTS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return processRequest(request);
   }
 
   @GetMapping("/freelancers/me/requests")
@@ -64,10 +67,7 @@ public class PaymentsController {
             .withFreelancerId(userId)
             .withUserId(userId)
             .build();
-    GetFreelancerPaymentRequestsResponse response =
-        (GetFreelancerPaymentRequestsResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.PAYMENTS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return processRequest(request);
   }
 
   @GetMapping("/freelancers/me/transactions")
@@ -78,10 +78,7 @@ public class PaymentsController {
             .withFreelancerId(userId)
             .withUserId(userId)
             .build();
-    GetFreelancerPaymentTransactionsResponse response =
-        (GetFreelancerPaymentTransactionsResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.PAYMENTS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return processRequest(request);
   }
 
   @GetMapping("/freelancers/me/wallet")
@@ -89,10 +86,7 @@ public class PaymentsController {
       @RequestAttribute(name = "userId") String userId) {
     GetWalletRequest request =
         GetWalletRequest.builder().withFreelancerId(userId).withUserId(userId).build();
-    GetWalletResponse response =
-        (GetWalletResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.PAYMENTS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return processRequest(request);
   }
 
   @PostMapping("/freelancers/me/wallet/withdraw")
@@ -101,10 +95,7 @@ public class PaymentsController {
       @RequestBody WithdrawFromWalletRequest request) {
     request.setFreelancerId(userId);
     request.setUserId(userId);
-    WithdrawFromWalletResponse response =
-        (WithdrawFromWalletResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.PAYMENTS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return processRequest(request);
   }
 
   @PostMapping("/requests/{requestId}/pay")
@@ -116,9 +107,6 @@ public class PaymentsController {
             .withPaymentRequestId(requestId)
             .withUserId(userId)
             .build();
-    PayPaymentRequestResponse response =
-        (PayPaymentRequestResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.PAYMENTS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return processRequest(request);
   }
 }
