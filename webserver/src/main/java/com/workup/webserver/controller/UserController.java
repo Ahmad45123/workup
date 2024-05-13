@@ -1,6 +1,7 @@
 package com.workup.webserver.controller;
 
 import com.workup.shared.commands.CommandRequest;
+import com.workup.shared.commands.CommandResponse;
 import com.workup.shared.commands.users.requests.*;
 import com.workup.shared.commands.users.responses.*;
 import com.workup.shared.enums.ServiceQueueNames;
@@ -58,235 +59,159 @@ public class UserController {
     return getAuthResponse(request);
   }
 
+  private <Response extends CommandResponse> ResponseEntity<Response> userDataCRUD(
+      String userId, CommandRequest request) {
+    request.setUserId(userId);
+    Response response =
+        (Response) rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+  }
+
   @PostMapping("/freelancer/achievements")
   public ResponseEntity<AddFreelancerAchievementResponse> postFreelancerAchievements(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody AddFreelancerAchievementRequest request) {
-    request.setUserId(userId);
-    AddFreelancerAchievementResponse response =
-        (AddFreelancerAchievementResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PostMapping("/freelancer/education")
   public ResponseEntity<AddFreelancerEducationResponse> postFreelancerEducation(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody AddFreelancerEducationRequest request) {
-    request.setUserId(userId);
-    AddFreelancerEducationResponse response =
-        (AddFreelancerEducationResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PostMapping("/freelancer/experience")
   public ResponseEntity<AddFreelancerExperienceResponse> postFreelancerExperience(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody AddFreelancerExperienceRequest request) {
-    request.setUserId(userId);
-    AddFreelancerExperienceResponse response =
-        (AddFreelancerExperienceResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PostMapping("/freelancer/languages")
   public ResponseEntity<AddFreelancerLanguageResponse> postFreelancerLanguages(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody AddFreelancerLanguageRequest request) {
-    request.setUserId(userId);
-    AddFreelancerLanguageResponse response =
-        (AddFreelancerLanguageResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PostMapping("/freelancer/skills")
   public ResponseEntity<AddFreelancerSkillResponse> postFreelancerSkills(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody AddFreelancerSkillRequest request) {
-    request.setUserId(userId);
-    AddFreelancerSkillResponse response =
-        (AddFreelancerSkillResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/client/photo")
   public ResponseEntity<ClientGetPhotoResponse> getClientPhoto(
       @RequestAttribute(name = "userId") String userId) {
     ClientGetPhotoRequest request = ClientGetPhotoRequest.builder().build();
-    request.setUserId(userId);
-    ClientGetPhotoResponse response =
-        (ClientGetPhotoResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/client/profile")
   public ResponseEntity<ClientGetProfileResponse> getClientProfile(
       @RequestAttribute(name = "userId") String userId) {
     ClientGetProfileRequest request = ClientGetProfileRequest.builder().build();
-    request.setUserId(userId);
-    ClientGetProfileResponse response =
-        (ClientGetProfileResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PostMapping("/client/photo")
   public ResponseEntity<ClientSetPhotoResponse> postClientPhoto(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody ClientSetPhotoRequest request) {
-    request.setUserId(userId);
-    ClientSetPhotoResponse response =
-        (ClientSetPhotoResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PostMapping("/client/profile")
   public ResponseEntity<ClientSetProfileResponse> postClientProfile(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody ClientSetProfileRequest request) {
-    request.setUserId(userId);
-    ClientSetProfileResponse response =
-        (ClientSetProfileResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/freelancer/photo")
   public ResponseEntity<FreelancerGetPhotoResponse> getFreelancerPhoto(
       @RequestAttribute(name = "userId") String userId) {
     FreelancerGetPhotoRequest request = FreelancerGetPhotoRequest.builder().build();
-    request.setUserId(userId);
-    FreelancerGetPhotoResponse response =
-        (FreelancerGetPhotoResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/freelancer/profile_briefs")
   public ResponseEntity<FreelancerGetProfileBriefResponse> getFreelancerProfileBriefs(
       @RequestAttribute(name = "userId") String userId) {
     FreelancerGetProfileBriefRequest request = FreelancerGetProfileBriefRequest.builder().build();
-    request.setUserId(userId);
-    FreelancerGetProfileBriefResponse response =
-        (FreelancerGetProfileBriefResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/freelancer/profile")
   public ResponseEntity<FreelancerGetProfileResponse> getFreelancerProfile(
       @RequestAttribute(name = "userId") String userId) {
     FreelancerGetProfileRequest request = FreelancerGetProfileRequest.builder().build();
-    request.setUserId(userId);
-    FreelancerGetProfileResponse response =
-        (FreelancerGetProfileResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/freelancer/resume")
   public ResponseEntity<FreelancerGetResumeResponse> getFreelancerResume(
       @RequestAttribute(name = "userId") String userId) {
     FreelancerGetResumeRequest request = FreelancerGetResumeRequest.builder().build();
-    request.setUserId(userId);
-    FreelancerGetResumeResponse response =
-        (FreelancerGetResumeResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PostMapping("/freelancer/photo")
   public ResponseEntity<FreelancerSetPhotoResponse> postFreelancerPhoto(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody FreelancerSetPhotoRequest request) {
-    request.setUserId(userId);
-    FreelancerSetPhotoResponse response =
-        (FreelancerSetPhotoResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PostMapping("/freelancer/profile")
   public ResponseEntity<FreelancerSetProfileResponse> postFreelancerProfile(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody FreelancerSetProfileRequest request) {
-    request.setUserId(userId);
-    FreelancerSetProfileResponse response =
-        (FreelancerSetProfileResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PostMapping("/freelancer/resume")
   public ResponseEntity<FreelancerSetResumeResponse> postFreelancerResume(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody FreelancerSetResumeRequest request) {
-    request.setUserId(userId);
-    FreelancerSetResumeResponse response =
-        (FreelancerSetResumeResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/freelancer/achievements")
   public ResponseEntity<GetFreelancerAchievementsResponse> getFreelancerAchievements(
       @RequestAttribute(name = "userId") String userId) {
     GetFreelancerAchievementsRequest request = GetFreelancerAchievementsRequest.builder().build();
-    request.setUserId(userId);
-    GetFreelancerAchievementsResponse response =
-        (GetFreelancerAchievementsResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/freelancer/education")
   public ResponseEntity<GetFreelancerEducationsResponse> getFreelancerEducations(
       @RequestAttribute(name = "userId") String userId) {
     GetFreelancerEducationsRequest request = GetFreelancerEducationsRequest.builder().build();
-    request.setUserId(userId);
-    GetFreelancerEducationsResponse response =
-        (GetFreelancerEducationsResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/freelancer/experience")
   public ResponseEntity<GetFreelancerExperiencesResponse> getFreelancerExperiences(
       @RequestAttribute(name = "userId") String userId) {
     GetFreelancerExperiencesRequest request = GetFreelancerExperiencesRequest.builder().build();
-    request.setUserId(userId);
-    GetFreelancerExperiencesResponse response =
-        (GetFreelancerExperiencesResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/freelancer/languages")
   public ResponseEntity<GetFreelancerLanguagesResponse> getFreelancerLanguages(
       @RequestAttribute(name = "userId") String userId) {
     GetFreelancerLanguagesRequest request = GetFreelancerLanguagesRequest.builder().build();
-    request.setUserId(userId);
-    GetFreelancerLanguagesResponse response =
-        (GetFreelancerLanguagesResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("/freelancer/skills")
   public ResponseEntity<GetFreelancerSkillsResponse> getFreelancerSkills(
       @RequestAttribute(name = "userId") String userId) {
     GetFreelancerSkillsRequest request = GetFreelancerSkillsRequest.builder().build();
-    request.setUserId(userId);
-    GetFreelancerSkillsResponse response =
-        (GetFreelancerSkillsResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @DeleteMapping("/freelancer/achievements")
@@ -294,11 +219,7 @@ public class UserController {
       @RequestAttribute(name = "userId") String userId, @RequestParam String achievementId) {
     RemoveFreelancerAchievementRequest request =
         RemoveFreelancerAchievementRequest.builder().withAchievementId(achievementId).build();
-    request.setUserId(userId);
-    RemoveFreelancerAchievementResponse response =
-        (RemoveFreelancerAchievementResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @DeleteMapping("/freelancer/education")
@@ -306,11 +227,7 @@ public class UserController {
       @RequestAttribute(name = "userId") String userId, @RequestParam String educationId) {
     RemoveFreelancerEducationRequest request =
         RemoveFreelancerEducationRequest.builder().withEducation_id(educationId).build();
-    request.setUserId(userId);
-    RemoveFreelancerEducationResponse response =
-        (RemoveFreelancerEducationResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @DeleteMapping("/freelancer/experience")
@@ -318,11 +235,7 @@ public class UserController {
       @RequestAttribute(name = "userId") String userId, @RequestParam String experienceId) {
     RemoveFreelancerExperienceRequest request =
         RemoveFreelancerExperienceRequest.builder().withExperience_id(experienceId).build();
-    request.setUserId(userId);
-    RemoveFreelancerExperienceResponse response =
-        (RemoveFreelancerExperienceResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @DeleteMapping("/freelancer/languages")
@@ -330,11 +243,7 @@ public class UserController {
       @RequestAttribute(name = "userId") String userId, @RequestParam String languageToRemove) {
     RemoveFreelancerLanguageRequest request =
         RemoveFreelancerLanguageRequest.builder().withLanguageToRemove(languageToRemove).build();
-    request.setUserId(userId);
-    RemoveFreelancerLanguageResponse response =
-        (RemoveFreelancerLanguageResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @DeleteMapping("/freelancer/skills")
@@ -342,11 +251,7 @@ public class UserController {
       @RequestAttribute(name = "userId") String userId, @RequestParam String skillToRemove) {
     RemoveFreelancerSkillRequest request =
         RemoveFreelancerSkillRequest.builder().withSkillToRemove(skillToRemove).build();
-    request.setUserId(userId);
-    RemoveFreelancerSkillResponse response =
-        (RemoveFreelancerSkillResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @GetMapping("path")
@@ -354,33 +259,21 @@ public class UserController {
   public ResponseEntity<UpdateFreelancerAchievementResponse> putFreelancerAchievements(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody UpdateFreelancerAchievementRequest request) {
-    request.setUserId(userId);
-    UpdateFreelancerAchievementResponse response =
-        (UpdateFreelancerAchievementResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PutMapping("/freelancer/education")
   public ResponseEntity<UpdateFreelancerEducationResponse> putFreelancerEducation(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody UpdateFreelancerEducationRequest request) {
-    request.setUserId(userId);
-    UpdateFreelancerEducationResponse response =
-        (UpdateFreelancerEducationResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 
   @PutMapping("/freelancer/experience")
   public ResponseEntity<UpdateFreelancerExperienceResponse> putFreelancerExperience(
       @RequestAttribute(name = "userId") String userId,
       @RequestBody UpdateFreelancerExperienceRequest request) {
-    request.setUserId(userId);
-    UpdateFreelancerExperienceResponse response =
-        (UpdateFreelancerExperienceResponse)
-            rabbitTemplate.convertSendAndReceive(ServiceQueueNames.USERS, request);
-    return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
+    return userDataCRUD(userId, request);
   }
 }
 
