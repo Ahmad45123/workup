@@ -2,6 +2,7 @@ package com.workup.shared.commands.contracts.requests;
 
 import com.workup.shared.commands.CommandRequest;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
@@ -14,7 +15,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class ProgressMilestoneRequest extends CommandRequest {
-
-  private final String freelancerId;
-  private final String milestoneId;
+  @Setter private String milestoneId;
 }
