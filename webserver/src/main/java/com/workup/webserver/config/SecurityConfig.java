@@ -47,7 +47,8 @@ public class SecurityConfig {
                     .hasAuthority(ROLE_FREELANCER)
                     .requestMatchers(HttpMethod.GET, "/api/v1/jobs/me/proposals")
                     .hasAuthority(ROLE_FREELANCER)
-                    .requestMatchers(HttpMethod.POST, "/api/v1/jobs/proposals/{id}/accept")
+                    .requestMatchers(
+                        HttpMethod.POST, "/api/v1/jobs/{jobId}/proposals/{proposalId}/accept")
                     .hasAuthority(ROLE_CLIENT)
                     .requestMatchers("/api/v1/payments/clients/**")
                     .hasAuthority(ROLE_CLIENT)

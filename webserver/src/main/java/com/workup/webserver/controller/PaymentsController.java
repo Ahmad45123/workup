@@ -14,7 +14,11 @@ import com.workup.shared.commands.payments.paymenttransaction.responses.GetClien
 import com.workup.shared.commands.payments.paymenttransaction.responses.GetFreelancerPaymentTransactionsResponse;
 import com.workup.shared.commands.payments.wallet.requests.GetWalletRequest;
 import com.workup.shared.commands.payments.wallet.responses.GetWalletResponse;
+import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionRequest;
+import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletTransactionsRequest;
 import com.workup.shared.commands.payments.wallettransaction.requests.WithdrawFromWalletRequest;
+import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionResponse;
+import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionsResponse;
 import com.workup.shared.commands.payments.wallettransaction.responses.WithdrawFromWalletResponse;
 import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -76,6 +80,25 @@ public class PaymentsController {
     GetFreelancerPaymentTransactionsRequest request =
         GetFreelancerPaymentTransactionsRequest.builder()
             .withFreelancerId(userId)
+            .withUserId(userId)
+            .build();
+    return processRequest(request);
+  }
+
+  @GetMapping("/freelancers/me/wallet/transactions")
+  public ResponseEntity<GetWalletTransactionsResponse> getFreelancerWalletTransactions(
+      @RequestAttribute(name = "userId") String userId) {
+    GetWalletTransactionsRequest request =
+        GetWalletTransactionsRequest.builder().withFreelancerId(userId).withUserId(userId).build();
+    return processRequest(request);
+  }
+
+  @GetMapping("/freelancers/me/wallet/transactions/{id}")
+  public ResponseEntity<GetWalletTransactionResponse> getFreelancerWalletTransaction(
+      @PathVariable String id, @RequestAttribute(name = "userId") String userId) {
+    GetWalletTransactionRequest request =
+        GetWalletTransactionRequest.builder()
+            .withWalletTransactionId(id)
             .withUserId(userId)
             .build();
     return processRequest(request);

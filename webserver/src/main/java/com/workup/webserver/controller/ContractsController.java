@@ -66,7 +66,7 @@ public class ContractsController {
     return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/{id}/terminations")
   public ResponseEntity<GetPendingTerminationsResponse> getContractTermination(
       @PathVariable String id, @RequestAttribute(name = "userId") String userId) {
     GetPendingTerminationsRequest request =

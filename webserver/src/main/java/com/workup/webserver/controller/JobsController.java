@@ -87,8 +87,11 @@ public class JobsController {
       @PathVariable String id,
       @RequestBody CreateProposalRequest request,
       @RequestAttribute(name = "userId") String userId) {
+    System.out.println("Setting CreateProposalResponse");
+
     request.setUserId(userId);
     request.setJobId(id);
+
     CreateProposalResponse response =
         (CreateProposalResponse)
             rabbitTemplate.convertSendAndReceive(ServiceQueueNames.JOBS, request);
@@ -117,7 +120,7 @@ public class JobsController {
     return ResponseEntity.status(response.getStatusCode().getValue()).body(response);
   }
 
-  @GetMapping("/{jobId}/proposals/{proposalId}/accept")
+  @PostMapping("/{jobId}/proposals/{proposalId}/accept")
   public ResponseEntity<AcceptProposalResponse> acceptProposal(
       @PathVariable(name = "jobId") String jobId,
       @PathVariable(name = "proposalId") String proposalId,
