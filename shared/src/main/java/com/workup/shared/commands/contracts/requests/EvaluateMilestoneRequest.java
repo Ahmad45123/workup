@@ -3,6 +3,7 @@ package com.workup.shared.commands.contracts.requests;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.enums.contracts.MilestoneState;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
@@ -21,8 +22,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class EvaluateMilestoneRequest extends CommandRequest {
-
-  private final String clientId;
-  private final String milestoneId;
+  @Setter private String milestoneId;
   private final MilestoneState evaluatedState;
 }

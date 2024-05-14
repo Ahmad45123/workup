@@ -57,3 +57,9 @@ jobs:
       run: |
         docker build ./services/contracts --tag ahmad45123/workup:service_contracts
         docker push ahmad45123/workup:service_contracts
+
+    - name: Build and push Webserver Image
+      run: |
+        docker build ./webserver --tag ahmad45123/workup:webserver
+        docker push ahmad45123/workup:webserver
+  

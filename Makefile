@@ -6,6 +6,7 @@ build:
 	docker build ./services/payments --tag workup:service_payments
 	docker build ./services/users --tag workup:service_users
 	docker build ./services/contracts --tag workup:service_contracts
+	docker build ./webserver --tag workup:webserver
 
 up: 
 	docker stack deploy -c compose.yaml -c compose.override.yaml workup

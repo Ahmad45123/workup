@@ -4,6 +4,17 @@ version: '3.7'
 
 services:
   # ----- GENERAL SERVICES -------
+  service_webserver:
+    image: ahmad45123/workup:webserver
+    depends_on:
+      - service_mq
+    ports:
+      - "8080:8080"
+    networks:
+      - frontend
+    env_file:
+      - ./webserver/.env
+  
   service_mq:
     image: rabbitmq:3.13-management
     healthcheck:
@@ -13,6 +24,7 @@ services:
       retries: 3
     networks:
       - default
+      - frontend
     
   service_redis:
     image: redis:7.2.4
@@ -125,3 +137,4 @@ networks:
   payments:
   contracts:
   users:
+  frontend:

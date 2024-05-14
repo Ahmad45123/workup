@@ -12,3 +12,6 @@ services:
 
   service_users:
     image: workup:service_users
+  
+  service_webserver:
+    image: workup:webserver

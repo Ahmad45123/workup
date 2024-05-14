@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.workup.shared.commands.users.requests.*;
 import com.workup.shared.commands.users.responses.*;
+import com.workup.shared.enums.AdminUserCredentials;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.users.UserType;
@@ -72,8 +73,6 @@ class UsersApplicationTests {
   @DynamicPropertySource
   static void setDatasourceProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.data.mongodb.uri", mongoDBContainer::getConnectionString);
-    registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
-    registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
 
     registry.add("spring.rabbitmq.host", rabbitMQContainer::getHost);
     registry.add("spring.rabbitmq.port", rabbitMQContainer::getFirstMappedPort);
@@ -128,6 +127,19 @@ class UsersApplicationTests {
     SignUpAndInResponse response =
         (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
     UsersTestUtils.verifySignUpAndInResponse(response, client.getEmail(), UserType.CLIENT);
+  }
+
+  @Test
+  public void testAdminLogin() {
+    LoginRequest request =
+        LoginRequest.builder()
+            .withEmail(AdminUserCredentials.ADMIN_EMAIL)
+            .withPassword(AdminUserCredentials.ADMIN_PASSWORD)
+            .build();
+    SignUpAndInResponse response =
+        (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    UsersTestUtils.verifySignUpAndInResponse(
+        response, AdminUserCredentials.ADMIN_EMAIL, UserType.ADMIN);
   }
 
   @Test
