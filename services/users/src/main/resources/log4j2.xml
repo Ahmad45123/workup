@@ -1,0 +1,52 @@
+<Configuration>
+    <Properties>
+        <Property name="baseDir">logs/users</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+        </Console>
+
+        <RollingFile name="AppLogsFileAppender" fileName="${baseDir}/app.log"
+                     filePattern="${baseDir}/app/%d{yyyy}/%d{MM}/%d{dd}/%d{HH:mm:ss}.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <!-- Time-based policy: Rolls daily at midnight -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <!-- Size-based policy: Rolls after the log file reaches 10 MB -->
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30">
+                <Delete basePath="${baseDir}/app" maxDepth="4">
+                    <IfFileName glob="/app-.log.gz"/>
+                    <IfLastModified age="30d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+            <Filters>
+                <!-- Deny ERROR to avoid duplication in AppLogs -->
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+        </RollingFile>
+
+        <RollingFile name="ErrorsLogsFileAppender" fileName="${baseDir}/errors.log"
+                     filePattern="${baseDir}/errors/%d{yyyy}/%d{MM}/%d{dd}/%d{HH:mm:ss}.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <!-- Time-based policy: Rolls daily at midnight -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <!-- Size-based policy: Rolls after the log file reaches 10 MB -->
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+        </RollingFile>
+
+
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="Console" level="DEBUG"/>
+            <AppenderRef ref="AppLogsFileAppender"/>
+            <AppenderRef ref="ErrorsLogsFileAppender" level="ERROR"/>
+        </Root>
+    </Loggers>
+</Configuration>
