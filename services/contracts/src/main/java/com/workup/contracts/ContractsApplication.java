@@ -1,9 +1,5 @@
 package com.workup.contracts;
 
-import static com.workup.contracts.tests.InitiateContractTests.initiateContractTest1;
-
-import com.workup.contracts.tests.HandleContractTerminationTests;
-import com.workup.contracts.tests.RequestContractTerminationTests;
 import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
@@ -30,20 +26,20 @@ public class ContractsApplication {
     return args -> {
       System.out.println("ApplicationRunner is executing");
 
-      // Use below example function to test sending to the queue.
-      initiateContractTest1(template);
+      // // Use below example function to test sending to the queue.
+      // initiateContractTest1(template);
 
-      RequestContractTerminationTests requestTerminationCommandTests =
-          new RequestContractTerminationTests();
-      requestTerminationCommandTests.contractNotFoundTest(template);
-      requestTerminationCommandTests.unAuthorizedRequestTest(template);
-      requestTerminationCommandTests.requestedBeforeTest(template);
-      requestTerminationCommandTests.sucessTest(template);
+      // RequestContractTerminationTests requestTerminationCommandTests =
+      //     new RequestContractTerminationTests();
+      // requestTerminationCommandTests.contractNotFoundTest(template);
+      // requestTerminationCommandTests.unAuthorizedRequestTest(template);
+      // requestTerminationCommandTests.requestedBeforeTest(template);
+      // requestTerminationCommandTests.sucessTest(template);
 
-      HandleContractTerminationTests handleContractTerminationTests =
-          new HandleContractTerminationTests();
-      handleContractTerminationTests.requestNotFoundTest(template);
-      handleContractTerminationTests.successTest(template);
+      // HandleContractTerminationTests handleContractTerminationTests =
+      //     new HandleContractTerminationTests();
+      // handleContractTerminationTests.requestNotFoundTest(template);
+      // handleContractTerminationTests.successTest(template);
     };
   }
 

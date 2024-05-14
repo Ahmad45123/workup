@@ -26,6 +26,7 @@ public class ViewContractMilestonesCommand
                             .withContractId(milestone.getContractId())
                             .withDescription(milestone.getDescription())
                             .withDueDate(milestone.getDueDate())
+                            .withStatus(milestone.getStatus())
                             .withAmount(milestone.getAmount())
                             .build())
                 .toList();

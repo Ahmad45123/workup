@@ -12,43 +12,52 @@ public class GetContractCommand extends ContractCommand<GetContractRequest, GetC
 
   @Override
   public GetContractResponse Run(GetContractRequest request) {
-    String cachingKey = request.getContractId();
-    GetContractResponse cachedResponse =
-        (GetContractResponse) redisService.getValue(cachingKey, GetContractResponse.class);
-    if (cachedResponse != null) {
-      ContractsLogger.print(
-          "[x] Contract request response fetched from cache: " + cachedResponse.toString());
+    try {
+      String cachingKey = request.getContractId();
+      GetContractResponse cachedResponse =
+          (GetContractResponse) redisService.getValue(cachingKey, GetContractResponse.class);
+      if (cachedResponse != null) {
+        ContractsLogger.print(
+            "[x] Contract request response fetched from cache: " + cachedResponse.toString());
 
-      return cachedResponse;
-    }
+        return cachedResponse;
+      }
 
-    Optional<Contract> contractOptional =
-        contractRepository.findById(UUID.fromString(request.getContractId()));
+      Optional<Contract> contractOptional =
+          contractRepository.findById(UUID.fromString(request.getContractId()));
 
-    if (contractOptional.isEmpty()) {
+      if (contractOptional.isEmpty()) {
+        return GetContractResponse.builder()
+            .withStatusCode(HttpStatusCode.NOT_FOUND)
+            .withErrorMessage("Requested contract does not exist")
+            .build();
+      }
+
+      Contract contract = contractOptional.get();
+
+      GetContractResponse response =
+          GetContractResponse.builder()
+              .withContractId(contract.getContractId().toString())
+              .withProposalId(contract.getProposalId())
+              .withJobId(contract.getJobId())
+              .withJobTitle(contract.getJobTitle())
+              .withClientId(contract.getClientId())
+              .withFreelancerId(contract.getFreelancerId())
+              .withMilestonesIds(contract.getMilestonesIds())
+              .withStatus(contract.getStatus())
+              .withStatusCode(HttpStatusCode.OK)
+              .withErrorMessage("")
+              .build();
+
+      redisService.setValue(cachingKey, response);
+      return response;
+    } catch (Exception ex) {
+      ContractsLogger.print("[x] Error occurred while fetching contract: " + ex.getMessage());
+      ex.printStackTrace();
       return GetContractResponse.builder()
-          .withStatusCode(HttpStatusCode.NOT_FOUND)
-          .withErrorMessage("Requested contract does not exist")
+          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .withErrorMessage("Error occurred while fetching contract")
           .build();
     }
-
-    Contract contract = contractOptional.get();
-
-    GetContractResponse response =
-        GetContractResponse.builder()
-            .withContractId(contract.getContractId().toString())
-            .withProposalId(contract.getProposalId())
-            .withJobId(contract.getJobId())
-            .withJobTitle(contract.getJobTitle())
-            .withClientId(contract.getClientId())
-            .withFreelancerId(contract.getFreelancerId())
-            .withMilestonesIds(contract.getMilestonesIds())
-            .withStatus(contract.getStatus())
-            .withStatusCode(HttpStatusCode.OK)
-            .withErrorMessage("")
-            .build();
-
-    redisService.setValue(cachingKey, response);
-    return response;
   }
 }
