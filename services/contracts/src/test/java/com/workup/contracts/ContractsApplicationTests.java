@@ -1,6 +1,7 @@
 package com.workup.contracts;
 
 import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.contracts.repositories.ContractMilestoneRepository;
 import com.workup.contracts.repositories.ContractRepository;
 import com.workup.contracts.repositories.TerminationRequestRepository;
@@ -165,7 +166,7 @@ class ContractsApplicationTests {
     try {
       evaluateMilestoneTests.successTest(template);
     } catch (Exception e) {
-      ContractsLogger.print("Error Occurred in EvaluateMilestoneTest3");
+      ContractsLogger.print("Error Occurred in EvaluateMilestoneTest3", LoggingLevel.TRACE);
     }
   }
 }
