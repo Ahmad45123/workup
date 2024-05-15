@@ -11,21 +11,22 @@
         <outputRelativeToContentRoot value="true" />
         <module name="shared" />
         <module name="controller" />
-        <module name="contracts" />
-        <module name="users" />
         <module name="jobs" />
         <module name="payments" />
+        <module name="contracts" />
+        <module name="webserver" />
+        <module name="users" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="contracts" options="-parameters" />
-      <module name="controller" options="-parameters" />
+      <module name="controller" options="" />
       <module name="jobs" options="-parameters" />
       <module name="payments" options="-parameters" />
       <module name="users" options="-parameters" />
-      <module name="webserver" options="-parameters" />
+      <module name="webserver" options="" />
     </option>
   </component>
 </project>

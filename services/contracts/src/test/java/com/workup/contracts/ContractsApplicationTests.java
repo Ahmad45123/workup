@@ -179,6 +179,7 @@ class ContractsApplicationTests {
   }
 
   @Test
+
   void GetContractTest1() {
     getContractTests.contractNotFoundTest(template);
   }
@@ -191,4 +192,11 @@ class ContractsApplicationTests {
       ContractsLogger.print("Error Happened in GetContractTest2", LoggingLevel.ERROR);
     }
   }
+
+  void ContractsLoggerTest1(){
+    ContractsLogger.print("Contracts Logger Test 1 Message",LoggingLevel.INFO);
+  }
+
+
 }
+
