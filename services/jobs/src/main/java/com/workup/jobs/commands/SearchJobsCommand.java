@@ -6,27 +6,35 @@ import com.workup.shared.commands.jobs.requests.SearchJobsRequest;
 import com.workup.shared.commands.jobs.responses.SearchJobsResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import java.nio.ByteBuffer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.cassandra.core.query.CassandraPageRequest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
 public class SearchJobsCommand extends JobCommand<SearchJobsRequest, SearchJobsResponse> {
+  private static final Logger logger = LogManager.getLogger(SearchJobsCommand.class);
 
   @Override
   public SearchJobsResponse Run(SearchJobsRequest request) {
+    logger.info("[x] Searching for jobs with query: " + request.getQuery());
     try {
       CassandraPageRequest pageRequest;
 
       if (request.getPagingState() != null) {
+        logger.info("[x] Using paging state: " + request.getPagingState());
         PageRequest pageReq = PageRequest.of(0, request.getPageLimit());
         ByteBuffer byteBuffer =
             com.datastax.oss.protocol.internal.util.Bytes.fromHexString(request.getPagingState());
         pageRequest = CassandraPageRequest.of(pageReq, byteBuffer);
       } else {
+        logger.info("[x] Fetching First page");
         pageRequest = CassandraPageRequest.of(0, request.getPageLimit());
       }
 
       Slice<Job> result = jobRepository.searchForJob("%" + request.getQuery() + "%", pageRequest);
+      // log number of jibs fetched
+      logger.info("[x] Fetched " + result.getContent().size() + " jobs");
       return SearchJobsResponse.builder()
           .withJobs(
               result.stream()
@@ -45,8 +53,7 @@ public class SearchJobsCommand extends JobCommand<SearchJobsRequest, SearchJobsR
           .withStatusCode(HttpStatusCode.OK)
           .build();
     } catch (Exception e) {
-      System.err.println("ERROR: " + e.getMessage());
-      e.printStackTrace();
+      logger.error("[x] An error occurred while searching for jobs", e.getMessage());
       return SearchJobsResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage(e.getMessage())

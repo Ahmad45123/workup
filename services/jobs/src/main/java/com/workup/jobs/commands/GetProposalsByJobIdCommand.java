@@ -11,15 +11,19 @@ import com.workup.shared.commands.jobs.proposals.responses.GetProposalsByJobIdRe
 import com.workup.shared.enums.HttpStatusCode;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetProposalsByJobIdCommand
     extends JobCommand<GetProposalsByJobIdRequest, GetProposalsByJobIdResponse> {
+  private static final Logger logger = LogManager.getLogger(GetProposalsByJobIdCommand.class);
 
   @Override
   public GetProposalsByJobIdResponse Run(GetProposalsByJobIdRequest request) {
+    logger.info("[x] Fetching proposals for job " + request.getJobId());
     try {
       List<Proposal> response = proposalRepository.findByJobId(request.getJobId());
-
+      logger.info("[x] Found " + response.size() + " proposals for job " + request.getJobId());
       List<ProposalModel> proposals = new ArrayList<>();
       for (Proposal proposal : response) {
         ArrayList<ProposalAttachment> attachments = new ArrayList<>();
@@ -57,11 +61,13 @@ public class GetProposalsByJobIdCommand
                 .withMilestones(milestones)
                 .build());
       }
+      logger.info("[x] Returning " + proposals.size() + " proposals for job " + request.getJobId());
       return GetProposalsByJobIdResponse.builder()
           .withProposals(proposals)
           .withStatusCode(HttpStatusCode.OK)
           .build();
     } catch (Exception e) {
+      logger.error("[x] An error occurred while fetching proposals", e.getMessage());
       return GetProposalsByJobIdResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage("An error occurred while fetching proposals")
