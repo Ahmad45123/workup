@@ -77,25 +77,28 @@ public class RabbitMQListener {
   }
 
   @RabbitHandler
-  public GetContractResponse receive(GetContractRequest in) throws Exception {
-    System.out.println("** ENTERED GET CONTRACT RABBITMQ");
-    return ((GetContractCommand) commandMap.getCommand("GetContract")).Run(in);
+  @Async
+  public CompletableFuture<GetContractResponse> receive(GetContractRequest in) throws Exception {
+    return CompletableFuture.completedFuture(((GetContractCommand) commandMap.getCommand("GetContract")).Run(in));
   }
 
   @RabbitHandler
-  public EvaluateMilestoneResponse receive(EvaluateMilestoneRequest in) throws Exception {
-    return ((EvaluateMilestoneCommand) commandMap.getCommand("EvaluateMilestone")).Run(in);
+  @Async
+  public CompletableFuture<EvaluateMilestoneResponse> receive(EvaluateMilestoneRequest in) throws Exception {
+    return CompletableFuture.completedFuture(((EvaluateMilestoneCommand) commandMap.getCommand("EvaluateMilestone")).Run(in));
   }
 
   @RabbitHandler
-  public ProgressMilestoneResponse receive(ProgressMilestoneRequest in) throws Exception {
-    return ((ProgressMilestoneCommand) commandMap.getCommand("ProgressMilestone")).Run(in);
+  @Async
+  public CompletableFuture<ProgressMilestoneResponse> receive(ProgressMilestoneRequest in) throws Exception {
+    return CompletableFuture.completedFuture(((ProgressMilestoneCommand) commandMap.getCommand("ProgressMilestone")).Run(in));
   }
 
   @RabbitHandler
-  public GetPendingTerminationsResponse receive(GetPendingTerminationsRequest in) throws Exception {
-    return ((GetPendingTerminationsCommand) commandMap.getCommand("GetPendingTerminations"))
-        .Run(in);
+  @Async
+  public CompletableFuture<GetPendingTerminationsResponse> receive(GetPendingTerminationsRequest in) throws Exception {
+    return CompletableFuture.completedFuture(((GetPendingTerminationsCommand) commandMap.getCommand("GetPendingTerminations"))
+        .Run(in));
   }
   // NEW_COMMAND_BOILERPLATE
 
