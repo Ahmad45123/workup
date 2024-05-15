@@ -29,9 +29,11 @@ import com.workup.shared.commands.payments.wallettransaction.responses.GetWallet
 import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionsResponse;
 import com.workup.shared.commands.payments.wallettransaction.responses.WithdrawFromWalletResponse;
 import com.workup.shared.enums.ServiceQueueNames;
+import java.util.concurrent.CompletableFuture;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,80 +43,112 @@ public class RabbitMQListener {
   @Autowired public PaymentCommandMap commandMap;
 
   @RabbitHandler
-  public CreatePaymentRequestResponse receive(CreatePaymentRequestRequest in) throws Exception {
-    return ((CreatePaymentRequestCommand) commandMap.getCommand("CreatePaymentRequest")).Run(in);
-  }
-
-  @RabbitHandler
-  public CreateWalletTransactionResponse receive(CreateWalletTransactionRequest in)
+  @Async
+  public CompletableFuture<CreatePaymentRequestResponse> receive(CreatePaymentRequestRequest in)
       throws Exception {
-    return ((CreateWalletTransactionCommand) commandMap.getCommand("CreateWalletTransaction"))
-        .Run(in);
+    return CompletableFuture.completedFuture(
+        ((CreatePaymentRequestCommand) commandMap.getCommand("CreatePaymentRequest")).Run(in));
   }
 
   @RabbitHandler
-  public GetClientPaymentRequestsResponse receive(GetClientPaymentRequestsRequest in)
+  @Async
+  public CompletableFuture<CreateWalletTransactionResponse> receive(
+      CreateWalletTransactionRequest in) throws Exception {
+    return CompletableFuture.completedFuture(
+        ((CreateWalletTransactionCommand) commandMap.getCommand("CreateWalletTransaction"))
+            .Run(in));
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<GetClientPaymentRequestsResponse> receive(
+      GetClientPaymentRequestsRequest in) throws Exception {
+    return CompletableFuture.completedFuture(
+        ((GetClientPaymentRequestsCommand) commandMap.getCommand("GetClientPaymentRequests"))
+            .Run(in));
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<GetWalletTransactionResponse> receive(GetWalletTransactionRequest in)
       throws Exception {
-    return ((GetClientPaymentRequestsCommand) commandMap.getCommand("GetClientPaymentRequests"))
-        .Run(in);
+    return CompletableFuture.completedFuture(
+        ((GetWalletTransactionCommand) commandMap.getCommand("GetWalletTransaction")).Run(in));
   }
 
   @RabbitHandler
-  public GetWalletTransactionResponse receive(GetWalletTransactionRequest in) throws Exception {
-    return ((GetWalletTransactionCommand) commandMap.getCommand("GetWalletTransaction")).Run(in);
-  }
-
-  @RabbitHandler
-  public GetWalletTransactionsResponse receive(GetWalletTransactionsRequest in) throws Exception {
-    return ((GetWalletTransactionsCommand) commandMap.getCommand("GetWalletTransactions")).Run(in);
-  }
-
-  @RabbitHandler
-  public WithdrawFromWalletResponse receive(WithdrawFromWalletRequest in) throws Exception {
-    return ((WithdrawFromWalletCommand) commandMap.getCommand("WithdrawFromWallet")).Run(in);
-  }
-
-  @RabbitHandler
-  public GetFreelancerPaymentRequestsResponse receive(GetFreelancerPaymentRequestsRequest in)
+  @Async
+  public CompletableFuture<GetWalletTransactionsResponse> receive(GetWalletTransactionsRequest in)
       throws Exception {
-    return ((GetFreelancerPaymentRequestsCommand)
-            commandMap.getCommand("GetFreelancerPaymentRequests"))
-        .Run(in);
+    return CompletableFuture.completedFuture(
+        ((GetWalletTransactionsCommand) commandMap.getCommand("GetWalletTransactions")).Run(in));
   }
 
   @RabbitHandler
-  public GetPaymentRequestResponse receive(GetPaymentRequestRequest in) throws Exception {
-    return ((GetPaymentRequestCommand) commandMap.getCommand("GetPaymentRequest")).Run(in);
-  }
-
-  @RabbitHandler
-  public PayPaymentRequestResponse receive(PayPaymentRequestRequest in) throws Exception {
-    return ((PayPaymentRequestCommand) commandMap.getCommand("PayPaymentRequest")).Run(in);
-  }
-
-  @RabbitHandler
-  public CreateWalletResponse receive(CreateWalletRequest in) throws Exception {
-    return ((CreateWalletCommand) commandMap.getCommand("CreateWallet")).Run(in);
-  }
-
-  @RabbitHandler
-  public GetWalletResponse receive(GetWalletRequest in) throws Exception {
-    return ((GetWalletCommand) commandMap.getCommand("GetWallet")).Run(in);
-  }
-
-  @RabbitHandler
-  public GetClientPaymentTransactionsResponse receive(GetClientPaymentTransactionsRequest in)
+  @Async
+  public CompletableFuture<WithdrawFromWalletResponse> receive(WithdrawFromWalletRequest in)
       throws Exception {
-    return ((GetClientPaymentTransactionsCommand)
-            commandMap.getCommand("GetClientPaymentTransactions"))
-        .Run(in);
+    return CompletableFuture.completedFuture(
+        ((WithdrawFromWalletCommand) commandMap.getCommand("WithdrawFromWallet")).Run(in));
   }
 
   @RabbitHandler
-  public GetFreelancerPaymentTransactionsResponse receive(
+  @Async
+  public CompletableFuture<GetFreelancerPaymentRequestsResponse> receive(
+      GetFreelancerPaymentRequestsRequest in) throws Exception {
+    return CompletableFuture.completedFuture(
+        ((GetFreelancerPaymentRequestsCommand)
+                commandMap.getCommand("GetFreelancerPaymentRequests"))
+            .Run(in));
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<GetPaymentRequestResponse> receive(GetPaymentRequestRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((GetPaymentRequestCommand) commandMap.getCommand("GetPaymentRequest")).Run(in));
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<PayPaymentRequestResponse> receive(PayPaymentRequestRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((PayPaymentRequestCommand) commandMap.getCommand("PayPaymentRequest")).Run(in));
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<CreateWalletResponse> receive(CreateWalletRequest in) throws Exception {
+    return CompletableFuture.completedFuture(
+        ((CreateWalletCommand) commandMap.getCommand("CreateWallet")).Run(in));
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<GetWalletResponse> receive(GetWalletRequest in) throws Exception {
+    return CompletableFuture.completedFuture(
+        ((GetWalletCommand) commandMap.getCommand("GetWallet")).Run(in));
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<GetClientPaymentTransactionsResponse> receive(
+      GetClientPaymentTransactionsRequest in) throws Exception {
+    return CompletableFuture.completedFuture(
+        ((GetClientPaymentTransactionsCommand)
+                commandMap.getCommand("GetClientPaymentTransactions"))
+            .Run(in));
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<GetFreelancerPaymentTransactionsResponse> receive(
       GetFreelancerPaymentTransactionsRequest in) throws Exception {
-    return ((GetFreelancerPaymentTransactionsCommand)
-            commandMap.getCommand("GetFreelancerPaymentTransactions"))
-        .Run(in);
+    return CompletableFuture.completedFuture(
+        ((GetFreelancerPaymentTransactionsCommand)
+                commandMap.getCommand("GetFreelancerPaymentTransactions"))
+            .Run(in));
   }
 }

@@ -26,9 +26,11 @@ import com.workup.shared.commands.jobs.responses.GetJobByIdResponse;
 import com.workup.shared.commands.jobs.responses.GetMyJobsResponse;
 import com.workup.shared.commands.jobs.responses.SearchJobsResponse;
 import com.workup.shared.enums.ServiceQueueNames;
+import java.util.concurrent.CompletableFuture;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,56 +40,69 @@ public class RabbitMQListener {
   @Autowired public JobCommandMap commandMap;
 
   @RabbitHandler
-  public CreateJobResponse receive(CreateJobRequest in) throws Exception {
-    return ((CreateJobCommand) commandMap.getCommand("CreateJob")).Run(in);
+  @Async
+  public CompletableFuture<CreateJobResponse> receive(CreateJobRequest in) throws Exception {
+    CreateJobResponse response = ((CreateJobCommand) commandMap.getCommand("CreateJob")).Run(in);
+    return CompletableFuture.completedFuture(response);
   }
 
   @RabbitHandler
-  public CreateProposalResponse receive(CreateProposalRequest in) throws Exception {
+  @Async
+  public CompletableFuture<CreateProposalResponse> receive(CreateProposalRequest in)
+      throws Exception {
     CreateProposalResponse response =
         ((CreateProposalCommand) commandMap.getCommand("CreateProposal")).Run(in);
-    return response;
+    return CompletableFuture.completedFuture(response);
   }
 
   @RabbitHandler
-  public GetJobByIdResponse receive(GetJobByIdRequest request) throws Exception {
+  @Async
+  public CompletableFuture<GetJobByIdResponse> receive(GetJobByIdRequest request) throws Exception {
     GetJobByIdResponse response =
         ((GetJobByIdCommand) commandMap.getCommand("GetJobById")).Run(request);
-    return response;
+    return CompletableFuture.completedFuture(response);
   }
 
   @RabbitHandler
-  public SearchJobsResponse receive(SearchJobsRequest request) throws Exception {
+  @Async
+  public CompletableFuture<SearchJobsResponse> receive(SearchJobsRequest request) throws Exception {
     SearchJobsResponse response =
         ((SearchJobsCommand) commandMap.getCommand("SearchJobs")).Run(request);
-    return response;
+    return CompletableFuture.completedFuture(response);
   }
 
   @RabbitHandler
-  public GetMyJobsResponse receive(GetMyJobsRequest request) throws Exception {
+  @Async
+  public CompletableFuture<GetMyJobsResponse> receive(GetMyJobsRequest request) throws Exception {
     GetMyJobsResponse response =
         ((GetMyJobsCommand) commandMap.getCommand("GetMyJobs")).Run(request);
-    return response;
+    return CompletableFuture.completedFuture(response);
   }
 
   @RabbitHandler
-  public AcceptProposalResponse receive(AcceptProposalRequest request) throws Exception {
+  @Async
+  public CompletableFuture<AcceptProposalResponse> receive(AcceptProposalRequest request)
+      throws Exception {
     AcceptProposalResponse response =
         ((AcceptProposalCommand) commandMap.getCommand("AcceptProposal")).Run(request);
-    return response;
+    return CompletableFuture.completedFuture(response);
   }
 
   @RabbitHandler
-  public GetProposalsByJobIdResponse receive(GetProposalsByJobIdRequest request) throws Exception {
+  @Async
+  public CompletableFuture<GetProposalsByJobIdResponse> receive(GetProposalsByJobIdRequest request)
+      throws Exception {
     GetProposalsByJobIdResponse response =
         ((GetProposalsByJobIdCommand) commandMap.getCommand("GetProposalsByJobId")).Run(request);
-    return response;
+    return CompletableFuture.completedFuture(response);
   }
 
   @RabbitHandler
-  public GetMyProposalsResponse receive(GetMyProposalsRequest request) throws Exception {
+  @Async
+  public CompletableFuture<GetMyProposalsResponse> receive(GetMyProposalsRequest request)
+      throws Exception {
     GetMyProposalsResponse response =
         ((GetMyProposalsCommand) commandMap.getCommand("GetMyProposals")).Run(request);
-    return response;
+    return CompletableFuture.completedFuture(response);
   }
 }

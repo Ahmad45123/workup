@@ -1,9 +1,7 @@
-package com.workup.jobs;
+package com.workup.contracts;
 
-import com.workup.jobs.commands.JobCommandMap;
 import com.workup.shared.commands.controller.SetMaxThreadsRequest;
 import java.lang.reflect.Field;
-import javassist.*;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = "#{controllerQueue.name}")
 public class ControllerMQListener {
 
-  @Autowired public JobCommandMap commandMap;
   @Autowired public ThreadPoolTaskExecutor taskExecutor;
 
   @Autowired private ApplicationContext context;
