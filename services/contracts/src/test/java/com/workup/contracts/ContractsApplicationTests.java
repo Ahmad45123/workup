@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.CassandraContainer;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -31,6 +32,9 @@ class ContractsApplicationTests {
   @Container
   static RabbitMQContainer rabbitMQContainer = new RabbitMQContainer("rabbitmq:3.13-management");
 
+  @Container
+  static GenericContainer redis = new GenericContainer<>("redis:7.2.4").withExposedPorts(6379);
+
   static String GetCassandraContactPoint() {
     return cassandraContainer.getHost() + ":" + cassandraContainer.getFirstMappedPort();
   }
@@ -44,6 +48,9 @@ class ContractsApplicationTests {
     registry.add("spring.rabbitmq.port", rabbitMQContainer::getFirstMappedPort);
     registry.add("spring.rabbitmq.username", rabbitMQContainer::getAdminUsername);
     registry.add("spring.rabbitmq.password", rabbitMQContainer::getAdminPassword);
+
+    registry.add("spring.cache.host", redis::getHost);
+    registry.add("spring.cache.port", redis::getFirstMappedPort);
   }
 
   private static final String CLIENT_ONE_ID = "123";
@@ -60,6 +67,7 @@ class ContractsApplicationTests {
   @Autowired RequestContractTerminationTests requestContractTerminationTests;
   @Autowired MarkMilestoneAsPaidTests markMilestoneAsPaidTests;
   @Autowired EvaluateMilestoneTests evaluateMilestoneTests;
+  @Autowired GetContractTests getContractTests;
 
   @BeforeEach
   void clearAll() {
@@ -167,6 +175,20 @@ class ContractsApplicationTests {
       evaluateMilestoneTests.successTest(template);
     } catch (Exception e) {
       ContractsLogger.print("Error Occurred in EvaluateMilestoneTest3", LoggingLevel.TRACE);
+    }
+  }
+
+  @Test
+  void GetContractTest1() {
+    getContractTests.contractNotFoundTest(template);
+  }
+
+  @Test
+  void GetContractTest2() {
+    try {
+      getContractTests.successTest(template);
+    } catch (Exception e) {
+      ContractsLogger.print("Error Happened in GetContractTest2");
     }
   }
 }
