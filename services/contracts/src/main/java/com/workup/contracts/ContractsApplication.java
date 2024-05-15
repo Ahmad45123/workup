@@ -1,5 +1,6 @@
 package com.workup.contracts;
 
+import com.workup.shared.enums.ControllerQueueNames;
 import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.AnonymousQueue;
