@@ -59,7 +59,7 @@ class PaymentsApplicationTests {
 
   @Container
   static final PostgreSQLContainer<?> postgreSQLContainer =
-      new PostgreSQLContainer<>("postgres:latest");
+      new PostgreSQLContainer<>("postgres:12.18");
 
   @Container
   static final RabbitMQContainer rabbitMQContainer =
@@ -273,12 +273,14 @@ class PaymentsApplicationTests {
 
   @Test
   void testGetWalletTransactionsRequest() {
+    Wallet wallet = Wallet.builder().withBalance(1000).withFreelancerId("1").build();
+    walletRepository.save(wallet);
     WalletTransaction walletTransaction1 =
         WalletTransaction.builder()
             .withAmount(1000)
             .withTransactionType(WalletTransactionType.DEBIT)
             .withPaymentTransactionId("1")
-            .withWalletId("1")
+            .withWalletId(wallet.getFreelancerId())
             .build();
     WalletTransaction savedWalletTransaction1 =
         walletTransactionRepository.save(walletTransaction1);
@@ -292,7 +294,6 @@ class PaymentsApplicationTests {
             .build();
     WalletTransaction savedWalletTransaction2 =
         walletTransactionRepository.save(walletTransaction2);
-
     GetWalletTransactionsRequest getWalletTransactionsRequest =
         GetWalletTransactionsRequest.builder()
             .withFreelancerId(savedWalletTransaction1.getWalletId())

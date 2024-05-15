@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
@@ -8,9 +9,9 @@
         <option value="$PROJECT_DIR$/services/jobs/pom.xml" />
         <option value="$PROJECT_DIR$/services/payments/pom.xml" />
         <option value="$PROJECT_DIR$/services/contracts/pom.xml" />
+        <option value="$PROJECT_DIR$/controller/pom.xml" />
       </list>
     </option>
-    <option name="workspaceImportForciblyTurnedOn" value="true" />
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="org.jetbrains.annotations.Nullable" />

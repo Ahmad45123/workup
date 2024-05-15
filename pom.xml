@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.workup</groupId>
@@ -16,10 +16,12 @@
 
     <modules>
         <module>shared</module>
+        <module>controller</module>
         <module>services/jobs</module>
         <module>services/payments</module>
         <module>services/users</module>
         <module>services/contracts</module>
+        <module>webserver</module>
     </modules>
 
     <build>
@@ -54,6 +56,23 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <groupId>com.rudikershaw.gitbuildhook</groupId>
+                <artifactId>git-build-hook-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                  <gitConfig>
+                    <pull.rebase>true</pull.rebase> 
+                  </gitConfig>
+                </configuration>
+                <executions>
+                  <execution>
+                    <goals>       
+                      <goal>configure</goal>
+                    </goals>
+                  </execution>
+                </executions>
+              </plugin>
         </plugins>
     </build>
 

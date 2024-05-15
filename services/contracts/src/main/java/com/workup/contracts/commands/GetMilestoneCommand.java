@@ -43,6 +43,7 @@ public class GetMilestoneCommand
             .withAmount(milestone.getAmount())
             .withDescription(milestone.getDescription())
             .withDueDate(milestone.getDueDate())
+            .withStatus(milestone.getStatus())
             .withAmount(milestone.getAmount())
             .withStatusCode(HttpStatusCode.OK)
             .withErrorMessage("")

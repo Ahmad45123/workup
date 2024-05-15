@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.workup.shared.commands.users.requests.*;
 import com.workup.shared.commands.users.responses.*;
+import com.workup.shared.enums.AdminUserCredentials;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.users.UserType;
@@ -42,7 +43,7 @@ class UsersApplicationTests {
 
   @Container
   static final MongoDBContainer mongoDBContainer =
-      new MongoDBContainer("mongo:7").withExposedPorts(27017);
+      new MongoDBContainer("mongo:7.0").withExposedPorts(27017);
 
   @Autowired private AmqpTemplate template;
   @Autowired private ClientRepository paymentRequestRepository;
@@ -126,6 +127,19 @@ class UsersApplicationTests {
     SignUpAndInResponse response =
         (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
     UsersTestUtils.verifySignUpAndInResponse(response, client.getEmail(), UserType.CLIENT);
+  }
+
+  @Test
+  public void testAdminLogin() {
+    LoginRequest request =
+        LoginRequest.builder()
+            .withEmail(AdminUserCredentials.ADMIN_EMAIL)
+            .withPassword(AdminUserCredentials.ADMIN_PASSWORD)
+            .build();
+    SignUpAndInResponse response =
+        (SignUpAndInResponse) template.convertSendAndReceive(ServiceQueueNames.USERS, request);
+    UsersTestUtils.verifySignUpAndInResponse(
+        response, AdminUserCredentials.ADMIN_EMAIL, UserType.ADMIN);
   }
 
   @Test
