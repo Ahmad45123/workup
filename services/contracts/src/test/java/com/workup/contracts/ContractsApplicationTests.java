@@ -179,7 +179,6 @@ class ContractsApplicationTests {
   }
 
   @Test
-
   void GetContractTest1() {
     getContractTests.contractNotFoundTest(template);
   }
@@ -193,10 +192,7 @@ class ContractsApplicationTests {
     }
   }
 
-  void ContractsLoggerTest1(){
-    ContractsLogger.print("Contracts Logger Test 1 Message",LoggingLevel.INFO);
+  void ContractsLoggerTest1() {
+    ContractsLogger.print("Contracts Logger Test 1 Message", LoggingLevel.INFO);
   }
-
-
 }
-
