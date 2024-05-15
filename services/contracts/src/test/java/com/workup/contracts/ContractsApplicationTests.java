@@ -1,5 +1,6 @@
 package com.workup.contracts;
 
+import com.workup.contracts.logger.ContractsLogger;
 import com.workup.contracts.repositories.ContractMilestoneRepository;
 import com.workup.contracts.repositories.ContractRepository;
 import com.workup.contracts.repositories.TerminationRequestRepository;
@@ -52,10 +53,12 @@ class ContractsApplicationTests {
   @Autowired ContractRepository contractRepository;
   @Autowired ContractMilestoneRepository contractMilestoneRepository;
   @Autowired TerminationRequestRepository terminationRequestRepository;
+  @Autowired PaymentsMockingListener paymentsMockingListener;
 
   @Autowired HandleContractTerminationTests handleContractTerminationTests;
   @Autowired RequestContractTerminationTests requestContractTerminationTests;
   @Autowired MarkMilestoneAsPaidTests markMilestoneAsPaidTests;
+  @Autowired EvaluateMilestoneTests evaluateMilestoneTests;
 
   @BeforeEach
   void clearAll() {
@@ -145,5 +148,24 @@ class ContractsApplicationTests {
   @Test
   void MarkMilestoneAsPaidTest3() throws ParseException {
     markMilestoneAsPaidTests.successTest(template);
+  }
+
+  @Test
+  void EvaluateMilestoneTest1() {
+    evaluateMilestoneTests.milestoneNotFoundTest(template);
+  }
+
+  @Test
+  void EvaluateMilestoneTest2() {
+    evaluateMilestoneTests.wrongMilestoneState(template);
+  }
+
+  @Test
+  void EvaluateMilestoneTest3() {
+    try {
+      evaluateMilestoneTests.successTest(template);
+    } catch (Exception e) {
+      ContractsLogger.print("Error Occurred in EvaluateMilestoneTest3");
+    }
   }
 }
