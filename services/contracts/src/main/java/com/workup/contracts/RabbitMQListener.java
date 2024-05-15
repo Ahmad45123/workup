@@ -1,8 +1,6 @@
 package com.workup.contracts;
 
 import com.workup.contracts.commands.*;
-import com.workup.contracts.logger.ContractsLogger;
-import com.workup.contracts.logger.LoggingLevel;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.EvaluateMilestoneRequest;
 import com.workup.shared.commands.contracts.requests.GetContractRequest;

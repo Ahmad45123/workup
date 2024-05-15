@@ -1,7 +1,7 @@
 package com.workup.contracts;
 
-
 import static com.workup.contracts.tests.InitiateContractTests.initiateContractTest1;
+
 import com.workup.contracts.logger.ContractsLogger;
 import com.workup.contracts.logger.LoggingLevel;
 import com.workup.shared.enums.ControllerQueueNames;
