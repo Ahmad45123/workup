@@ -2,6 +2,8 @@ package com.workup.payments;
 
 import com.workup.shared.enums.ControllerQueueNames;
 import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.shared.enums.ThreadPoolSize;
+
 import org.springframework.amqp.core.AnonymousQueue;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -33,11 +35,6 @@ public class PaymentsApplication {
   }
 
   @Bean
-  public MessageConverter messageConverter() {
-    return new Jackson2JsonMessageConverter();
-  }
-
-  @Bean
   public Queue controllerQueue() {
     return new AnonymousQueue();
   }
@@ -53,10 +50,16 @@ public class PaymentsApplication {
   }
 
   @Bean
+  public MessageConverter messageConverter() {
+    return new Jackson2JsonMessageConverter();
+  }
+
+  @Bean
   public ThreadPoolTaskExecutor taskExecutor() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-    executor.setCorePoolSize(50);
-    executor.setMaxPoolSize(50);
+    executor.setCorePoolSize(ThreadPoolSize.POOL_SIZE);
+    executor.setMaxPoolSize(ThreadPoolSize.POOL_SIZE);
+    executor.setWaitForTasksToCompleteOnShutdown(true);
     executor.setQueueCapacity(500);
     executor.setThreadNamePrefix("payments-");
     executor.initialize();

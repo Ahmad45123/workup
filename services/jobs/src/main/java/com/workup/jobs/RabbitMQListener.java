@@ -1,7 +1,6 @@
 package com.workup.jobs;
 
 import com.workup.jobs.commands.AcceptProposalCommand;
-import com.workup.jobs.commands.CreateJobCommand;
 import com.workup.jobs.commands.CreateProposalCommand;
 import com.workup.jobs.commands.GetJobByIdCommand;
 import com.workup.jobs.commands.GetMyJobsCommand;
@@ -9,6 +8,8 @@ import com.workup.jobs.commands.GetMyProposalsCommand;
 import com.workup.jobs.commands.GetProposalsByJobIdCommand;
 import com.workup.jobs.commands.JobCommandMap;
 import com.workup.jobs.commands.SearchJobsCommand;
+import com.workup.shared.commands.Command;
+import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.jobs.proposals.requests.AcceptProposalRequest;
 import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
 import com.workup.shared.commands.jobs.proposals.requests.GetMyProposalsRequest;
@@ -34,7 +35,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-@RabbitListener(queues = ServiceQueueNames.JOBS)
+@RabbitListener(queues = ServiceQueueNames.JOBS, id = ServiceQueueNames.JOBS)
 public class RabbitMQListener {
 
   @Autowired public JobCommandMap commandMap;
@@ -42,8 +43,10 @@ public class RabbitMQListener {
   @RabbitHandler
   @Async
   public CompletableFuture<CreateJobResponse> receive(CreateJobRequest in) throws Exception {
-    CreateJobResponse response = ((CreateJobCommand) commandMap.getCommand("CreateJob")).Run(in);
-    return CompletableFuture.completedFuture(response);
+    CreateJobResponse resp =
+        (CreateJobResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("CreateJob")).Run(in);
+    return CompletableFuture.completedFuture(resp);
   }
 
   @RabbitHandler
