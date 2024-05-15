@@ -5,6 +5,7 @@ import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,14 @@ public class JobsApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(JobsApplication.class, args);
+  }
+
+  @Bean
+  public ApplicationRunner runner(AmqpTemplate template) {
+    return args -> {
+      System.out.println("ApplicationRunner is executing");
+      // Configurator.setLevel("com.workup.jobs", org.apache.logging.log4j.Level.ERROR);
+    };
   }
 
   @Bean

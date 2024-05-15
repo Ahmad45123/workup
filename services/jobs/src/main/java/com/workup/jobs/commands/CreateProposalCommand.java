@@ -13,12 +13,16 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CreateProposalCommand
     extends JobCommand<CreateProposalRequest, CreateProposalResponse> {
+  private static final Logger logger = LogManager.getLogger(CreateProposalCommand.class);
 
   @Override
   public CreateProposalResponse Run(CreateProposalRequest request) {
+    logger.info("[x] Saving proposal for job '" + request.getJobId() + "'");
     try {
       Optional<Job> job = jobRepository.findById(UUID.fromString(request.getJobId()));
       if (!job.isPresent()) {
@@ -66,14 +70,13 @@ public class CreateProposalCommand
               .withStatus(ProposalStatus.PENDING)
               .build();
       Proposal savedProposal = proposalRepository.save(proposal);
-      System.out.println(" [x] Saved Proposal '" + savedProposal.getAttachments());
-      System.out.println(" [x] Saved Proposal '" + savedProposal.getMilestones());
+      logger.info("[x] Proposal saved with id: " + savedProposal.getPrimaryKey().getId());
       return CreateProposalResponse.builder()
           .withStatusCode(HttpStatusCode.CREATED)
           .withId(savedProposal.getPrimaryKey().getId().toString())
           .build();
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error("[x] An error occurred while saving proposal", e.getMessage());
       return CreateProposalResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage("An error occurred while saving proposal")

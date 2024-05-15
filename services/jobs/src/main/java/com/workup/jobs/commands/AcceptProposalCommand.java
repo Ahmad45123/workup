@@ -17,18 +17,23 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AcceptProposalCommand
     extends JobCommand<AcceptProposalRequest, AcceptProposalResponse> {
+  private static final Logger logger = LogManager.getLogger(AcceptProposalCommand.class);
 
   @Override
   public AcceptProposalResponse Run(AcceptProposalRequest request) {
+    logger.info("[x] Accepting proposal with id: " + request.getProposalId());
     try {
       UUID proposalId = UUID.fromString(request.getProposalId());
       ProposalPrimaryKey proposalPrimaryKey =
           ProposalPrimaryKey.builder().withId(proposalId).withJobId(request.getJobId()).build();
       Optional<Proposal> proposals = proposalRepository.findById(proposalPrimaryKey);
       if (proposals.isEmpty()) {
+        logger.info("[x] Proposal not found with id: " + proposalId);
         return AcceptProposalResponse.builder()
             .withStatusCode(HttpStatusCode.NOT_FOUND)
             .withErrorMessage("Proposal not found")
@@ -36,6 +41,7 @@ public class AcceptProposalCommand
       }
       Proposal acceptedProposal = proposals.get();
       if (acceptedProposal.getStatus() != ProposalStatus.PENDING) {
+        logger.info("[x] Proposal is not pending with id: " + proposalId);
         return AcceptProposalResponse.builder()
             .withStatusCode(HttpStatusCode.BAD_REQUEST)
             .withErrorMessage("Proposal is not pending")
@@ -45,6 +51,7 @@ public class AcceptProposalCommand
       UUID jobId = UUID.fromString(request.getJobId());
       Optional<Job> job = jobRepository.findById(jobId);
       if (job.isEmpty()) {
+        logger.info("[x] Job not found with id: " + jobId);
         return AcceptProposalResponse.builder()
             .withStatusCode(HttpStatusCode.NOT_FOUND)
             .withErrorMessage("Job not found")
@@ -52,12 +59,14 @@ public class AcceptProposalCommand
       }
       Job acceptedJob = job.get();
       if (!acceptedJob.isActive()) {
+        logger.info("[x] Job is no longer active with id: " + jobId);
         return AcceptProposalResponse.builder()
             .withStatusCode(HttpStatusCode.BAD_REQUEST)
             .withErrorMessage("This job is no longer active!")
             .build();
       }
       if (!acceptedJob.getClientId().equals(request.getUserId())) {
+        logger.info("[x] User is not the owner of this proposal's job with id: " + jobId);
         return AcceptProposalResponse.builder()
             .withStatusCode(HttpStatusCode.UNAUTHORIZED)
             .withErrorMessage("User is not the owner of this proposal's job!")
@@ -67,6 +76,7 @@ public class AcceptProposalCommand
       proposalRepository.save(acceptedProposal);
       jobRepository.save(acceptedJob);
       String contractId = initiateContract(acceptedProposal, acceptedJob, request);
+      logger.info("[x] Contract Initiated with id" + contractId);
       return AcceptProposalResponse.builder()
           .withStatusCode(HttpStatusCode.OK)
           .withJob(AcceptedJobInfo.builder().withId(request.getJobId()).withIsActive(false).build())
@@ -79,7 +89,7 @@ public class AcceptProposalCommand
           .withContractId(contractId)
           .build();
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error("[x] An error occurred while accepting job proposal", e.getMessage());
       return AcceptProposalResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage("An error occurred while accepting job proposal")
