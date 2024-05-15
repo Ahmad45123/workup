@@ -188,7 +188,7 @@ class ContractsApplicationTests {
     try {
       getContractTests.successTest(template);
     } catch (Exception e) {
-      ContractsLogger.print("Error Happened in GetContractTest2");
+      ContractsLogger.print("Error Happened in GetContractTest2", LoggingLevel.ERROR);
     }
   }
 }
