@@ -79,26 +79,32 @@ public class RabbitMQListener {
   @RabbitHandler
   @Async
   public CompletableFuture<GetContractResponse> receive(GetContractRequest in) throws Exception {
-    return CompletableFuture.completedFuture(((GetContractCommand) commandMap.getCommand("GetContract")).Run(in));
+    return CompletableFuture.completedFuture(
+        ((GetContractCommand) commandMap.getCommand("GetContract")).Run(in));
   }
 
   @RabbitHandler
   @Async
-  public CompletableFuture<EvaluateMilestoneResponse> receive(EvaluateMilestoneRequest in) throws Exception {
-    return CompletableFuture.completedFuture(((EvaluateMilestoneCommand) commandMap.getCommand("EvaluateMilestone")).Run(in));
+  public CompletableFuture<EvaluateMilestoneResponse> receive(EvaluateMilestoneRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((EvaluateMilestoneCommand) commandMap.getCommand("EvaluateMilestone")).Run(in));
   }
 
   @RabbitHandler
   @Async
-  public CompletableFuture<ProgressMilestoneResponse> receive(ProgressMilestoneRequest in) throws Exception {
-    return CompletableFuture.completedFuture(((ProgressMilestoneCommand) commandMap.getCommand("ProgressMilestone")).Run(in));
+  public CompletableFuture<ProgressMilestoneResponse> receive(ProgressMilestoneRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((ProgressMilestoneCommand) commandMap.getCommand("ProgressMilestone")).Run(in));
   }
 
   @RabbitHandler
   @Async
-  public CompletableFuture<GetPendingTerminationsResponse> receive(GetPendingTerminationsRequest in) throws Exception {
-    return CompletableFuture.completedFuture(((GetPendingTerminationsCommand) commandMap.getCommand("GetPendingTerminations"))
-        .Run(in));
+  public CompletableFuture<GetPendingTerminationsResponse> receive(GetPendingTerminationsRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((GetPendingTerminationsCommand) commandMap.getCommand("GetPendingTerminations")).Run(in));
   }
   // NEW_COMMAND_BOILERPLATE
 
