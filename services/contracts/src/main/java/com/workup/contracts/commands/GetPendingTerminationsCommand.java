@@ -1,6 +1,7 @@
 package com.workup.contracts.commands;
 
 import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.contracts.models.TerminationRequest;
 import com.workup.shared.commands.contracts.requests.GetPendingTerminationsRequest;
 import com.workup.shared.commands.contracts.responses.GetPendingTerminationsResponse;
@@ -19,7 +20,8 @@ public class GetPendingTerminationsCommand
             redisService.getValue(cachingKey, GetPendingTerminationsResponse.class);
     if (cachedResponse != null) {
       ContractsLogger.print(
-          "[x] Contract terminations response fetched from cache: " + cachedResponse.toString());
+          "[x] Contract terminations response fetched from cache: " + cachedResponse.toString(),
+          LoggingLevel.TRACE);
 
       return cachedResponse;
     }

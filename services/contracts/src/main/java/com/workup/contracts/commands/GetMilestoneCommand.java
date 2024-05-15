@@ -1,6 +1,7 @@
 package com.workup.contracts.commands;
 
 import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.contracts.models.ContractMilestone;
 import com.workup.shared.commands.contracts.requests.GetMilestoneRequest;
 import com.workup.shared.commands.contracts.responses.GetMilestoneResponse;
@@ -19,7 +20,8 @@ public class GetMilestoneCommand
         (GetMilestoneResponse) redisService.getValue(cachingKey, GetMilestoneResponse.class);
     if (cachedResponse != null) {
       ContractsLogger.print(
-          "[x] Milestone request response fetched from cache: " + cachedResponse.toString());
+          "[x] Milestone request response fetched from cache: " + cachedResponse.toString(),
+          LoggingLevel.TRACE);
 
       return cachedResponse;
     }

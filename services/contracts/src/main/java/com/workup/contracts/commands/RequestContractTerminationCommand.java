@@ -1,6 +1,7 @@
 package com.workup.contracts.commands;
 
 import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.contracts.models.Contract;
 import com.workup.contracts.models.TerminationRequest;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
@@ -69,7 +70,7 @@ public class RequestContractTerminationCommand
     try {
       TerminationRequest savedRequest = terminationRequestRepository.save(terminationRequest);
 
-      ContractsLogger.print(" [x] Saved Termination Request '" + savedRequest);
+      ContractsLogger.print(" [x] Saved Termination Request '" + savedRequest, LoggingLevel.TRACE);
 
       return ContractTerminationResponse.builder()
           .withRequestId(savedRequest.getRequestId().toString())

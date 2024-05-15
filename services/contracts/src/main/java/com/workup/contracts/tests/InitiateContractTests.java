@@ -1,5 +1,7 @@
 package com.workup.contracts.tests;
 
+import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.shared.commands.contracts.Milestone;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
@@ -13,7 +15,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 public class InitiateContractTests {
 
   public static void initiateContractTest1(AmqpTemplate template) throws ParseException {
-    System.out.println("[ ] Running InitiateContractTest1...");
+    ContractsLogger.print("[ ] Running InitiateContractTest1...", LoggingLevel.TRACE);
 
     Milestone milestone =
         Milestone.builder()
@@ -39,8 +41,9 @@ public class InitiateContractTests {
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
 
     assert resp != null : "InitiateContractTest1 Response was null";
-    System.out.println(
-        "Response success output: " + resp.getStatusCode() + " " + resp.getErrorMessage());
-    System.out.println("[x] Finished InitiateContractTest1...");
+    ContractsLogger.print(
+        "Response success output: " + resp.getStatusCode() + " " + resp.getErrorMessage(),
+        LoggingLevel.TRACE);
+    ContractsLogger.print("[x] Finished InitiateContractTest1...", LoggingLevel.TRACE);
   }
 }

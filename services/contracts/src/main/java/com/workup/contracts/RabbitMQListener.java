@@ -1,6 +1,8 @@
 package com.workup.contracts;
 
 import com.workup.contracts.commands.*;
+import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.EvaluateMilestoneRequest;
 import com.workup.shared.commands.contracts.requests.GetContractRequest;
@@ -63,7 +65,7 @@ public class RabbitMQListener {
 
   @RabbitHandler
   public GetContractResponse receive(GetContractRequest in) throws Exception {
-    System.out.println("** ENTERED GET CONTRACT RABBITMQ");
+    ContractsLogger.print("** ENTERED GET CONTRACT RABBITMQ", LoggingLevel.TRACE);
     return ((GetContractCommand) commandMap.getCommand("GetContract")).Run(in);
   }
 

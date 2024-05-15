@@ -2,6 +2,8 @@ package com.workup.contracts;
 
 import static com.workup.contracts.tests.InitiateContractTests.initiateContractTest1;
 
+import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
@@ -26,7 +28,7 @@ public class ContractsApplication {
   @Bean
   public ApplicationRunner runner(AmqpTemplate template) {
     return args -> {
-      System.out.println("ApplicationRunner is executing");
+      ContractsLogger.print("ApplicationRunner is executing", LoggingLevel.TRACE);
 
       // Use below example function to test sending to the queue.
       initiateContractTest1(template);
