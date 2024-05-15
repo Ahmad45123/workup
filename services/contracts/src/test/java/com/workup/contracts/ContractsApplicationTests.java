@@ -192,6 +192,7 @@ class ContractsApplicationTests {
     }
   }
 
+  @Test
   void ContractsLoggerTest1() {
     ContractsLogger.print("Contracts Logger Test 1 Message", LoggingLevel.INFO);
   }
