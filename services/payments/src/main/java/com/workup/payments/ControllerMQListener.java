@@ -1,9 +1,9 @@
-package com.workup.jobs;
+package com.workup.payments;
 
-import com.workup.jobs.commands.JobCommandMap;
 import com.workup.shared.commands.controller.SetMaxThreadsRequest;
 import java.lang.reflect.Field;
-import javassist.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,8 @@ import org.springframework.stereotype.Service;
 @RabbitListener(queues = "#{controllerQueue.name}")
 public class ControllerMQListener {
 
-  @Autowired public JobCommandMap commandMap;
+  private static final Logger logger = LogManager.getLogger(ControllerMQListener.class);
+
   @Autowired public ThreadPoolTaskExecutor taskExecutor;
 
   @Autowired private ApplicationContext context;
@@ -31,8 +32,7 @@ public class ControllerMQListener {
       corePoolSize.setAccessible(true);
       corePoolSize.set(myBean, in.getMaxThreads());
     } catch (Exception e) {
-      System.out.println(e.getMessage());
-      e.printStackTrace();
+      logger.error("Error setting max threads", e.getMessage());
     }
   }
 }

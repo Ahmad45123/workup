@@ -4,8 +4,10 @@ import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
+import java.util.concurrent.CompletableFuture;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,10 +18,13 @@ public class ContractsMockingListener {
   public static HttpStatusCode statusCodeToBeReturned;
 
   @RabbitHandler
-  public InitiateContractResponse receive(InitiateContractRequest in) throws Exception {
-    return InitiateContractResponse.builder()
-        .withContractId(contractIdToBeReturned)
-        .withStatusCode(statusCodeToBeReturned)
-        .build();
+  @Async
+  public CompletableFuture<InitiateContractResponse> receive(InitiateContractRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        InitiateContractResponse.builder()
+            .withContractId(contractIdToBeReturned)
+            .withStatusCode(statusCodeToBeReturned)
+            .build());
   }
 }
