@@ -8,7 +8,7 @@ const { SUPPORTED_MIME_TYPES } = require("./enums");
  * Constructs an array of all supported MIME types.
  */
 const mimeTypes = []
-  .concat(SUPPORTED_MIME_TYPES.AUDIO)
+  .concat(SUPPORTED_MIME_TYPES.DOC)
   .concat(SUPPORTED_MIME_TYPES.VIDEO)
   .concat(SUPPORTED_MIME_TYPES.IMAGE);
 

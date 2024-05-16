@@ -15,3 +15,6 @@ services:
   
   service_webserver:
     image: workup:webserver
+
+  service_mediaserver:
+    image: workup:mediaserver

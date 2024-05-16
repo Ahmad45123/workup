@@ -7,6 +7,7 @@ build:
 	docker build ./services/users --tag workup:service_users
 	docker build ./services/contracts --tag workup:service_contracts
 	docker build ./webserver --tag workup:webserver
+	docker build ./mediaserver --tag workup:mediaserver
 
 up: 
 	docker stack deploy -c compose.yaml -c compose.override.yaml workup
