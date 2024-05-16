@@ -15,7 +15,6 @@ import java.util.UUID;
 public class HandleTerminationRequestCommand
     extends ContractCommand<HandleTerminationRequest, HandleTerminationResponse> {
 
-  // TODO: validation by authorizing the `adminId` from `user service` and adding `adminId` to
   // request body
   public HandleTerminationResponse Run(HandleTerminationRequest request) {
     Optional<TerminationRequest> terminationRequest =

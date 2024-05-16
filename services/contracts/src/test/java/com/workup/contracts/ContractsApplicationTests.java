@@ -85,34 +85,6 @@ class ContractsApplicationTests {
    * @throws ParseException
    */
   @Test
-  void testCreateJob() {
-    // Example test from jobs
-    //    CreateJobRequest createJobRequest =
-    //            CreateJobRequest.builder()
-    //                    .withTitle("Convert HTML Template to React 3")
-    //                    .withDescription(
-    //                            "I have an HTML template that I have purchased and own the rights
-    // to. I would like"
-    //                                    + " it converted into a React application.")
-    //                    .withSkills(new String[] {"HTML", "CSS", "JavaScript", "React"})
-    //                    .withUserId(CLIENT_ONE_ID)
-    //                    .build();
-    //
-    //    CreateJobResponse response =
-    //            (CreateJobResponse)
-    //                    template.convertSendAndReceive(ServiceQueueNames.JOBS, createJobRequest);
-    //
-    //    assertNotNull(response);
-    //    assertTrue(response.getStatusCode() == HttpStatusCode.CREATED);
-    //
-    //    jobRepository
-    //            .findById(UUID.fromString(response.getJobId()))
-    //            .ifPresentOrElse(
-    //                    job -> assertTrue(job.getTitle().equals(createJobRequest.getTitle())),
-    //                    () -> new RuntimeException("Job not found"));
-  }
-
-  @Test
   void HandleContractTerminationTest1() throws ParseException {
     handleContractTerminationTests.acceptingRequest(template);
   }

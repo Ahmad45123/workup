@@ -13,43 +13,36 @@ public class GetPendingTerminationsCommand
 
   @Override
   public GetPendingTerminationsResponse Run(GetPendingTerminationsRequest request) {
-    String cachingKey = request.getContractId() + "/pending_terminations";
 
-    GetPendingTerminationsResponse cachedResponse =
-        (GetPendingTerminationsResponse)
-            redisService.getValue(cachingKey, GetPendingTerminationsResponse.class);
-    if (cachedResponse != null) {
-      ContractsLogger.print(
-          "[x] Contract terminations response fetched from cache: " + cachedResponse.toString(),
-          LoggingLevel.TRACE);
+    try {
+      List<TerminationRequest> terminationsList =
+          terminationRequestRepository.findByContractId(request.getContractId());
 
-      return cachedResponse;
-    }
+      if (terminationsList.isEmpty()) {
+        return GetPendingTerminationsResponse.builder()
+            .withStatusCode(HttpStatusCode.NOT_FOUND)
+            .withErrorMessage("No pending terminations exist")
+            .build();
+      }
 
-    List<TerminationRequest> terminationsList =
-        terminationRequestRepository.findByContractId(request.getContractId());
+      TerminationRequest terminationRequest = terminationsList.getFirst();
 
-    if (terminationsList.isEmpty()) {
       return GetPendingTerminationsResponse.builder()
-          .withStatusCode(HttpStatusCode.NOT_FOUND)
-          .withErrorMessage("No pending terminations exist")
+          .withRequestId(terminationRequest.getRequestId().toString())
+          .withRequesterId(terminationRequest.getRequesterId())
+          .withContractId(terminationRequest.getContractId())
+          .withReason(terminationRequest.getReason())
+          .withStatus(terminationRequest.getStatus())
+          .withStatusCode(HttpStatusCode.OK)
+          .withErrorMessage("")
+          .build();
+    } catch (Exception e) {
+      ContractsLogger.print(e.getMessage(), LoggingLevel.TRACE);
+
+      return GetPendingTerminationsResponse.builder()
+          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .withErrorMessage("Error occurred while fetching pending termination requests")
           .build();
     }
-
-    TerminationRequest terminationRequest = terminationsList.getFirst();
-
-    GetPendingTerminationsResponse response =
-        GetPendingTerminationsResponse.builder()
-            .withRequestId(terminationRequest.getRequestId().toString())
-            .withRequesterId(terminationRequest.getRequesterId())
-            .withContractId(terminationRequest.getContractId())
-            .withReason(terminationRequest.getReason())
-            .withStatus(terminationRequest.getStatus())
-            .withStatusCode(HttpStatusCode.OK)
-            .withErrorMessage("")
-            .build();
-
-    redisService.setValue(cachingKey, response);
-    return response;
   }
 }

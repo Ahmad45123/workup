@@ -1,7 +1,5 @@
 package com.workup.contracts.commands;
 
-import com.workup.contracts.logger.ContractsLogger;
-import com.workup.contracts.logger.LoggingLevel;
 import com.workup.contracts.models.ContractMilestone;
 import com.workup.shared.commands.contracts.requests.GetMilestoneRequest;
 import com.workup.shared.commands.contracts.responses.GetMilestoneResponse;
@@ -14,17 +12,6 @@ public class GetMilestoneCommand
 
   @Override
   public GetMilestoneResponse Run(GetMilestoneRequest request) {
-    String cachingKey = request.getMilestoneId();
-
-    GetMilestoneResponse cachedResponse =
-        (GetMilestoneResponse) redisService.getValue(cachingKey, GetMilestoneResponse.class);
-    if (cachedResponse != null) {
-      ContractsLogger.print(
-          "[x] Milestone request response fetched from cache: " + cachedResponse.toString(),
-          LoggingLevel.TRACE);
-
-      return cachedResponse;
-    }
 
     Optional<ContractMilestone> milestoneOptional =
         contractMilestoneRepository.findById(UUID.fromString(request.getMilestoneId()));
@@ -38,20 +25,16 @@ public class GetMilestoneCommand
 
     ContractMilestone milestone = milestoneOptional.get();
 
-    GetMilestoneResponse response =
-        GetMilestoneResponse.builder()
-            .withContractId(milestone.getContractId())
-            .withMilestoneId(milestone.getMilestoneId().toString())
-            .withAmount(milestone.getAmount())
-            .withDescription(milestone.getDescription())
-            .withDueDate(milestone.getDueDate())
-            .withStatus(milestone.getStatus())
-            .withAmount(milestone.getAmount())
-            .withStatusCode(HttpStatusCode.OK)
-            .withErrorMessage("")
-            .build();
-
-    redisService.setValue(cachingKey, response);
-    return response;
+    return GetMilestoneResponse.builder()
+        .withContractId(milestone.getContractId())
+        .withMilestoneId(milestone.getMilestoneId().toString())
+        .withAmount(milestone.getAmount())
+        .withDescription(milestone.getDescription())
+        .withDueDate(milestone.getDueDate())
+        .withStatus(milestone.getStatus())
+        .withAmount(milestone.getAmount())
+        .withStatusCode(HttpStatusCode.OK)
+        .withErrorMessage("")
+        .build();
   }
 }
