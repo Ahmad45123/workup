@@ -14,7 +14,7 @@
   "author": "aboueleyes",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^1.6.8",
     "cron": "^1.7.0",
     "dotenv": "^7.0.0",
     "fs-extra": "^7.0.1",
