@@ -72,6 +72,8 @@ services:
       - payments
     env_file:
       - ./services/payments/.env
+    volumes:
+      - ./logs/payment:/logs/payment
 
   payments_db:
     image: postgres:12.18
