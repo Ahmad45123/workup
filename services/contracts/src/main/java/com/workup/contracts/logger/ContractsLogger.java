@@ -9,7 +9,7 @@ public class ContractsLogger {
   private static final Logger logger = LogManager.getLogger(ContractsLogger.class);
 
   public static void print(String logMessage, LoggingLevel level) {
-    Configurator.setRootLevel(Level.ERROR);
+    Configurator.setRootLevel(Level.TRACE);
 
     switch (level) {
       case TRACE -> logger.trace("Trace level log message: " + logMessage);
