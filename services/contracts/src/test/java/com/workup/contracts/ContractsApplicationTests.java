@@ -71,6 +71,7 @@ class ContractsApplicationTests {
   @Autowired GetMilestoneTests getMilestoneTests;
   @Autowired InitiateContractTests initiateContractTests;
   @Autowired ViewContractMilestonesTests viewContractMilestonesTests;
+  @Autowired GetPendingTerminationsTests getPendingTerminationsTests;
 
   @BeforeEach
   void clearAll() {
@@ -198,5 +199,15 @@ class ContractsApplicationTests {
   @Test
   void ViewContractMilestonesTest() {
     viewContractMilestonesTests.successTest(template);
+  }
+
+  @Test
+  void GetPendingTerminationsTest1() {
+    getPendingTerminationsTests.invalidContract(template);
+  }
+
+  @Test
+  void GetPendingTerminationsTest2() {
+    getPendingTerminationsTests.successTest(template);
   }
 }
