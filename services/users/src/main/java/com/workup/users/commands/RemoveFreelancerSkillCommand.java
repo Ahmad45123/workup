@@ -17,7 +17,7 @@ public class RemoveFreelancerSkillCommand
     logger.info("Remove Freelancer Skill");
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.info("Freelancer Not Found");
+      logger.error("Freelancer Not Found");
       return RemoveFreelancerSkillResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")

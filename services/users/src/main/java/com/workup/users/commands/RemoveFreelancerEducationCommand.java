@@ -18,7 +18,7 @@ public class RemoveFreelancerEducationCommand
     logger.info("Remove Freelancer Education");
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.info("Freelancer Not Found");
+      logger.error("Freelancer Not Found");
       return RemoveFreelancerEducationResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")

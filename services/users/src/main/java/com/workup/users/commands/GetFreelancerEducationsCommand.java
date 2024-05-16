@@ -21,7 +21,7 @@ public class GetFreelancerEducationsCommand
     logger.info("Get Freelancer Educations");
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.info("Freelancer Not Found");
+      logger.error("Freelancer Not Found");
       return GetFreelancerEducationsResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")

@@ -21,7 +21,7 @@ public class GetFreelancerExperiencesCommand
     logger.info("Get Freelancer Experiences");
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.info("Freelancer Not Found");
+      logger.error("Freelancer Not Found");
       return GetFreelancerExperiencesResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")

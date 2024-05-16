@@ -19,7 +19,7 @@ public class AddFreelancerSkillCommand
     logger.info("Add Freelancer Skill");
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.info("Freelancer Not Found");
+      logger.error("Freelancer Not Found");
       return AddFreelancerSkillResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")
