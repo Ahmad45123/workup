@@ -74,6 +74,11 @@ module.exports = {
       NAME: "resume",
       MIME_TYPE: "application",
       FILE_EXTENSION: "pdf",
+    },
+    {
+      NAME: "attachments",
+      MIME_TYPE: "application",
+      FILE_EXTENSION: "pdf",
     }
   ]
 };
