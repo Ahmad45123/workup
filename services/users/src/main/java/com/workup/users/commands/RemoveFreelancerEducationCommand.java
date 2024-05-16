@@ -15,10 +15,10 @@ public class RemoveFreelancerEducationCommand
 
   @Override
   public RemoveFreelancerEducationResponse Run(RemoveFreelancerEducationRequest request) {
-    logger.info("Remove Freelancer Education");
+    logger.info("Remove Freelancer Education - Freelancer ID: " + request.getUserId());
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.error("Freelancer Not Found");
+      logger.error("Freelancer Not Found - Freelancer ID: " + request.getUserId());
       return RemoveFreelancerEducationResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")

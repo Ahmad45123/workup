@@ -18,10 +18,10 @@ public class GetFreelancerEducationsCommand
 
   @Override
   public GetFreelancerEducationsResponse Run(GetFreelancerEducationsRequest request) {
-    logger.info("Get Freelancer Educations");
+    logger.info("Get Freelancer Educations - Freelancer ID: " + request.getUserId());
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.error("Freelancer Not Found");
+      logger.error("Freelancer Not Found - Freelancer ID: " + request.getUserId());
       return GetFreelancerEducationsResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")

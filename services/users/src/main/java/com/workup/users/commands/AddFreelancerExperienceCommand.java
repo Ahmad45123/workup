@@ -15,10 +15,10 @@ public class AddFreelancerExperienceCommand
 
   @Override
   public AddFreelancerExperienceResponse Run(AddFreelancerExperienceRequest request) {
-    logger.info("Add Freelancer Experience");
+    logger.info("Add Freelancer Experience - Freelancer ID: " + request.getUserId());
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.error("Freelancer Not Found");
+      logger.error("Freelancer Not Found - Freelancer ID: " + request.getUserId());
       return AddFreelancerExperienceResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")

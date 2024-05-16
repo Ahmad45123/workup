@@ -18,10 +18,10 @@ public class GetFreelancerAchievementsCommand
 
   @Override
   public GetFreelancerAchievementsResponse Run(GetFreelancerAchievementsRequest request) {
-    logger.info("Get Freelancer Achievements");
+    logger.info("Get Freelancer Achievements - Freelancer ID: " + request.getUserId());
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.error("Freelancer Not Found");
+      logger.error("Freelancer Not Found - Freelancer ID: " + request.getUserId());
       return GetFreelancerAchievementsResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")

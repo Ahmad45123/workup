@@ -16,10 +16,10 @@ public class RemoveFreelancerExperienceCommand
 
   @Override
   public RemoveFreelancerExperienceResponse Run(RemoveFreelancerExperienceRequest request) {
-    logger.info("Remove Freelancer Experience");
+    logger.info("Remove Freelancer Experience - Freelancer ID: " + request.getUserId());
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.error("Freelancer Not Found");
+      logger.error("Freelancer Not Found - Freelancer ID: " + request.getUserId());
       return RemoveFreelancerExperienceResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")

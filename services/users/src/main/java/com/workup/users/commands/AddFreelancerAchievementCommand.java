@@ -15,10 +15,10 @@ public class AddFreelancerAchievementCommand
 
   @Override
   public AddFreelancerAchievementResponse Run(AddFreelancerAchievementRequest request) {
-    logger.info("Add Freelancer Achievement");
+    logger.info("Add Freelancer Achievement - Freelancer ID: " + request.getUserId());
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
     if (freelancerOptional.isEmpty()) {
-      logger.error("Freelancer Not Found");
+      logger.error("Freelancer Not Found - Freelancer ID: " + request.getUserId());
       return AddFreelancerAchievementResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")
