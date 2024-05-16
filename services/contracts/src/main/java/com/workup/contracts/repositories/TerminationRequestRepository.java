@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface TerminationRequestRepository
     extends CassandraRepository<TerminationRequest, UUID> {
   @AllowFiltering
-  List<TerminationRequest> findByRequesterIdAndContractIdAndStatus(
-      String requesterId, String contractId, TerminationRequestStatus status);
+  List<TerminationRequest> findByContractIdAndStatus(
+      String contractId, TerminationRequestStatus status);
 
   @Query("SELECT * FROM contracts_data.termination_requests WHERE contractid = ?0")
   List<TerminationRequest> findByContractId(String contractId);
