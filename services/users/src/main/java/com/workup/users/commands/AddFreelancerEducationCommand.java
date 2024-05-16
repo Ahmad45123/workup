@@ -6,18 +6,24 @@ import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.db.Education;
 import com.workup.users.db.Freelancer;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AddFreelancerEducationCommand
     extends UserCommand<AddFreelancerEducationRequest, AddFreelancerEducationResponse> {
+  private static final Logger logger = LogManager.getLogger(AddFreelancerEducationCommand.class);
 
   @Override
   public AddFreelancerEducationResponse Run(AddFreelancerEducationRequest request) {
+    logger.info("Add Freelancer Education");
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
-    if (freelancerOptional.isEmpty())
+    if (freelancerOptional.isEmpty()) {
+      logger.info("Freelancer Not Found");
       return AddFreelancerEducationResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")
           .build();
+    }
     Freelancer freelancer = freelancerOptional.get();
     Education newEducation =
         Education.builder()

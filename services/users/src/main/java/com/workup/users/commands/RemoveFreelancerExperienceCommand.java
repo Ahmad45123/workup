@@ -6,17 +6,25 @@ import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.db.Experience;
 import com.workup.users.db.Freelancer;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class RemoveFreelancerExperienceCommand
     extends UserCommand<RemoveFreelancerExperienceRequest, RemoveFreelancerExperienceResponse> {
+  private static final Logger logger =
+      LogManager.getLogger(RemoveFreelancerExperienceCommand.class);
+
   @Override
   public RemoveFreelancerExperienceResponse Run(RemoveFreelancerExperienceRequest request) {
+    logger.info("Remove Freelancer Experience");
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
-    if (freelancerOptional.isEmpty())
+    if (freelancerOptional.isEmpty()) {
+      logger.info("Freelancer Not Found");
       return RemoveFreelancerExperienceResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")
           .build();
+    }
     Freelancer freelancer = freelancerOptional.get();
     freelancer
         .getExperiences()

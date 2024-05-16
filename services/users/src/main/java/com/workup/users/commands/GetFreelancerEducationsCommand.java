@@ -9,17 +9,24 @@ import com.workup.users.db.Freelancer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetFreelancerEducationsCommand
     extends UserCommand<GetFreelancerEducationsRequest, GetFreelancerEducationsResponse> {
+  private static final Logger logger = LogManager.getLogger(GetFreelancerEducationsCommand.class);
+
   @Override
   public GetFreelancerEducationsResponse Run(GetFreelancerEducationsRequest request) {
+    logger.info("Get Freelancer Educations");
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
-    if (freelancerOptional.isEmpty())
+    if (freelancerOptional.isEmpty()) {
+      logger.info("Freelancer Not Found");
       return GetFreelancerEducationsResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")
           .build();
+    }
     Freelancer freelancer = freelancerOptional.get();
     List<EducationView> educations = convertToEducationViewList(freelancer.getEducations());
     return GetFreelancerEducationsResponse.builder()
