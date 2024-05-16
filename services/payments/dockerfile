@@ -1,5 +1,8 @@
 FROM eclipse-temurin:21-jre-alpine
+RUN mkdir -p /logs
+RUN chmod -R 777 /logs
 VOLUME /tmp
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} payments.jar
-ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar /payments.jar ${0} ${@}"]
+COPY src/main/resources/log4j2.xml /log4j2.xml
+ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -Dlog4j.configurationFile=/log4j2.xml -jar /payments.jar ${0} ${@}"]

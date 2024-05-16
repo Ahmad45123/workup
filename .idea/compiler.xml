@@ -11,10 +11,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="shared" />
         <module name="controller" />
-        <module name="contracts" />
-        <module name="users" />
         <module name="jobs" />
         <module name="payments" />
+        <module name="contracts" />
+        <module name="webserver" />
+        <module name="users" />
       </profile>
     </annotationProcessing>
   </component>
@@ -25,6 +26,7 @@
       <module name="jobs" options="-parameters" />
       <module name="payments" options="-parameters" />
       <module name="users" options="-parameters" />
+      <module name="webserver" options="-parameters" />
     </option>
   </component>
 </project>
