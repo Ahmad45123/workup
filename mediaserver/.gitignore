@@ -1,0 +1,4 @@
+/node_modules
+.env
+/media/static/icons/*
+/media/static/resume/*

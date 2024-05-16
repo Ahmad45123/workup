@@ -8,12 +8,20 @@ services:
     image: ahmad45123/workup:webserver
     depends_on:
       - service_mq
+      - service_mediaserver
     ports:
-      - "8080:8080"
+      - "80:8080"
     networks:
       - frontend
     env_file:
       - ./webserver/.env
+
+  service_mediaserver:
+    image: ahmed45123/workup:mediaserver
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./mediaserver/.env
   
   service_mq:
     image: rabbitmq:3.13-management
