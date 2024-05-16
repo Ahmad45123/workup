@@ -68,6 +68,9 @@ class ContractsApplicationTests {
   @Autowired MarkMilestoneAsPaidTests markMilestoneAsPaidTests;
   @Autowired EvaluateMilestoneTests evaluateMilestoneTests;
   @Autowired GetContractTests getContractTests;
+  @Autowired GetMilestoneTests getMilestoneTests;
+  @Autowired InitiateContractTests initiateContractTests;
+  @Autowired ViewContractMilestonesTests viewContractMilestonesTests;
 
   @BeforeEach
   void clearAll() {
@@ -195,5 +198,33 @@ class ContractsApplicationTests {
   @Test
   void ContractsLoggerTest1() {
     ContractsLogger.print("Contracts Logger Test 1 Message", LoggingLevel.INFO);
+  }
+
+  @Test
+  void GetMilestoneTest1() {
+    getMilestoneTests.milestoneNotFoundTest(template);
+  }
+
+  @Test
+  void GetMilestoneTest2() {
+    try {
+      getMilestoneTests.successTest(template);
+    } catch (Exception e) {
+      ContractsLogger.print("Error occurred while applying GetMilestoneTest2", LoggingLevel.ERROR);
+    }
+  }
+
+  @Test
+  void InitiateContractTest() {
+    try {
+      initiateContractTests.successTest(template);
+    } catch (Exception e) {
+      ContractsLogger.print("Error Occurred in Initating COntract Test", LoggingLevel.ERROR);
+    }
+  }
+
+  @Test
+  void ViewContractMilestonesTest() {
+    viewContractMilestonesTests.successTest(template);
   }
 }

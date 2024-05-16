@@ -1,24 +1,8 @@
 package com.workup.contracts;
 
 import com.workup.contracts.commands.*;
-import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
-import com.workup.shared.commands.contracts.requests.EvaluateMilestoneRequest;
-import com.workup.shared.commands.contracts.requests.GetContractRequest;
-import com.workup.shared.commands.contracts.requests.GetPendingTerminationsRequest;
-import com.workup.shared.commands.contracts.requests.HandleTerminationRequest;
-import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
-import com.workup.shared.commands.contracts.requests.MarkPaymentCompletedRequest;
-import com.workup.shared.commands.contracts.requests.ProgressMilestoneRequest;
-import com.workup.shared.commands.contracts.requests.ViewContractMilestonesRequest;
-import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
-import com.workup.shared.commands.contracts.responses.EvaluateMilestoneResponse;
-import com.workup.shared.commands.contracts.responses.GetContractResponse;
-import com.workup.shared.commands.contracts.responses.GetPendingTerminationsResponse;
-import com.workup.shared.commands.contracts.responses.HandleTerminationResponse;
-import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
-import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedResponse;
-import com.workup.shared.commands.contracts.responses.ProgressMilestoneResponse;
-import com.workup.shared.commands.contracts.responses.ViewContractMilestonesResponse;
+import com.workup.shared.commands.contracts.requests.*;
+import com.workup.shared.commands.contracts.responses.*;
 import com.workup.shared.enums.ServiceQueueNames;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -105,6 +89,13 @@ public class RabbitMQListener {
       throws Exception {
     return CompletableFuture.completedFuture(
         ((GetPendingTerminationsCommand) commandMap.getCommand("GetPendingTerminations")).Run(in));
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<GetMilestoneResponse> receive(GetMilestoneRequest in) throws Exception {
+    return CompletableFuture.completedFuture(
+        ((GetMilestoneCommand) commandMap.getCommand("GetMilestone")).Run(in));
   }
   // NEW_COMMAND_BOILERPLATE
 

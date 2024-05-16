@@ -35,6 +35,7 @@ public class ContractCommandMap
     commands.put("EvaluateMilestone", EvaluateMilestoneCommand.class);
     commands.put("ProgressMilestone", ProgressMilestoneCommand.class);
     commands.put("GetPendingTerminations", GetPendingTerminationsCommand.class);
+    commands.put("GetMilestone", GetMilestoneCommand.class);
     // NEW_COMMAND_BOILERPLATE
   }
 

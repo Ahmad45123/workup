@@ -1,13 +1,14 @@
 package com.workup.contracts;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.workup.contracts.models.Contract;
+import com.workup.contracts.models.ContractMilestone;
+import com.workup.contracts.repositories.ContractMilestoneRepository;
 import com.workup.contracts.repositories.ContractRepository;
 import com.workup.shared.commands.contracts.Milestone;
-import com.workup.shared.commands.contracts.requests.GetContractRequest;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
-import com.workup.shared.commands.contracts.responses.GetContractResponse;
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
@@ -22,19 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GetContractTests {
+public class InitiateContractTests {
 
   @Autowired ContractRepository contractRepository;
 
-  public void contractNotFoundTest(AmqpTemplate template) {
-    GetContractRequest request =
-        GetContractRequest.builder().withContractId(UUID.randomUUID().toString()).build();
-
-    GetContractResponse response =
-        (GetContractResponse) template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
-    assertNotNull(response);
-    assertEquals(HttpStatusCode.NOT_FOUND, response.getStatusCode());
-  }
+  @Autowired ContractMilestoneRepository contractMilestoneRepository;
 
   public void successTest(AmqpTemplate template) throws ParseException {
     Milestone milestone =
@@ -57,19 +50,14 @@ public class GetContractTests {
             .withJobTitle("very happy guc worker :)")
             .withJobMilestones(milestones)
             .build();
-    InitiateContractResponse contractResponse =
+    InitiateContractResponse response =
         (InitiateContractResponse)
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
 
-    assertNotNull(contractResponse);
-
-    GetContractRequest request =
-        GetContractRequest.builder().withContractId(contractResponse.getContractId()).build();
-
-    GetContractResponse response =
-        (GetContractResponse) template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
     assertNotNull(response);
-    assertEquals(HttpStatusCode.OK, response.getStatusCode());
+
+    // Now make sure that this contract is exactly the one submitted
+    assertEquals(HttpStatusCode.CREATED, response.getStatusCode());
 
     Optional<Contract> contractOptional =
         contractRepository.findById(UUID.fromString(response.getContractId()));
@@ -82,5 +70,19 @@ public class GetContractTests {
     assertEquals("very happy guc worker :)", contract.getJobTitle());
     assertEquals(clientId, contract.getClientId());
     assertEquals(freelancerId, contract.getFreelancerId());
+
+    // Now check over the milestone that it was inserted correctly with the contract also
+    List<String> milestoneIds = contract.getMilestonesIds();
+
+    Optional<ContractMilestone> optionalContractMilestone =
+        contractMilestoneRepository.findById(UUID.fromString(milestoneIds.getFirst()));
+    if (optionalContractMilestone.isEmpty())
+      fail("Milestones weren't added with the contract correctly");
+
+    ContractMilestone addedMilestone = optionalContractMilestone.get();
+    assertEquals("make sure the students hate your admin system", addedMilestone.getDescription());
+    assertEquals(
+        new SimpleDateFormat("yyyy-MM-dd").parse("2025-01-01"), addedMilestone.getDueDate());
+    assertEquals(30000, addedMilestone.getAmount());
   }
 }
