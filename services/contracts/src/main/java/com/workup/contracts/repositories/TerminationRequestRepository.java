@@ -16,6 +16,10 @@ public interface TerminationRequestRepository
   List<TerminationRequest> findByContractIdAndStatus(
       String contractId, TerminationRequestStatus status);
 
+  @AllowFiltering
+  List<TerminationRequest> findByRequesterIdAndContractIdAndStatus(
+      String requesterId, String contractId, TerminationRequestStatus status);
+
   @Query("SELECT * FROM contracts_data.termination_requests WHERE contractid = ?0")
   List<TerminationRequest> findByContractId(String contractId);
 }
