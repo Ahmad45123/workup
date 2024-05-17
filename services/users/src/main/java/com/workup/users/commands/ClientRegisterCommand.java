@@ -29,6 +29,8 @@ public class ClientRegisterCommand extends UserCommand<ClientRegisterRequest, Si
     try {
       // check if registered already as freelancer
       if (freelancerRepository.findByEmail(request.getEmail()).isPresent()) {
+        logger.error(
+            "[x] User with email" + request.getEmail() + " already registered as freelancer");
         return SignUpAndInResponse.builder()
             .withStatusCode(HttpStatusCode.BAD_REQUEST)
             .withSuccess(false)

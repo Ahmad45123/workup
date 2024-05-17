@@ -32,6 +32,7 @@ public class FreelancerRegisterCommand
     try {
       // check if registered already as client
       if (clientRepository.findByEmail(request.getEmail()).isPresent()) {
+        logger.error("[x] User with email" + request.getEmail() + " already registered as client");
         return SignUpAndInResponse.builder()
             .withStatusCode(HttpStatusCode.BAD_REQUEST)
             .withSuccess(false)
