@@ -2,10 +2,6 @@
 # Simulates a network etc.
 version: '3.7'
 
-configs:
-  jobs_cassandra_config:
-    file: ./services/jobs/cassandra-config/cassandra.yaml
-
 services:
   # ----- GENERAL SERVICES -------
   service_webserver:
@@ -71,10 +67,7 @@ services:
         swarm.autoscaler.maximum: '3'
 
   jobs_db:
-    image: cassandra:4.0.7
-    configs:
-       - source: jobs_cassandra_config
-         target: /etc/cassandra/cassandra.yaml
+    image: ahmad45123/workup:sasicassandra
     healthcheck:
       test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
       interval: 20s
