@@ -2,6 +2,10 @@
 # Simulates a network etc.
 version: '3.7'
 
+configs:
+  jobs_cassandra_config:
+    file: ./services/jobs/cassandra-config/cassandra.yaml
+
 services:
   # ----- GENERAL SERVICES -------
   service_webserver:
@@ -68,8 +72,9 @@ services:
 
   jobs_db:
     image: cassandra:4.0.7
-    volumes:
-      - ./services/jobs/cassandra-config/cassandra.yaml:/etc/cassandra/cassandra.yaml
+    configs:
+       - source: jobs_cassandra_config
+         target: /etc/cassandra/cassandra.yaml
     healthcheck:
       test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
       interval: 20s
