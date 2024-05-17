@@ -67,4 +67,9 @@ jobs:
       run: |
         docker build ./autoscaler/docker-swarm-autoscaler --tag ahmad45123/workup:autoscaler
         docker push ahmad45123/workup:autoscaler
+
+    - name: Build and push Mediaserver Image
+      run: |
+        docker build ./mediaserver --tag ahmad45123/workup:mediaserver
+        docker push ahmad45123/workup:mediaserver
   
