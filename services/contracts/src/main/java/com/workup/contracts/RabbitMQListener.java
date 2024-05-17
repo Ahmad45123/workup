@@ -97,6 +97,14 @@ public class RabbitMQListener {
     return CompletableFuture.completedFuture(
         ((GetMilestoneCommand) commandMap.getCommand("GetMilestone")).Run(in));
   }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<PrintContractResponse> receive(PrintContractRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((PrintContractCommand) commandMap.getCommand("PrintContract")).Run(in));
+  }
   // NEW_COMMAND_BOILERPLATE
 
 }
