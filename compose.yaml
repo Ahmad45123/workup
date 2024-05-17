@@ -22,7 +22,7 @@ services:
         swarm.autoscaler.maximum: '4'
 
   service_mediaserver:
-    image: ahmed45123/workup:mediaserver
+    image: ahmad45123/workup:mediaserver
     ports:
       - "8080:8080"
     env_file:
