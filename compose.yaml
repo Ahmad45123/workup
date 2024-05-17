@@ -15,6 +15,11 @@ services:
       - frontend
     env_file:
       - ./webserver/.env
+    deploy:
+      labels:
+        swarm.autoscaler: 'true'
+        swarm.autoscaler.minimum: '1'
+        swarm.autoscaler.maximum: '4'
 
   service_mediaserver:
     image: ahmed45123/workup:mediaserver
@@ -55,6 +60,11 @@ services:
       - jobs
     env_file:
       - ./services/jobs/.env
+    deploy:
+      labels:
+        swarm.autoscaler: 'true'
+        swarm.autoscaler.minimum: '1'
+        swarm.autoscaler.maximum: '3'
 
   jobs_db:
     image: cassandra:4.0.7
@@ -80,6 +90,11 @@ services:
       - payments
     env_file:
       - ./services/payments/.env
+    deploy:
+      labels:
+        swarm.autoscaler: 'true'
+        swarm.autoscaler.minimum: '1'
+        swarm.autoscaler.maximum: '3'
 
   payments_db:
     image: postgres:12.18
@@ -106,6 +121,11 @@ services:
       - contracts
     env_file:
       - ./services/contracts/.env
+    deploy:
+      labels:
+        swarm.autoscaler: 'true'
+        swarm.autoscaler.minimum: '1'
+        swarm.autoscaler.maximum: '3'
 
   contracts_db:
     image: cassandra:4.0.7
@@ -128,6 +148,11 @@ services:
       - users
     env_file:
       - ./services/users/.env
+    deploy:
+      labels:
+        swarm.autoscaler: 'true'
+        swarm.autoscaler.minimum: '1'
+        swarm.autoscaler.maximum: '3'
   
   users_db:
     image: mongo:7.0
