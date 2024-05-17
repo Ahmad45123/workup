@@ -8,14 +8,19 @@ import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.users.UserType;
 import com.workup.users.db.Client;
 import java.util.Objects;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ClientRegisterCommand extends UserCommand<ClientRegisterRequest, SignUpAndInResponse> {
+  private static final Logger logger = LogManager.getLogger(ClientRegisterCommand.class);
 
   @Override
   public SignUpAndInResponse Run(ClientRegisterRequest request) {
+    logger.info("[i] Registering Client with Email: " + request.getEmail());
     if (Objects.isNull(request.getEmail())
         || Objects.isNull(request.getPassword())
         || Objects.isNull(request.getClientName())) {
+      logger.error("[x] Missing Required Fields");
       return SignUpAndInResponse.builder()
           .withStatusCode(HttpStatusCode.BAD_REQUEST)
           .withSuccess(false)
@@ -50,6 +55,7 @@ public class ClientRegisterCommand extends UserCommand<ClientRegisterRequest, Si
           .withStatusCode(HttpStatusCode.OK)
           .build();
     } catch (Exception e) {
+      logger.error("[x] Error Registering Client: " + e.getMessage());
       return SignUpAndInResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withSuccess(false)

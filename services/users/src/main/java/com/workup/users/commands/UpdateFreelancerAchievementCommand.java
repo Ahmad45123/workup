@@ -6,17 +6,25 @@ import com.workup.shared.enums.HttpStatusCode;
 import com.workup.users.db.Achievement;
 import com.workup.users.db.Freelancer;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UpdateFreelancerAchievementCommand
     extends UserCommand<UpdateFreelancerAchievementRequest, UpdateFreelancerAchievementResponse> {
+  private static final Logger logger =
+      LogManager.getLogger(UpdateFreelancerAchievementCommand.class);
+
   @Override
   public UpdateFreelancerAchievementResponse Run(UpdateFreelancerAchievementRequest request) {
+    logger.info("Update Freelancer Achievement - Freelancer ID: " + request.getUserId());
     Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
-    if (freelancerOptional.isEmpty())
+    if (freelancerOptional.isEmpty()) {
+      logger.error("Freelancer Not Found - Freelancer ID: " + request.getUserId());
       return UpdateFreelancerAchievementResponse.builder()
           .withStatusCode(HttpStatusCode.NOT_FOUND)
           .withErrorMessage("Freelancer Doesn't Exist")
           .build();
+    }
     Freelancer freelancer = freelancerOptional.get();
     Achievement updatedAchievement =
         Achievement.builder()
