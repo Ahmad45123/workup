@@ -16,21 +16,18 @@ get_high_cpu_services () {
 }
 
 get_all_services () {
-  # local prometheus_results="${1}"
-  # local services=""
-  # for service in $(printf "%s$prometheus_results" | jq ".data.result[].metric.container_label_com_docker_swarm_service_name" | sed 's/"//g' | sort | uniq); do
-  #   services="$services $service"
-  # done
-  echo "workup_service_users workup_service_webserver"
+  local prometheus_results="${1}"
+  local services=""
+  for service in $(printf "%s$prometheus_results" | jq ".data.result[].metric.container_label_com_docker_swarm_service_name" | sed 's/"//g' | sort | uniq); do
+    services="$services $service"
+  done
 }
 
 get_low_cpu_services () {
   local prometheus_results="${1}"
   local services=""
   for service in $(printf "%s$prometheus_results" | jq ".data.result[] | select( all(.value[1]|tonumber; . < $CPU_PERCENTAGE_LOWER_LIMIT) ) | .metric.container_label_com_docker_swarm_service_name" | sed 's/"//g' | sort | uniq); do
-    if [[ $service == "workup_service_users" || $service == "workup_service_webserver" ]]; then
-      services="$services $service"
-    fi
+    services="$services $service"
   done
   
   echo $services
