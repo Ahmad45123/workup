@@ -52,6 +52,7 @@ public class FreelancerRegisterCommand
     } catch (Exception e) {
       return SignUpAndInResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .withErrorMessage(e.getMessage())
           .withSuccess(false)
           .build();
     }
