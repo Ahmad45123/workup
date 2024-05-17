@@ -9,7 +9,7 @@ configs:
 
 services:
   docker-swarm-autoscaler:
-    image: workup:autoscaler
+    image: ahmad45123/workup:autoscaler
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
