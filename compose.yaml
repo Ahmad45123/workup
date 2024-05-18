@@ -43,7 +43,7 @@ services:
     labels:
       com.datadoghq.ad.check_names: '["rabbitmq"]'
       com.datadoghq.ad.init_configs: '[{}]'
-      com.datadoghq.ad.instances: '[{"prometheus_plugin": {"url": "http://%%host%%:15692"}}]'
+      com.datadoghq.ad.instances: '[{"prometheus_plugin": {"url": "http://service_mq:15692"}}]'
 
   service_redis:
     image: redis:7.2.4
@@ -57,7 +57,7 @@ services:
     labels:
       com.datadoghq.ad.check_names: '["redisdb"]'
       com.datadoghq.ad.init_configs: '[{}]'
-      com.datadoghq.ad.instances: '[{"host": "%%host%%","port":"6379"}]'
+      com.datadoghq.ad.instances: '[{"host": "service_redis","port":"6379"}]'
 
   # ----- JOBS MICROSERVICE -------
   service_jobs:
