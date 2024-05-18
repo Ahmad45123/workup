@@ -2,14 +2,8 @@ package com.workup.payments;
 
 import com.workup.payments.commands.PaymentCommandMap;
 import com.workup.payments.commands.paymentrequest.*;
-import com.workup.payments.commands.paymenttransaction.GetClientPaymentTransactionsCommand;
-import com.workup.payments.commands.paymenttransaction.GetFreelancerPaymentTransactionsCommand;
-import com.workup.payments.commands.wallet.CreateWalletCommand;
-import com.workup.payments.commands.wallet.GetWalletCommand;
-import com.workup.payments.commands.wallettransaction.CreateWalletTransactionCommand;
-import com.workup.payments.commands.wallettransaction.GetWalletTransactionCommand;
-import com.workup.payments.commands.wallettransaction.GetWalletTransactionsCommand;
-import com.workup.payments.commands.wallettransaction.WithdrawFromWalletCommand;
+import com.workup.shared.commands.Command;
+import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.payments.paymentrequest.requests.*;
 import com.workup.shared.commands.payments.paymentrequest.responses.*;
 import com.workup.shared.commands.payments.paymenttransaction.requests.GetClientPaymentTransactionsRequest;
@@ -47,7 +41,8 @@ public class RabbitMQListener {
   public CompletableFuture<CreatePaymentRequestResponse> receive(CreatePaymentRequestRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((CreatePaymentRequestCommand) commandMap.getCommand("CreatePaymentRequest")).Run(in));
+        (CreatePaymentRequestResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("CreatePaymentRequest")).Run(in));
   }
 
   @RabbitHandler
@@ -55,8 +50,9 @@ public class RabbitMQListener {
   public CompletableFuture<CreateWalletTransactionResponse> receive(
       CreateWalletTransactionRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((CreateWalletTransactionCommand) commandMap.getCommand("CreateWalletTransaction"))
-            .Run(in));
+        (CreateWalletTransactionResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("CreateWalletTransaction"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -64,8 +60,9 @@ public class RabbitMQListener {
   public CompletableFuture<GetClientPaymentRequestsResponse> receive(
       GetClientPaymentRequestsRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetClientPaymentRequestsCommand) commandMap.getCommand("GetClientPaymentRequests"))
-            .Run(in));
+        (GetClientPaymentRequestsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetClientPaymentRequests"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -73,7 +70,8 @@ public class RabbitMQListener {
   public CompletableFuture<GetWalletTransactionResponse> receive(GetWalletTransactionRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetWalletTransactionCommand) commandMap.getCommand("GetWalletTransaction")).Run(in));
+        (GetWalletTransactionResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetWalletTransaction")).Run(in));
   }
 
   @RabbitHandler
@@ -81,7 +79,8 @@ public class RabbitMQListener {
   public CompletableFuture<GetWalletTransactionsResponse> receive(GetWalletTransactionsRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetWalletTransactionsCommand) commandMap.getCommand("GetWalletTransactions")).Run(in));
+        (GetWalletTransactionsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetWalletTransactions")).Run(in));
   }
 
   @RabbitHandler
@@ -89,7 +88,8 @@ public class RabbitMQListener {
   public CompletableFuture<WithdrawFromWalletResponse> receive(WithdrawFromWalletRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((WithdrawFromWalletCommand) commandMap.getCommand("WithdrawFromWallet")).Run(in));
+        (WithdrawFromWalletResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("WithdrawFromWallet")).Run(in));
   }
 
   @RabbitHandler
@@ -97,9 +97,9 @@ public class RabbitMQListener {
   public CompletableFuture<GetFreelancerPaymentRequestsResponse> receive(
       GetFreelancerPaymentRequestsRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetFreelancerPaymentRequestsCommand)
-                commandMap.getCommand("GetFreelancerPaymentRequests"))
-            .Run(in));
+        (GetFreelancerPaymentRequestsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetFreelancerPaymentRequests"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -107,7 +107,8 @@ public class RabbitMQListener {
   public CompletableFuture<GetPaymentRequestResponse> receive(GetPaymentRequestRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetPaymentRequestCommand) commandMap.getCommand("GetPaymentRequest")).Run(in));
+        (GetPaymentRequestResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetPaymentRequest")).Run(in));
   }
 
   @RabbitHandler
@@ -115,21 +116,24 @@ public class RabbitMQListener {
   public CompletableFuture<PayPaymentRequestResponse> receive(PayPaymentRequestRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((PayPaymentRequestCommand) commandMap.getCommand("PayPaymentRequest")).Run(in));
+        (PayPaymentRequestResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("PayPaymentRequest")).Run(in));
   }
 
   @RabbitHandler
   @Async
   public CompletableFuture<CreateWalletResponse> receive(CreateWalletRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((CreateWalletCommand) commandMap.getCommand("CreateWallet")).Run(in));
+        (CreateWalletResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("CreateWallet")).Run(in));
   }
 
   @RabbitHandler
   @Async
   public CompletableFuture<GetWalletResponse> receive(GetWalletRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetWalletCommand) commandMap.getCommand("GetWallet")).Run(in));
+        (GetWalletResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetWallet")).Run(in));
   }
 
   @RabbitHandler
@@ -137,9 +141,9 @@ public class RabbitMQListener {
   public CompletableFuture<GetClientPaymentTransactionsResponse> receive(
       GetClientPaymentTransactionsRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetClientPaymentTransactionsCommand)
-                commandMap.getCommand("GetClientPaymentTransactions"))
-            .Run(in));
+        (GetClientPaymentTransactionsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetClientPaymentTransactions"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -147,8 +151,8 @@ public class RabbitMQListener {
   public CompletableFuture<GetFreelancerPaymentTransactionsResponse> receive(
       GetFreelancerPaymentTransactionsRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetFreelancerPaymentTransactionsCommand)
-                commandMap.getCommand("GetFreelancerPaymentTransactions"))
-            .Run(in));
+        (GetFreelancerPaymentTransactionsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetFreelancerPaymentTransactions"))
+                .Run(in));
   }
 }

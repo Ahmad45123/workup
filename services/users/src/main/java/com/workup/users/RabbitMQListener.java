@@ -1,5 +1,7 @@
 package com.workup.users;
 
+import com.workup.shared.commands.Command;
+import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.users.requests.*;
 import com.workup.shared.commands.users.responses.*;
 import com.workup.shared.enums.ServiceQueueNames;
@@ -23,8 +25,9 @@ public class RabbitMQListener {
   public CompletableFuture<FreelancerGetProfileBriefResponse> receive(
       FreelancerGetProfileBriefRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((FreelancerGetProfileBriefCommand) commandMap.getCommand("FreelancerGetProfileBrief"))
-            .Run(in));
+        (FreelancerGetProfileBriefResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("FreelancerGetProfileBrief"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -32,7 +35,8 @@ public class RabbitMQListener {
   public CompletableFuture<FreelancerGetProfileResponse> receive(FreelancerGetProfileRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((FreelancerGetProfileCommand) commandMap.getCommand("FreelancerGetProfile")).Run(in));
+        (FreelancerGetProfileResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("FreelancerGetProfile")).Run(in));
   }
 
   @RabbitHandler
@@ -40,7 +44,8 @@ public class RabbitMQListener {
   public CompletableFuture<FreelancerGetResumeResponse> receive(FreelancerGetResumeRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((FreelancerGetResumeCommand) commandMap.getCommand("FreelancerGetResume")).Run(in));
+        (FreelancerGetResumeResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("FreelancerGetResume")).Run(in));
   }
 
   @RabbitHandler
@@ -48,7 +53,8 @@ public class RabbitMQListener {
   public CompletableFuture<FreelancerSetPhotoResponse> receive(FreelancerSetPhotoRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((FreelancerSetPhotoCommand) commandMap.getCommand("FreelancerSetPhoto")).Run(in));
+        (FreelancerSetPhotoResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("FreelancerSetPhoto")).Run(in));
   }
 
   @RabbitHandler
@@ -56,7 +62,8 @@ public class RabbitMQListener {
   public CompletableFuture<FreelancerSetProfileResponse> receive(FreelancerSetProfileRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((FreelancerSetProfileCommand) commandMap.getCommand("FreelancerSetProfile")).Run(in));
+        (FreelancerSetProfileResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("FreelancerSetProfile")).Run(in));
   }
 
   @RabbitHandler
@@ -64,7 +71,8 @@ public class RabbitMQListener {
   public CompletableFuture<FreelancerSetResumeResponse> receive(FreelancerSetResumeRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((FreelancerSetResumeCommand) commandMap.getCommand("FreelancerSetResume")).Run(in));
+        (FreelancerSetResumeResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("FreelancerSetResume")).Run(in));
   }
 
   @RabbitHandler
@@ -72,7 +80,8 @@ public class RabbitMQListener {
   public CompletableFuture<FreelancerGetPhotoResponse> receive(FreelancerGetPhotoRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((FreelancerGetPhotoCommand) commandMap.getCommand("FreelancerGetPhoto")).Run(in));
+        (FreelancerGetPhotoResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("FreelancerGetPhoto")).Run(in));
   }
 
   @RabbitHandler
@@ -80,7 +89,8 @@ public class RabbitMQListener {
   public CompletableFuture<ClientSetProfileResponse> receive(ClientSetProfileRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((ClientSetProfileCommand) commandMap.getCommand("ClientSetProfile")).Run(in));
+        (ClientSetProfileResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("ClientSetProfile")).Run(in));
   }
 
   @RabbitHandler
@@ -88,7 +98,8 @@ public class RabbitMQListener {
   public CompletableFuture<ClientGetProfileResponse> receive(ClientGetProfileRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((ClientGetProfileCommand) commandMap.getCommand("ClientGetProfile")).Run(in));
+        (ClientGetProfileResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("ClientGetProfile")).Run(in));
   }
 
   @RabbitHandler
@@ -96,7 +107,8 @@ public class RabbitMQListener {
   public CompletableFuture<ClientSetPhotoResponse> receive(ClientSetPhotoRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((ClientSetPhotoCommand) commandMap.getCommand("ClientSetPhoto")).Run(in));
+        (ClientSetPhotoResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("ClientSetPhoto")).Run(in));
   }
 
   @RabbitHandler
@@ -104,7 +116,8 @@ public class RabbitMQListener {
   public CompletableFuture<ClientGetPhotoResponse> receive(ClientGetPhotoRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((ClientGetPhotoCommand) commandMap.getCommand("ClientGetPhoto")).Run(in));
+        (ClientGetPhotoResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("ClientGetPhoto")).Run(in));
   }
 
   @RabbitHandler
@@ -112,8 +125,9 @@ public class RabbitMQListener {
   public CompletableFuture<AddFreelancerAchievementResponse> receive(
       AddFreelancerAchievementRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((AddFreelancerAchievementCommand) commandMap.getCommand("AddFreelancerAchievement"))
-            .Run(in));
+        (AddFreelancerAchievementResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("AddFreelancerAchievement"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -121,7 +135,8 @@ public class RabbitMQListener {
   public CompletableFuture<AddFreelancerEducationResponse> receive(AddFreelancerEducationRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((AddFreelancerEducationCommand) commandMap.getCommand("AddFreelancerEducation")).Run(in));
+        (AddFreelancerEducationResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("AddFreelancerEducation")).Run(in));
   }
 
   @RabbitHandler
@@ -129,8 +144,9 @@ public class RabbitMQListener {
   public CompletableFuture<AddFreelancerExperienceResponse> receive(
       AddFreelancerExperienceRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((AddFreelancerExperienceCommand) commandMap.getCommand("AddFreelancerExperience"))
-            .Run(in));
+        (AddFreelancerExperienceResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("AddFreelancerExperience"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -138,7 +154,8 @@ public class RabbitMQListener {
   public CompletableFuture<AddFreelancerSkillResponse> receive(AddFreelancerSkillRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((AddFreelancerSkillCommand) commandMap.getCommand("AddFreelancerSkill")).Run(in));
+        (AddFreelancerSkillResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("AddFreelancerSkill")).Run(in));
   }
 
   @RabbitHandler
@@ -146,7 +163,8 @@ public class RabbitMQListener {
   public CompletableFuture<AddFreelancerLanguageResponse> receive(AddFreelancerLanguageRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((AddFreelancerLanguageCommand) commandMap.getCommand("AddFreelancerLanguage")).Run(in));
+        (AddFreelancerLanguageResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("AddFreelancerLanguage")).Run(in));
   }
 
   @RabbitHandler
@@ -154,8 +172,9 @@ public class RabbitMQListener {
   public CompletableFuture<GetFreelancerAchievementsResponse> receive(
       GetFreelancerAchievementsRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetFreelancerAchievementsCommand) commandMap.getCommand("GetFreelancerAchievements"))
-            .Run(in));
+        (GetFreelancerAchievementsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetFreelancerAchievements"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -163,8 +182,9 @@ public class RabbitMQListener {
   public CompletableFuture<GetFreelancerEducationsResponse> receive(
       GetFreelancerEducationsRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetFreelancerEducationsCommand) commandMap.getCommand("GetFreelancerEducations"))
-            .Run(in));
+        (GetFreelancerEducationsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetFreelancerEducations"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -172,8 +192,9 @@ public class RabbitMQListener {
   public CompletableFuture<GetFreelancerExperiencesResponse> receive(
       GetFreelancerExperiencesRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetFreelancerExperiencesCommand) commandMap.getCommand("GetFreelancerExperiences"))
-            .Run(in));
+        (GetFreelancerExperiencesResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetFreelancerExperiences"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -181,7 +202,8 @@ public class RabbitMQListener {
   public CompletableFuture<GetFreelancerSkillsResponse> receive(GetFreelancerSkillsRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetFreelancerSkillsCommand) commandMap.getCommand("GetFreelancerSkills")).Run(in));
+        (GetFreelancerSkillsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetFreelancerSkills")).Run(in));
   }
 
   @RabbitHandler
@@ -189,7 +211,8 @@ public class RabbitMQListener {
   public CompletableFuture<GetFreelancerLanguagesResponse> receive(GetFreelancerLanguagesRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetFreelancerLanguagesCommand) commandMap.getCommand("GetFreelancerLanguages")).Run(in));
+        (GetFreelancerLanguagesResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetFreelancerLanguages")).Run(in));
   }
 
   @RabbitHandler
@@ -197,8 +220,9 @@ public class RabbitMQListener {
   public CompletableFuture<UpdateFreelancerAchievementResponse> receive(
       UpdateFreelancerAchievementRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((UpdateFreelancerAchievementCommand) commandMap.getCommand("UpdateFreelancerAchievement"))
-            .Run(in));
+        (UpdateFreelancerAchievementResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("UpdateFreelancerAchievement"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -206,8 +230,9 @@ public class RabbitMQListener {
   public CompletableFuture<UpdateFreelancerEducationResponse> receive(
       UpdateFreelancerEducationRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((UpdateFreelancerEducationCommand) commandMap.getCommand("UpdateFreelancerEducation"))
-            .Run(in));
+        (UpdateFreelancerEducationResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("UpdateFreelancerEducation"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -215,8 +240,9 @@ public class RabbitMQListener {
   public CompletableFuture<UpdateFreelancerExperienceResponse> receive(
       UpdateFreelancerExperienceRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((UpdateFreelancerExperienceCommand) commandMap.getCommand("UpdateFreelancerExperience"))
-            .Run(in));
+        (UpdateFreelancerExperienceResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("UpdateFreelancerExperience"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -224,8 +250,9 @@ public class RabbitMQListener {
   public CompletableFuture<RemoveFreelancerAchievementResponse> receive(
       RemoveFreelancerAchievementRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((RemoveFreelancerAchievementCommand) commandMap.getCommand("RemoveFreelancerAchievement"))
-            .Run(in));
+        (RemoveFreelancerAchievementResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("RemoveFreelancerAchievement"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -233,8 +260,9 @@ public class RabbitMQListener {
   public CompletableFuture<RemoveFreelancerEducationResponse> receive(
       RemoveFreelancerEducationRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((RemoveFreelancerEducationCommand) commandMap.getCommand("RemoveFreelancerEducation"))
-            .Run(in));
+        (RemoveFreelancerEducationResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("RemoveFreelancerEducation"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -242,8 +270,9 @@ public class RabbitMQListener {
   public CompletableFuture<RemoveFreelancerExperienceResponse> receive(
       RemoveFreelancerExperienceRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((RemoveFreelancerExperienceCommand) commandMap.getCommand("RemoveFreelancerExperience"))
-            .Run(in));
+        (RemoveFreelancerExperienceResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("RemoveFreelancerExperience"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -251,7 +280,8 @@ public class RabbitMQListener {
   public CompletableFuture<RemoveFreelancerSkillResponse> receive(RemoveFreelancerSkillRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((RemoveFreelancerSkillCommand) commandMap.getCommand("RemoveFreelancerSkill")).Run(in));
+        (RemoveFreelancerSkillResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("RemoveFreelancerSkill")).Run(in));
   }
 
   @RabbitHandler
@@ -259,15 +289,17 @@ public class RabbitMQListener {
   public CompletableFuture<RemoveFreelancerLanguageResponse> receive(
       RemoveFreelancerLanguageRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((RemoveFreelancerLanguageCommand) commandMap.getCommand("RemoveFreelancerLanguage"))
-            .Run(in));
+        (RemoveFreelancerLanguageResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("RemoveFreelancerLanguage"))
+                .Run(in));
   }
 
   @RabbitHandler
   @Async
   public CompletableFuture<SignUpAndInResponse> receive(LoginRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((LoginCommand) commandMap.getCommand("Login")).Run(in));
+        (SignUpAndInResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("Login")).Run(in));
   }
 
   @RabbitHandler
@@ -275,13 +307,15 @@ public class RabbitMQListener {
   public CompletableFuture<SignUpAndInResponse> receive(FreelancerRegisterRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((FreelancerRegisterCommand) commandMap.getCommand("FreelancerRegister")).Run(in));
+        (SignUpAndInResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("FreelancerRegister")).Run(in));
   }
 
   @RabbitHandler
   @Async
   public CompletableFuture<SignUpAndInResponse> receive(ClientRegisterRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((ClientRegisterCommand) commandMap.getCommand("ClientRegister")).Run(in));
+        (SignUpAndInResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("ClientRegister")).Run(in));
   }
 }

@@ -1,6 +1,8 @@
 package com.workup.contracts;
 
 import com.workup.contracts.commands.*;
+import com.workup.shared.commands.Command;
+import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.EvaluateMilestoneRequest;
 import com.workup.shared.commands.contracts.requests.GetContractRequest;
@@ -38,7 +40,8 @@ public class RabbitMQListener {
   public CompletableFuture<InitiateContractResponse> receive(InitiateContractRequest in)
       throws Exception {
     InitiateContractResponse response =
-        ((InitiateContractCommand) commandMap.getCommand("InitiateContract")).Run(in);
+        (InitiateContractResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("InitiateContract")).Run(in);
     return CompletableFuture.completedFuture(response);
   }
 
@@ -47,8 +50,9 @@ public class RabbitMQListener {
   public CompletableFuture<ContractTerminationResponse> receive(ContractTerminationRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((RequestContractTerminationCommand) commandMap.getCommand("RequestContractTermination"))
-            .Run(in));
+        (ContractTerminationResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("RequestContractTermination"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -56,8 +60,9 @@ public class RabbitMQListener {
   public CompletableFuture<HandleTerminationResponse> receive(HandleTerminationRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((HandleTerminationRequestCommand) commandMap.getCommand("HandleTerminationRequest"))
-            .Run(in));
+        (HandleTerminationResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("HandleTerminationRequest"))
+                .Run(in));
   }
 
   @RabbitHandler
@@ -65,7 +70,8 @@ public class RabbitMQListener {
   public CompletableFuture<MarkPaymentCompletedResponse> receive(MarkPaymentCompletedRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((MarkMilestoneAsPaidCommand) commandMap.getCommand("MarkMilestoneAsPaid")).Run(in));
+        (MarkPaymentCompletedResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("MarkMilestoneAsPaid")).Run(in));
   }
 
   @RabbitHandler
@@ -73,14 +79,16 @@ public class RabbitMQListener {
   public CompletableFuture<ViewContractMilestonesResponse> receive(ViewContractMilestonesRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((ViewContractMilestonesCommand) commandMap.getCommand("ViewContractMilestones")).Run(in));
+        (ViewContractMilestonesResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("ViewContractMilestones")).Run(in));
   }
 
   @RabbitHandler
   @Async
   public CompletableFuture<GetContractResponse> receive(GetContractRequest in) throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetContractCommand) commandMap.getCommand("GetContract")).Run(in));
+        (GetContractResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetContract")).Run(in));
   }
 
   @RabbitHandler
@@ -88,7 +96,8 @@ public class RabbitMQListener {
   public CompletableFuture<EvaluateMilestoneResponse> receive(EvaluateMilestoneRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((EvaluateMilestoneCommand) commandMap.getCommand("EvaluateMilestone")).Run(in));
+        (EvaluateMilestoneResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("EvaluateMilestone")).Run(in));
   }
 
   @RabbitHandler
@@ -96,7 +105,8 @@ public class RabbitMQListener {
   public CompletableFuture<ProgressMilestoneResponse> receive(ProgressMilestoneRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((ProgressMilestoneCommand) commandMap.getCommand("ProgressMilestone")).Run(in));
+        (ProgressMilestoneResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("ProgressMilestone")).Run(in));
   }
 
   @RabbitHandler
@@ -104,7 +114,8 @@ public class RabbitMQListener {
   public CompletableFuture<GetPendingTerminationsResponse> receive(GetPendingTerminationsRequest in)
       throws Exception {
     return CompletableFuture.completedFuture(
-        ((GetPendingTerminationsCommand) commandMap.getCommand("GetPendingTerminations")).Run(in));
+        (GetPendingTerminationsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetPendingTerminations")).Run(in));
   }
   // NEW_COMMAND_BOILERPLATE
 

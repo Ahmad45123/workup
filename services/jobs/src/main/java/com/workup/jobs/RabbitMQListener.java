@@ -1,13 +1,6 @@
 package com.workup.jobs;
 
-import com.workup.jobs.commands.AcceptProposalCommand;
-import com.workup.jobs.commands.CreateProposalCommand;
-import com.workup.jobs.commands.GetJobByIdCommand;
-import com.workup.jobs.commands.GetMyJobsCommand;
-import com.workup.jobs.commands.GetMyProposalsCommand;
-import com.workup.jobs.commands.GetProposalsByJobIdCommand;
 import com.workup.jobs.commands.JobCommandMap;
-import com.workup.jobs.commands.SearchJobsCommand;
 import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.jobs.proposals.requests.AcceptProposalRequest;
@@ -54,7 +47,8 @@ public class RabbitMQListener {
   public CompletableFuture<CreateProposalResponse> receive(CreateProposalRequest in)
       throws Exception {
     CreateProposalResponse response =
-        ((CreateProposalCommand) commandMap.getCommand("CreateProposal")).Run(in);
+        (CreateProposalResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("CreateProposal")).Run(in);
     return CompletableFuture.completedFuture(response);
   }
 
@@ -62,7 +56,8 @@ public class RabbitMQListener {
   @Async
   public CompletableFuture<GetJobByIdResponse> receive(GetJobByIdRequest request) throws Exception {
     GetJobByIdResponse response =
-        ((GetJobByIdCommand) commandMap.getCommand("GetJobById")).Run(request);
+        (GetJobByIdResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetJobById")).Run(request);
     return CompletableFuture.completedFuture(response);
   }
 
@@ -70,7 +65,8 @@ public class RabbitMQListener {
   @Async
   public CompletableFuture<SearchJobsResponse> receive(SearchJobsRequest request) throws Exception {
     SearchJobsResponse response =
-        ((SearchJobsCommand) commandMap.getCommand("SearchJobs")).Run(request);
+        (SearchJobsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("SearchJobs")).Run(request);
     return CompletableFuture.completedFuture(response);
   }
 
@@ -78,7 +74,8 @@ public class RabbitMQListener {
   @Async
   public CompletableFuture<GetMyJobsResponse> receive(GetMyJobsRequest request) throws Exception {
     GetMyJobsResponse response =
-        ((GetMyJobsCommand) commandMap.getCommand("GetMyJobs")).Run(request);
+        (GetMyJobsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetMyJobs")).Run(request);
     return CompletableFuture.completedFuture(response);
   }
 
@@ -87,7 +84,8 @@ public class RabbitMQListener {
   public CompletableFuture<AcceptProposalResponse> receive(AcceptProposalRequest request)
       throws Exception {
     AcceptProposalResponse response =
-        ((AcceptProposalCommand) commandMap.getCommand("AcceptProposal")).Run(request);
+        (AcceptProposalResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("AcceptProposal")).Run(request);
     return CompletableFuture.completedFuture(response);
   }
 
@@ -96,7 +94,9 @@ public class RabbitMQListener {
   public CompletableFuture<GetProposalsByJobIdResponse> receive(GetProposalsByJobIdRequest request)
       throws Exception {
     GetProposalsByJobIdResponse response =
-        ((GetProposalsByJobIdCommand) commandMap.getCommand("GetProposalsByJobId")).Run(request);
+        (GetProposalsByJobIdResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetProposalsByJobId"))
+                .Run(request);
     return CompletableFuture.completedFuture(response);
   }
 
@@ -105,7 +105,8 @@ public class RabbitMQListener {
   public CompletableFuture<GetMyProposalsResponse> receive(GetMyProposalsRequest request)
       throws Exception {
     GetMyProposalsResponse response =
-        ((GetMyProposalsCommand) commandMap.getCommand("GetMyProposals")).Run(request);
+        (GetMyProposalsResponse)
+            ((Command<CommandRequest, ?>) commandMap.getCommand("GetMyProposals")).Run(request);
     return CompletableFuture.completedFuture(response);
   }
 }
