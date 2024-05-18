@@ -16,8 +16,10 @@ import com.workup.shared.commands.jobs.proposals.requests.CreateProposalRequest;
 import com.workup.shared.commands.jobs.proposals.responses.AcceptProposalResponse;
 import com.workup.shared.commands.jobs.proposals.responses.CreateProposalResponse;
 import com.workup.shared.commands.jobs.requests.CreateJobRequest;
+import com.workup.shared.commands.jobs.requests.GetJobByIdRequest;
 import com.workup.shared.commands.jobs.requests.SearchJobsRequest;
 import com.workup.shared.commands.jobs.responses.CreateJobResponse;
+import com.workup.shared.commands.jobs.responses.GetJobByIdResponse;
 import com.workup.shared.commands.jobs.responses.SearchJobsResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
@@ -36,6 +38,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.CassandraContainer;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -56,6 +59,10 @@ class JobsApplicationTests {
     return cassandraContainer.getHost() + ":" + cassandraContainer.getFirstMappedPort();
   }
 
+  @Container
+  static final GenericContainer redisContainer =
+      new GenericContainer("redis:7.2.4").withExposedPorts(6379);
+
   @DynamicPropertySource
   static void datasourceProperties(DynamicPropertyRegistry registry) {
     registry.add("spring.cassandra.contact-points", JobsApplicationTests::GetCassandraContactPoint);
@@ -64,6 +71,8 @@ class JobsApplicationTests {
     registry.add("spring.rabbitmq.port", rabbitMQContainer::getFirstMappedPort);
     registry.add("spring.rabbitmq.username", rabbitMQContainer::getAdminUsername);
     registry.add("spring.rabbitmq.password", rabbitMQContainer::getAdminPassword);
+    registry.add("spring.cache.host", redisContainer::getHost);
+    registry.add("spring.cache.port", redisContainer::getFirstMappedPort);
   }
 
   private static final String CLIENT_ONE_ID = "123";
@@ -104,6 +113,36 @@ class JobsApplicationTests {
         .ifPresentOrElse(
             job -> assertTrue(job.getTitle().equals(createJobRequest.getTitle())),
             () -> new RuntimeException("Job not found"));
+  }
+
+  @Test
+  void testGetJobById() {
+    Job job =
+        jobRepository.save(
+            Job.builder()
+                .withId(UUID.randomUUID())
+                .withTitle("Convert HTML Template to React 3")
+                .withDescription(
+                    "I have an HTML template that I have purchased and own the rights to. I would"
+                        + " like it converted into a React application.")
+                .withSkills(new String[] {"HTML", "CSS", "JavaScript", "React"})
+                .withClientId(CLIENT_ONE_ID)
+                .withIsActive(true)
+                .build());
+
+    GetJobByIdResponse response =
+        (GetJobByIdResponse)
+            template.convertSendAndReceive(
+                ServiceQueueNames.JOBS,
+                GetJobByIdRequest.builder().withJobId(job.getId().toString()).build());
+
+    assertNotNull(response);
+    assertTrue(response.getStatusCode() == HttpStatusCode.OK);
+    assertEquals(job.getId().toString(), response.getId());
+    assertEquals(job.getTitle(), response.getTitle());
+    assertEquals(job.getDescription(), response.getDescription());
+    assertEquals(job.getClientId(), response.getClientId());
+    assertEquals(true, response.isActive());
   }
 
   /**

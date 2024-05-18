@@ -20,7 +20,7 @@ public class GetJobByIdResponse extends CommandResponse {
   private final String[] skills;
   private final Experience experience;
   private final String clientId;
-  private final boolean isActive;
+  private final boolean active;
   private final Date createdAt;
   private final Date modifiedAt;
 }

@@ -53,7 +53,7 @@ public class SearchJobsCommand extends JobCommand<SearchJobsRequest, SearchJobsR
           .withStatusCode(HttpStatusCode.OK)
           .build();
     } catch (Exception e) {
-      logger.error("[x] An error occurred while searching for jobs", e.getMessage());
+      logger.error("[x] An error occurred while searching for jobs" + e.getMessage());
       return SearchJobsResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage(e.getMessage())

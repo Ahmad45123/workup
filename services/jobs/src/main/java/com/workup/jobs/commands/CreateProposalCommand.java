@@ -76,7 +76,7 @@ public class CreateProposalCommand
           .withId(savedProposal.getPrimaryKey().getId().toString())
           .build();
     } catch (Exception e) {
-      logger.error("[x] An error occurred while saving proposal", e.getMessage());
+      logger.error("[x] An error occurred while saving proposal" + e.getMessage());
       return CreateProposalResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage("An error occurred while saving proposal")

@@ -73,9 +73,10 @@ public class AcceptProposalCommand
             .build();
       }
       acceptedJob.setActive(false);
+      acceptedJob.setSearchIndex(null);
+      String contractId = initiateContract(acceptedProposal, acceptedJob, request);
       proposalRepository.save(acceptedProposal);
       jobRepository.save(acceptedJob);
-      String contractId = initiateContract(acceptedProposal, acceptedJob, request);
       logger.info("[x] Contract Initiated with id" + contractId);
       return AcceptProposalResponse.builder()
           .withStatusCode(HttpStatusCode.OK)
@@ -89,7 +90,7 @@ public class AcceptProposalCommand
           .withContractId(contractId)
           .build();
     } catch (Exception e) {
-      logger.error("[x] An error occurred while accepting job proposal", e.getMessage());
+      logger.error("[x] An error occurred while accepting job proposal" + e.getMessage());
       return AcceptProposalResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage("An error occurred while accepting job proposal")
