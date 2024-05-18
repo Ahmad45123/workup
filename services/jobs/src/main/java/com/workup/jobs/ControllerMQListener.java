@@ -8,7 +8,6 @@ import com.workup.shared.commands.CommandResponse;
 import com.workup.shared.commands.controller.*;
 import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.ThreadPoolSize;
-import java.lang.reflect.Field;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,15 +28,17 @@ public class ControllerMQListener {
   @Autowired private ApplicationContext context;
   @Autowired private RabbitListenerEndpointRegistry registry;
 
+  private static final Logger logger = LogManager.getLogger(ControllerMQListener.class);
+
   @RabbitHandler
   public void receive(SetMaxThreadsRequest in) throws Exception {
     try {
-      System.out.println("Max threads is: " + taskExecutor.getMaxPoolSize());
+      logger.info("Max threads is: " + taskExecutor.getMaxPoolSize());
       setThreads(in.getMaxThreads());
       ThreadPoolSize.POOL_SIZE = taskExecutor.getMaxPoolSize();
-      System.out.println("Max threads set to: " + taskExecutor.getMaxPoolSize());
+      logger.info("Max threads set to: " + taskExecutor.getMaxPoolSize());
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.info(e.getMessage());
       e.printStackTrace();
     }
   }
@@ -45,10 +46,11 @@ public class ControllerMQListener {
   @RabbitHandler
   public void receive(SetLoggingLevelRequest in) throws Exception {
     try {
-      Logger logger = LogManager.getRootLogger();
+      Logger logger = LogManager.getLogger("com.workup.jobs");
       Configurator.setAllLevels(logger.getName(), Level.valueOf(in.getLevel()));
+      logger.info("Logging level set to: " + in.getLevel());
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.info(e.getMessage());
       e.printStackTrace();
     }
   }
@@ -56,12 +58,11 @@ public class ControllerMQListener {
   @RabbitHandler
   public void receive(FreezeRequest in) throws Exception {
     try {
-      registry.getListenerContainer(ServiceQueueNames.JOBS).stop();
-      taskExecutor.shutdown();
-      setThreads(0);
-      System.out.println("Stopped all threads.");
+      registry.getListenerContainer(ServiceQueueNames.PAYMENTS).stop();
+      setThreads(1);
+      logger.info("Stopped all threads.");
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.info(e.getMessage());
       e.printStackTrace();
     }
   }
@@ -69,11 +70,11 @@ public class ControllerMQListener {
   @RabbitHandler
   public void receive(ContinueRequest in) throws Exception {
     try {
-      taskExecutor.start();
+      registry.getListenerContainer(ServiceQueueNames.PAYMENTS).start();
       setThreads(ThreadPoolSize.POOL_SIZE);
-      registry.getListenerContainer(ServiceQueueNames.JOBS).start();
+      logger.info("Continued all threads.");
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.info(e.getMessage());
       e.printStackTrace();
     }
   }
@@ -93,8 +94,19 @@ public class ControllerMQListener {
           (Class<? extends JobCommand<? extends CommandRequest, ? extends CommandResponse>>)
               ((Command<?, ?>) clazz.newInstance()).getClass());
 
-      System.out.println("Updated command: " + in.getCommandName());
+      logger.info("Updated command: " + in.getCommandName());
       // clazz.newInstance().Run(null);
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
+  @RabbitHandler
+  public void receive(DeleteCommandRequest in) throws Exception {
+    try {
+      commandMap.removeCommand(in.getCommandName());
+      System.out.println("Deleted command: " + in.getCommandName());
     } catch (Exception e) {
       System.out.println(e.getMessage());
       e.printStackTrace();
@@ -112,12 +124,12 @@ public class ControllerMQListener {
   }
 
   private void setThreads(int threads) throws NoSuchFieldException, IllegalAccessException {
-    ThreadPoolTaskExecutor myBean = context.getBean(ThreadPoolTaskExecutor.class);
-    Field maxPoolSize = ThreadPoolTaskExecutor.class.getDeclaredField("maxPoolSize");
-    maxPoolSize.setAccessible(true);
-    maxPoolSize.set(myBean, threads);
-    Field corePoolSize = ThreadPoolTaskExecutor.class.getDeclaredField("corePoolSize");
-    corePoolSize.setAccessible(true);
-    corePoolSize.set(myBean, threads);
+    if (threads > taskExecutor.getCorePoolSize()) {
+      taskExecutor.setMaxPoolSize(threads);
+      taskExecutor.setCorePoolSize(threads);
+    } else {
+      taskExecutor.setCorePoolSize(threads);
+      taskExecutor.setMaxPoolSize(threads);
+    }
   }
 }

@@ -31,7 +31,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-@RabbitListener(queues = ServiceQueueNames.PAYMENTS)
+@RabbitListener(queues = ServiceQueueNames.PAYMENTS, id = ServiceQueueNames.PAYMENTS)
 public class RabbitMQListener {
 
   @Autowired public PaymentCommandMap commandMap;

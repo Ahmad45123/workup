@@ -15,7 +15,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-@RabbitListener(queues = ServiceQueueNames.USERS)
+@RabbitListener(queues = ServiceQueueNames.USERS, id = ServiceQueueNames.USERS)
 public class RabbitMQListener {
 
   @Autowired public UserCommandMap commandMap;

@@ -24,15 +24,15 @@ import org.springframework.stereotype.Component;
 public class PaymentCommandMap
     extends CommandMap<PaymentCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
-  @Autowired private PaymentRequestRepository paymentRequestRepository;
+  @Autowired public PaymentRequestRepository paymentRequestRepository;
 
-  @Autowired private PaymentTransactionRepository paymentTransactionRepository;
+  @Autowired public PaymentTransactionRepository paymentTransactionRepository;
 
-  @Autowired private WalletRepository walletRepository;
+  @Autowired public WalletRepository walletRepository;
 
-  @Autowired private WalletTransactionRepository walletTransactionRepository;
+  @Autowired public WalletTransactionRepository walletTransactionRepository;
 
-  @Autowired private RedisService redisService;
+  @Autowired public RedisService redisService;
 
   public void registerCommands() {
     /* PaymentRequest commands */
