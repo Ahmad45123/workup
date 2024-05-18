@@ -108,7 +108,7 @@ main () {
 
 main
 while [[ $LOOP == 'yes' ]]; do
-  echo Waiting 5 seconds for the next test
-  sleep 5s
+  echo Waiting 30 seconds for the next test
+  sleep 30s
   main
 done

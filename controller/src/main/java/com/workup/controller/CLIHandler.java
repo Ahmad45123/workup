@@ -29,9 +29,6 @@ public class CLIHandler {
     if (!appQueueMap.containsKey(app)) {
       return "Error: app can only be jobs, users, contracts or payments!";
     }
-    if (maxThreads > 100 || maxThreads < 1) {
-      return "Error: Max threads must have a value between 1 and 50";
-    }
     rabbitTemplate.convertAndSend(
         appQueueMap.get(app),
         "",
