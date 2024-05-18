@@ -62,6 +62,8 @@ services:
       - jobs
     env_file:
       - ./services/jobs/.env
+    volumes:
+      - /logs/jobs:/app/logs
     deploy:
       labels:
         swarm.autoscaler: 'true'
