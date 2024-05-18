@@ -67,11 +67,11 @@ services:
       - default
     environment:
       DD_API_KEY: 26913604f1968f188b5ca541aa58e092
-      DD_SYSTEM_PROBE_NETWORK_ENABLED: true
-      DD_PROCESS_AGENT_ENABLED: true
+      DD_SYSTEM_PROBE_NETWORK_ENABLED: "true"
+      DD_PROCESS_AGENT_ENABLED: "true"
       DD_SITE: us5.datadoghq.com
-      DD_LOGS_ENABLED: true
-      DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL: true
+      DD_LOGS_ENABLED: "true"
+      DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL: "true"
       DD_CONTAINER_EXCLUDE: "name:datadog-agent"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
