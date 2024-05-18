@@ -40,6 +40,7 @@ services:
     networks:
       - default
       - frontend
+      - datadog
     labels:
       com.datadoghq.ad.check_names: '["rabbitmq"]'
       com.datadoghq.ad.init_configs: '[{}]'
@@ -54,6 +55,7 @@ services:
       retries: 3
     networks:
       - default
+      - datadog
     labels:
       com.datadoghq.ad.check_names: '["redisdb"]'
       com.datadoghq.ad.init_configs: '[{}]'
@@ -179,3 +181,6 @@ networks:
   contracts:
   users:
   frontend:
+  datadog:
+    name: test-network
+    external: true
