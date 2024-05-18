@@ -6,6 +6,7 @@ import com.workup.contracts.repositories.ContractMilestoneRepository;
 import com.workup.contracts.repositories.ContractRepository;
 import com.workup.contracts.repositories.TerminationRequestRepository;
 import java.text.ParseException;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -146,14 +147,14 @@ class ContractsApplicationTests {
     evaluateMilestoneTests.wrongMilestoneState(template);
   }
 
-  /*@Test
+  @Ignore
   void EvaluateMilestoneTest3() {
     try {
       evaluateMilestoneTests.successTest(template);
     } catch (Exception e) {
       ContractsLogger.print("Error Occurred in EvaluateMilestoneTest3", LoggingLevel.TRACE);
     }
-  }*/
+  }
 
   @Test
   void GetContractTest1() {
@@ -198,8 +199,13 @@ class ContractsApplicationTests {
   }
 
   @Test
-  void ViewContractMilestonesTest() {
+  void ViewContractMilestonesTest1() {
     viewContractMilestonesTests.successTest(template);
+  }
+
+  @Test
+  void ViewContractMilestonesTest2() {
+    viewContractMilestonesTests.invalidContract(template);
   }
 
   @Test
