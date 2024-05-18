@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserCommandMap
     extends CommandMap<UserCommand<? extends CommandRequest, ? extends CommandResponse>> {
-  @Autowired FreelancerRepository freelancerRepository;
-  @Autowired ExperienceRepository experienceRepository;
-  @Autowired ClientRepository clientRepository;
-  @Autowired EducationRepository educationRepository;
-  @Autowired AchievementRepository achievementRepository;
-  @Autowired AmqpTemplate rabbitTemplate;
+  @Autowired public FreelancerRepository freelancerRepository;
+  @Autowired public ExperienceRepository experienceRepository;
+  @Autowired public ClientRepository clientRepository;
+  @Autowired public EducationRepository educationRepository;
+  @Autowired public AchievementRepository achievementRepository;
+  @Autowired public AmqpTemplate rabbitTemplate;
 
   public void registerCommands() {
 

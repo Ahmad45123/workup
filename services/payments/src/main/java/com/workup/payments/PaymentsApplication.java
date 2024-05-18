@@ -3,7 +3,6 @@ package com.workup.payments;
 import com.workup.shared.enums.ControllerQueueNames;
 import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.ThreadPoolSize;
-
 import org.springframework.amqp.core.AnonymousQueue;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

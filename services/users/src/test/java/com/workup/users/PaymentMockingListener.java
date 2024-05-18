@@ -19,7 +19,15 @@ public class PaymentMockingListener {
   @RabbitHandler
   @Async
   public CompletableFuture<CreateWalletResponse> receive(CreateWalletRequest in) throws Exception {
-    return CompletableFuture.completedFuture(
-        CreateWalletResponse.builder().withStatusCode(statusCodeToBeReturned).build());
+    try {
+      return CompletableFuture.completedFuture(
+          CreateWalletResponse.builder().withStatusCode(statusCodeToBeReturned).build());
+    } catch (Exception ex) {
+      return CompletableFuture.completedFuture(
+          CreateWalletResponse.builder()
+              .withErrorMessage("Not Implemented.")
+              .withStatusCode(HttpStatusCode.NOT_IMPLEMENTED)
+              .build());
+    }
   }
 }

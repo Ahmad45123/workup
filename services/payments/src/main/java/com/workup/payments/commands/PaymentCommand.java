@@ -14,9 +14,9 @@ import lombok.Data;
 public abstract class PaymentCommand<T extends CommandRequest, Q extends CommandResponse>
     implements Command<T, Q> {
 
-  private PaymentRequestRepository paymentRequestRepository;
-  private PaymentTransactionRepository paymentTransactionRepository;
-  private WalletRepository walletRepository;
-  private WalletTransactionRepository walletTransactionRepository;
-  private RedisService redisService;
+  public PaymentRequestRepository paymentRequestRepository;
+  public PaymentTransactionRepository paymentTransactionRepository;
+  public WalletRepository walletRepository;
+  public WalletTransactionRepository walletTransactionRepository;
+  public RedisService redisService;
 }

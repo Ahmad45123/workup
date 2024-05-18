@@ -15,15 +15,15 @@ import org.springframework.stereotype.Component;
 public class ContractCommandMap
     extends CommandMap<ContractCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
-  @Autowired ContractRepository contractRepository;
+  @Autowired public ContractRepository contractRepository;
 
-  @Autowired ContractMilestoneRepository contractMilestoneRepository;
+  @Autowired public ContractMilestoneRepository contractMilestoneRepository;
 
-  @Autowired TerminationRequestRepository terminationRequestRepository;
+  @Autowired public TerminationRequestRepository terminationRequestRepository;
 
-  @Autowired AmqpTemplate rabbitTemplate;
+  @Autowired public AmqpTemplate rabbitTemplate;
 
-  @Autowired RedisService redisService;
+  @Autowired public RedisService redisService;
 
   public void registerCommands() {
     commands.put("InitiateContract", InitiateContractCommand.class);

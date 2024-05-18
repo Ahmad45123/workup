@@ -1,11 +1,14 @@
 package com.workup.payments;
 
+import com.workup.payments.commands.PaymentCommand;
 import com.workup.payments.commands.PaymentCommandMap;
+import com.workup.shared.commands.Command;
+import com.workup.shared.commands.CommandRequest;
+import com.workup.shared.commands.CommandResponse;
 import com.workup.shared.commands.controller.*;
 import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.ThreadPoolSize;
 import com.zaxxer.hikari.HikariDataSource;
-import java.lang.reflect.Field;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,21 +24,23 @@ import org.springframework.stereotype.Service;
 @Service
 @RabbitListener(queues = "#{controllerQueue.name}", id = "#{controllerQueue.name}")
 public class ControllerMQListener {
+  @Autowired public HikariDataSource hikariDataSource;
   @Autowired public PaymentCommandMap commandMap;
   @Autowired public ThreadPoolTaskExecutor taskExecutor;
-  @Autowired private ApplicationContext context;
-  @Autowired private RabbitListenerEndpointRegistry registry;
-  @Autowired private HikariDataSource hikariDataSource;
+  @Autowired public ApplicationContext context;
+  @Autowired public RabbitListenerEndpointRegistry registry;
+
+  private static final Logger logger = LogManager.getLogger(ControllerMQListener.class);
 
   @RabbitHandler
   public void receive(SetMaxThreadsRequest in) throws Exception {
     try {
-      System.out.println("Max threads is: " + taskExecutor.getMaxPoolSize());
+      logger.info("Max threads is: " + taskExecutor.getMaxPoolSize());
       setThreads(in.getMaxThreads());
       ThreadPoolSize.POOL_SIZE = taskExecutor.getMaxPoolSize();
-      System.out.println("Max threads set to: " + taskExecutor.getMaxPoolSize());
+      logger.info("Max threads set to: " + taskExecutor.getMaxPoolSize());
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.info(e.getMessage());
       e.printStackTrace();
     }
   }
@@ -43,10 +48,11 @@ public class ControllerMQListener {
   @RabbitHandler
   public void receive(SetLoggingLevelRequest in) throws Exception {
     try {
-      Logger logger = LogManager.getRootLogger();
+      Logger logger = LogManager.getLogger("com.workup.payments");
       Configurator.setAllLevels(logger.getName(), Level.valueOf(in.getLevel()));
+      logger.info("Logging level set to: " + in.getLevel());
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.info(e.getMessage());
       e.printStackTrace();
     }
   }
@@ -54,12 +60,11 @@ public class ControllerMQListener {
   @RabbitHandler
   public void receive(FreezeRequest in) throws Exception {
     try {
-      registry.getListenerContainer(ServiceQueueNames.JOBS).stop();
-      taskExecutor.shutdown();
-      setThreads(0);
-      System.out.println("Stopped all threads.");
+      registry.getListenerContainer(ServiceQueueNames.PAYMENTS).stop();
+      setThreads(1);
+      logger.info("Stopped all threads.");
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.info(e.getMessage());
       e.printStackTrace();
     }
   }
@@ -67,59 +72,82 @@ public class ControllerMQListener {
   @RabbitHandler
   public void receive(ContinueRequest in) throws Exception {
     try {
-      taskExecutor.start();
+      registry.getListenerContainer(ServiceQueueNames.PAYMENTS).start();
       setThreads(ThreadPoolSize.POOL_SIZE);
-      registry.getListenerContainer(ServiceQueueNames.JOBS).start();
+      logger.info("Continued all threads.");
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  @RabbitHandler
+  public void receive(UpdateCommandRequest in) throws Exception {
+    try {
+      byte[] byteArray = in.getByteCode();
+      Class<?> clazz =
+          (Class<?>)
+              (new MyClassLoader(this.getClass().getClassLoader())
+                  .loadClass(byteArray, in.getClassName()));
+
+      commandMap.replaceCommand(
+          in.getCommandName(),
+          (Class<? extends PaymentCommand<? extends CommandRequest, ? extends CommandResponse>>)
+              ((Command<?, ?>) clazz.newInstance()).getClass());
+
+      logger.info("Updated command: " + in.getCommandName());
+      // clazz.newInstance().Run(null);
+    } catch (Exception e) {
+      logger.info(e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
+  @RabbitHandler
+  public void receive(DeleteCommandRequest in) throws Exception {
+    try {
+      commandMap.removeCommand(in.getCommandName());
+      System.out.println("Deleted command: " + in.getCommandName());
     } catch (Exception e) {
       System.out.println(e.getMessage());
       e.printStackTrace();
     }
   }
 
-  @RabbitHandler
-  public void receive(UpdateCommandRequest in) throws Exception {
-    //    try {
-    //      String className = commandMap.getCommand(in.getName()).getClass().getName();
-    //      System.out.println("Updating command: " + in.getName());
-    //      System.out.println("Class: " + className);
-    //      Class newClass = new MyClassLoader().loadClass(in.getByteCode(), className);
-    //      commandMap.replaceCommand(in.getName(), newClass);
-    //    } catch (Exception e) {
-    //      System.out.println(e.getMessage());
-    //      e.printStackTrace();
-    //    }
+  static class MyClassLoader extends ClassLoader {
+    public MyClassLoader(ClassLoader classLoader) {
+      super(classLoader);
+    }
+
+    public Class<?> loadClass(byte[] byteCode, String className) {
+      return defineClass(className, byteCode, 0, byteCode.length);
+    }
+  }
+
+  private void setThreads(int threads) throws NoSuchFieldException, IllegalAccessException {
+    if (threads > taskExecutor.getCorePoolSize()) {
+      taskExecutor.setMaxPoolSize(threads);
+      taskExecutor.setCorePoolSize(threads);
+    } else {
+      taskExecutor.setCorePoolSize(threads);
+      taskExecutor.setMaxPoolSize(threads);
+    }
   }
 
   @RabbitHandler
   private void SetMaxDBConnections(SetMaxDBConnectionsRequest in) {
     try {
       if (hikariDataSource == null) {
-        System.out.println("HikariDataSource is null");
+        logger.info("HikariDataSource is null");
         return;
       }
-      System.out.println("Max DB connections is: " + hikariDataSource.getMaximumPoolSize());
+      logger.info("Max DB connections is: " + hikariDataSource.getMaximumPoolSize());
       hikariDataSource.setMaximumPoolSize(in.getMaxDBConnections());
-      System.out.println("Max DB connections set to: " + hikariDataSource.getMaximumPoolSize());
+      logger.info("Max DB connections set to: " + hikariDataSource.getMaximumPoolSize());
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.info(e.getMessage());
       e.printStackTrace();
     }
-  }
-
-  private void setThreads(int threads) throws NoSuchFieldException, IllegalAccessException {
-    ThreadPoolTaskExecutor myBean = context.getBean(ThreadPoolTaskExecutor.class);
-    Field maxPoolSize = ThreadPoolTaskExecutor.class.getDeclaredField("maxPoolSize");
-    maxPoolSize.setAccessible(true);
-    maxPoolSize.set(myBean, threads);
-    Field corePoolSize = ThreadPoolTaskExecutor.class.getDeclaredField("corePoolSize");
-    corePoolSize.setAccessible(true);
-    corePoolSize.set(myBean, threads);
-  }
-}
-
-class MyClassLoader extends ClassLoader {
-  public Class<?> loadClass(byte[] byteCode, String className) {
-    System.out.println("Loading class: " + className);
-    return defineClass(className, byteCode, 0, byteCode.length);
   }
 }
