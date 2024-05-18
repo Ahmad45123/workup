@@ -14,6 +14,17 @@ public class GetContractCommand extends ContractCommand<GetContractRequest, GetC
   @Override
   public GetContractResponse Run(GetContractRequest request) {
     try {
+      String cachingKey = request.getContractId();
+      GetContractResponse cachedResponse =
+          (GetContractResponse) redisService.getValue(cachingKey, GetContractResponse.class);
+      if (cachedResponse != null) {
+        ContractsLogger.print(
+            "[x] Contract request response fetched from cache: " + cachedResponse.toString(),
+            LoggingLevel.TRACE);
+
+        return cachedResponse;
+      }
+
       Optional<Contract> contractOptional =
           contractRepository.findById(UUID.fromString(request.getContractId()));
 
@@ -40,7 +51,9 @@ public class GetContractCommand extends ContractCommand<GetContractRequest, GetC
               .withErrorMessage("")
               .build();
 
+      redisService.setValue(cachingKey, response);
       return response;
+
     } catch (Exception ex) {
       ContractsLogger.print(
           "[x] Error occurred while fetching contract: " + ex.getMessage(), LoggingLevel.TRACE);

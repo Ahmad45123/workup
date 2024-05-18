@@ -18,15 +18,26 @@ public class GetPendingTerminationsCommand
   @Override
   public GetPendingTerminationsResponse Run(GetPendingTerminationsRequest request) {
 
-    Optional<Contract> contract =
-        contractRepository.findById(UUID.fromString(request.getContractId()));
-    if (contract.isEmpty())
-      return GetPendingTerminationsResponse.builder()
-          .withStatusCode(HttpStatusCode.BAD_REQUEST)
-          .withErrorMessage("Invalid Contract Id")
-          .build();
-
     try {
+      String cachingKey = request.getContractId() + "/pending_terminations";
+      GetPendingTerminationsResponse cachedResponse =
+          (GetPendingTerminationsResponse)
+              redisService.getValue(cachingKey, GetPendingTerminationsResponse.class);
+      if (cachedResponse != null) {
+        ContractsLogger.print(
+            "[x] Contract terminations response fetched from cache: " + cachedResponse.toString(),
+            LoggingLevel.TRACE);
+        return cachedResponse;
+      }
+
+      Optional<Contract> contract =
+          contractRepository.findById(UUID.fromString(request.getContractId()));
+      if (contract.isEmpty())
+        return GetPendingTerminationsResponse.builder()
+            .withStatusCode(HttpStatusCode.BAD_REQUEST)
+            .withErrorMessage("Invalid Contract Id")
+            .build();
+
       @SuppressWarnings("unchecked")
       List<TerminationRequest> terminationsList =
           (List<TerminationRequest>)
@@ -45,11 +56,16 @@ public class GetPendingTerminationsCommand
                               .build())
                   .toList();
 
-      return GetPendingTerminationsResponse.builder()
-          .withTerminationRequests(terminationsList)
-          .withStatusCode(HttpStatusCode.OK)
-          .withErrorMessage("")
-          .build();
+      GetPendingTerminationsResponse response =
+          GetPendingTerminationsResponse.builder()
+              .withTerminationRequests(terminationsList)
+              .withStatusCode(HttpStatusCode.OK)
+              .withErrorMessage("")
+              .build();
+
+      redisService.setValue(cachingKey, response);
+      return response;
+
     } catch (Exception e) {
       ContractsLogger.print(e.getMessage(), LoggingLevel.TRACE);
 
