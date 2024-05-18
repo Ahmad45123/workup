@@ -1,4 +1,3 @@
-
 version: '3.7'
 services:
   service_jobs:
@@ -15,3 +14,6 @@ services:
   
   service_webserver:
     image: workup:webserver
+
+  service_mediaserver:
+    image: workup:mediaserver

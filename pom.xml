@@ -16,7 +16,6 @@
 
     <modules>
         <module>shared</module>
-        <module>controller</module>
         <module>services/jobs</module>
         <module>services/payments</module>
         <module>services/users</module>
@@ -61,18 +60,18 @@
                 <artifactId>git-build-hook-maven-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                  <gitConfig>
-                    <pull.rebase>true</pull.rebase> 
-                  </gitConfig>
+                    <gitConfig>
+                        <pull.rebase>true</pull.rebase>
+                    </gitConfig>
                 </configuration>
                 <executions>
-                  <execution>
-                    <goals>       
-                      <goal>configure</goal>
-                    </goals>
-                  </execution>
+                    <execution>
+                        <goals>
+                            <goal>configure</goal>
+                        </goals>
+                    </execution>
                 </executions>
-              </plugin>
+            </plugin>
         </plugins>
     </build>
 

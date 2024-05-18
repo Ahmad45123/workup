@@ -8,15 +8,30 @@ services:
     image: ahmad45123/workup:webserver
     depends_on:
       - service_mq
+      - service_mediaserver
     ports:
-      - "8080:8080"
+      - "80:8080"
     networks:
       - frontend
     env_file:
       - ./webserver/.env
+    deploy:
+      labels:
+        swarm.autoscaler: 'true'
+        swarm.autoscaler.minimum: '1'
+        swarm.autoscaler.maximum: '4'
+
+  service_mediaserver:
+    image: ahmad45123/workup:mediaserver
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./mediaserver/.env
   
   service_mq:
     image: rabbitmq:3.13-management
+    ports:
+      - "5672:5672" # hacky method.. dont ever do this :(
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       interval: 30s
@@ -25,7 +40,7 @@ services:
     networks:
       - default
       - frontend
-    
+
   service_redis:
     image: redis:7.2.4
     healthcheck:
@@ -47,11 +62,14 @@ services:
       - jobs
     env_file:
       - ./services/jobs/.env
+    deploy:
+      labels:
+        swarm.autoscaler: 'true'
+        swarm.autoscaler.minimum: '1'
+        swarm.autoscaler.maximum: '3'
 
   jobs_db:
-    image: cassandra:4.0.7
-    volumes:
-      - ./services/jobs/cassandra-config/cassandra.yaml:/etc/cassandra/cassandra.yaml
+    image: ahmad45123/workup:sasicassandra
     healthcheck:
       test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
       interval: 20s
@@ -72,6 +90,11 @@ services:
       - payments
     env_file:
       - ./services/payments/.env
+    deploy:
+      labels:
+        swarm.autoscaler: 'true'
+        swarm.autoscaler.minimum: '1'
+        swarm.autoscaler.maximum: '3'
 
   payments_db:
     image: postgres:12.18
@@ -80,7 +103,7 @@ services:
       POSTGRES_USER: payments_user
       POSTGRES_DB: payments_database
     healthcheck:
-      test:  ["CMD", "pg_isready"]
+      test: [ "CMD", "pg_isready" ]
       interval: 20s
       timeout: 10s
       retries: 10
@@ -98,6 +121,11 @@ services:
       - contracts
     env_file:
       - ./services/contracts/.env
+    deploy:
+      labels:
+        swarm.autoscaler: 'true'
+        swarm.autoscaler.minimum: '1'
+        swarm.autoscaler.maximum: '3'
 
   contracts_db:
     image: cassandra:4.0.7
@@ -120,6 +148,11 @@ services:
       - users
     env_file:
       - ./services/users/.env
+    deploy:
+      labels:
+        swarm.autoscaler: 'true'
+        swarm.autoscaler.minimum: '1'
+        swarm.autoscaler.maximum: '3'
   
   users_db:
     image: mongo:7.0

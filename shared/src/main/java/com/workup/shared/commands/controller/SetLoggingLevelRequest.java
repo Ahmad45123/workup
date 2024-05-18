@@ -1,6 +1,5 @@
 package com.workup.shared.commands.controller;
 
-import com.workup.shared.enums.ErrorLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.jackson.Jacksonized;
@@ -9,6 +8,6 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @Builder(setterPrefix = "with")
 @Jacksonized
-public class SetErrorReportingLevelRequest {
-  ErrorLevel errorLevel;
+public class SetLoggingLevelRequest {
+  String level;
 }

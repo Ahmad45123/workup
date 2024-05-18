@@ -11,9 +11,9 @@ import org.springframework.amqp.core.AmqpTemplate;
 public abstract class JobCommand<T extends CommandRequest, Q extends CommandResponse>
     implements Command<T, Q> {
 
-  @Setter JobRepository jobRepository;
+  @Setter public JobRepository jobRepository;
 
-  @Setter ProposalRepository proposalRepository;
+  @Setter public ProposalRepository proposalRepository;
 
-  @Setter AmqpTemplate rabbitTemplate;
+  @Setter public AmqpTemplate rabbitTemplate;
 }

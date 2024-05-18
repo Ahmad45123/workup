@@ -22,11 +22,11 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="contracts" options="-parameters" />
-      <module name="controller" options="" />
+      <module name="controller" options="-parameters" />
       <module name="jobs" options="-parameters" />
       <module name="payments" options="-parameters" />
       <module name="users" options="-parameters" />
-      <module name="webserver" options="" />
+      <module name="webserver" options="-parameters" />
     </option>
   </component>
 </project>

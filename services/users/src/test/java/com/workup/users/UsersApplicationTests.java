@@ -27,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -44,6 +45,11 @@ class UsersApplicationTests {
   @Container
   static final MongoDBContainer mongoDBContainer =
       new MongoDBContainer("mongo:7.0").withExposedPorts(27017);
+
+  // redis container
+  @Container
+  static final GenericContainer redisContainer =
+      new GenericContainer("redis:7.2.4").withExposedPorts(6379);
 
   @Autowired private AmqpTemplate template;
   @Autowired private ClientRepository paymentRequestRepository;
@@ -78,6 +84,9 @@ class UsersApplicationTests {
     registry.add("spring.rabbitmq.port", rabbitMQContainer::getFirstMappedPort);
     registry.add("spring.rabbitmq.username", rabbitMQContainer::getAdminUsername);
     registry.add("spring.rabbitmq.password", rabbitMQContainer::getAdminPassword);
+    // add redis properties
+    registry.add("spring.cache.host", redisContainer::getHost);
+    registry.add("spring.cache.port", redisContainer::getFirstMappedPort);
   }
 
   @Test
