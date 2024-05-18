@@ -41,5 +41,10 @@ jobs:
     - name: Check Payments Tests
       run: cd services/payments && mvn test
 
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+  
     - name: Submit Dependency Snapshot
       uses: advanced-security/maven-dependency-submission-action@v3
