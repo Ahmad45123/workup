@@ -40,7 +40,6 @@ services:
     networks:
       - default
       - frontend
-      - datadog
     labels:
       com.datadoghq.ad.check_names: '["rabbitmq"]'
       com.datadoghq.ad.init_configs: '[{}]'
@@ -55,11 +54,41 @@ services:
       retries: 3
     networks:
       - default
-      - datadog
     labels:
       com.datadoghq.ad.check_names: '["redisdb"]'
       com.datadoghq.ad.init_configs: '[{}]'
       com.datadoghq.ad.instances: '[{"host": "service_redis","port":"6379"}]'
+
+  service_datadog:
+    image: gcr.io/datadoghq/agent:latest
+    deploy:
+      mode: global
+    networks:
+      - default
+    environment:
+      DD_API_KEY: 26913604f1968f188b5ca541aa58e092
+      DD_SYSTEM_PROBE_NETWORK_ENABLED: true
+      DD_PROCESS_AGENT_ENABLED: true
+      DD_SITE: us5.datadoghq.com
+      DD_LOGS_ENABLED: true
+      DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL: true
+      DD_CONTAINER_EXCLUDE: "name:datadog-agent"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - /sys/kernel/debug:/sys/kernel/debug
+    security_opt:
+      - apparmor:unconfined
+    cap_add:
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - SYS_PTRACE
+      - NET_ADMIN
+      - NET_BROADCAST
+      - NET_RAW
+      - IPC_LOCK
+      - CHOWN
 
   # ----- JOBS MICROSERVICE -------
   service_jobs:
@@ -181,6 +210,3 @@ networks:
   contracts:
   users:
   frontend:
-  datadog:
-    name: test-network
-    external: true
