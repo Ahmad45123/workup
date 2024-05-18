@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 public class JobCommandMap
     extends CommandMap<JobCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
-  @Autowired JobRepository jobRepository;
+  @Autowired public JobRepository jobRepository;
 
-  @Autowired ProposalRepository proposalRepository;
+  @Autowired public ProposalRepository proposalRepository;
 
-  @Autowired AmqpTemplate rabbitTemplate;
+  @Autowired public AmqpTemplate rabbitTemplate;
 
   public void registerCommands() {
     commands.put("CreateJob", CreateJobCommand.class);

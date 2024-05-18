@@ -30,6 +30,8 @@ services:
   
   service_mq:
     image: rabbitmq:3.13-management
+    ports:
+      - "5672:5672" # hacky method.. dont ever do this :(
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       interval: 30s
@@ -38,7 +40,7 @@ services:
     networks:
       - default
       - frontend
-    
+
   service_redis:
     image: redis:7.2.4
     healthcheck:
@@ -101,7 +103,7 @@ services:
       POSTGRES_USER: payments_user
       POSTGRES_DB: payments_database
     healthcheck:
-      test:  ["CMD", "pg_isready"]
+      test: [ "CMD", "pg_isready" ]
       interval: 20s
       timeout: 10s
       retries: 10

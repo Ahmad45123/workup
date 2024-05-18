@@ -2,6 +2,7 @@ package com.workup.jobs;
 
 import com.workup.shared.enums.ControllerQueueNames;
 import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.shared.enums.ThreadPoolSize;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -56,8 +57,9 @@ public class JobsApplication {
   @Bean
   public ThreadPoolTaskExecutor taskExecutor() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-    executor.setCorePoolSize(50);
-    executor.setMaxPoolSize(50);
+    executor.setCorePoolSize(ThreadPoolSize.POOL_SIZE);
+    executor.setMaxPoolSize(ThreadPoolSize.POOL_SIZE);
+    executor.setWaitForTasksToCompleteOnShutdown(true);
     executor.setQueueCapacity(500);
     executor.setThreadNamePrefix("jobs-");
     executor.initialize();

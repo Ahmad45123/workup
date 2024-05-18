@@ -24,4 +24,8 @@ public abstract class CommandMap<
     setupCommand(commandInstance);
     return commandInstance;
   }
+
+  public void replaceCommand(String command, Class<? extends R> newCommand) {
+    commands.put(command, newCommand);
+  }
 }

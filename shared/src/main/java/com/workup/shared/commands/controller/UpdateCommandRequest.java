@@ -9,5 +9,6 @@ import lombok.extern.jackson.Jacksonized;
 @Builder(setterPrefix = "with")
 @Jacksonized
 public class UpdateCommandRequest {
-  String name;
+  String commandName;
+  byte[] byteCode;
 }
