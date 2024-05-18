@@ -21,10 +21,18 @@ public class ContractsMockingListener {
   @Async
   public CompletableFuture<InitiateContractResponse> receive(InitiateContractRequest in)
       throws Exception {
-    return CompletableFuture.completedFuture(
-        InitiateContractResponse.builder()
-            .withContractId(contractIdToBeReturned)
-            .withStatusCode(statusCodeToBeReturned)
-            .build());
+    try {
+      return CompletableFuture.completedFuture(
+          InitiateContractResponse.builder()
+              .withContractId(contractIdToBeReturned)
+              .withStatusCode(statusCodeToBeReturned)
+              .build());
+    } catch (Exception ex) {
+      return CompletableFuture.completedFuture(
+          InitiateContractResponse.builder()
+              .withErrorMessage("Not Implemented.")
+              .withStatusCode(HttpStatusCode.NOT_IMPLEMENTED)
+              .build());
+    }
   }
 }

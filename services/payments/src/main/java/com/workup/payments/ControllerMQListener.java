@@ -85,11 +85,11 @@ public class ControllerMQListener {
   @RabbitHandler
   public void receive(UpdateCommandRequest in) throws Exception {
     try {
-      String className = commandMap.getCommand(in.getCommandName()).getClass().getName();
       byte[] byteArray = in.getByteCode();
       Class<?> clazz =
           (Class<?>)
-              (new MyClassLoader(this.getClass().getClassLoader()).loadClass(byteArray, className));
+              (new MyClassLoader(this.getClass().getClassLoader())
+                  .loadClass(byteArray, in.getClassName()));
 
       commandMap.replaceCommand(
           in.getCommandName(),

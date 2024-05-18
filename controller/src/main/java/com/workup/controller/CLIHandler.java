@@ -55,6 +55,11 @@ public class CLIHandler {
     return "Command Sent!";
   }
 
+  @Command(description = "Adds a new command")
+  public String addCommand(String app, String commandName, String className) throws Exception {
+    return updateCommand(app, commandName, className);
+  }
+
   @Command(description = "starts a specific app")
   public String start(String app) {
     app = app.toLowerCase();
@@ -102,6 +107,7 @@ public class CLIHandler {
           "",
           UpdateCommandRequest.builder()
               .withCommandName(commandName)
+              .withClassName(className)
               .withByteCode(byteArray)
               .build());
     } catch (Exception ex) {
