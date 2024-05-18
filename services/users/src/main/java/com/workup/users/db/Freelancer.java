@@ -1,5 +1,6 @@
 package com.workup.users.db;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import lombok.Builder;
@@ -15,18 +16,20 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 @Getter
 @Setter
 @Document(collection = "Freelancer")
-public class Freelancer {
+public class Freelancer implements Serializable {
   @Id private ObjectId id;
-  @Indexed private String email;
+
+  @Indexed(unique = true)
+  private String email;
 
   private String password_hash;
   private Date created_at;
-  private String full_name;
+  private String fullName;
   private Date birthdate;
-  private String resume_id;
+  private String resume_link;
   private String city;
   private String job_title;
-  private String photo_id;
+  private String photo_link;
   private String description;
   private List<String> skills;
   private List<String> languages;

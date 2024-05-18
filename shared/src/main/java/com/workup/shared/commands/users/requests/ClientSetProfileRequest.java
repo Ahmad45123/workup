@@ -9,11 +9,10 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class ClientSetProfileRequest extends CommandRequest {
-  public String user_id;
   public String name;
   public String email;
   public String city;
   public String description;
   public String industry;
-  public Integer employee_count;
+  public Integer employeeCount;
 }

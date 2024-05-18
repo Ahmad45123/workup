@@ -8,10 +8,13 @@ import com.workup.shared.commands.payments.wallettransaction.responses.WithdrawF
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.payments.WalletTransactionType;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 
 public class WithdrawFromWalletCommand
     extends PaymentCommand<WithdrawFromWalletRequest, WithdrawFromWalletResponse> {
+  private static final Logger logger = LogManager.getLogger(WithdrawFromWalletCommand.class);
 
   @Override
   @Transactional
@@ -43,7 +46,7 @@ public class WithdrawFromWalletCommand
     try {
       getWalletRepository().save(wallet.get());
 
-      System.out.println("[x] Wallet balance updated : " + wallet.get().getBalance());
+      logger.info("[x] Wallet balance updated : " + wallet.get().getBalance());
 
       WalletTransaction walletTransaction =
           WalletTransaction.builder()
@@ -54,7 +57,7 @@ public class WithdrawFromWalletCommand
               .build();
       getWalletTransactionRepository().save(walletTransaction);
 
-      System.out.println("[x] Wallet transaction created : " + walletTransaction);
+      logger.info("[x] Wallet transaction created : " + walletTransaction);
 
       return WithdrawFromWalletResponse.builder()
           .withStatusCode(HttpStatusCode.OK)

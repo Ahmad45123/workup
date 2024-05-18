@@ -9,9 +9,12 @@ import com.workup.shared.commands.payments.paymentrequest.responses.GetPaymentRe
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.redis.RedisService;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetPaymentRequestCommand
     extends PaymentCommand<GetPaymentRequestRequest, GetPaymentRequestResponse> {
+  private static final Logger logger = LogManager.getLogger(GetPaymentRequestCommand.class);
 
   @Override
   public GetPaymentRequestResponse Run(GetPaymentRequestRequest request) {
@@ -21,7 +24,7 @@ public class GetPaymentRequestCommand
         (GetPaymentRequestResponse)
             redisService.getValue(request.getPaymentRequestId(), GetPaymentRequestResponse.class);
     if (cachedResponse != null) {
-      System.out.println(
+      logger.info(
           "[x] Payment request response fetched from cache : " + cachedResponse.getRequest());
 
       return cachedResponse;
@@ -38,7 +41,7 @@ public class GetPaymentRequestCommand
           .build();
     }
 
-    System.out.println("[x] Payment request fetched : " + savedPaymentRequest.get());
+    logger.info("[x] Payment request fetched : " + savedPaymentRequest.get());
 
     PaymentRequestDTO paymentRequestDTO =
         PaymentRequestMapper.mapToPaymentRequestDTO(savedPaymentRequest.get());

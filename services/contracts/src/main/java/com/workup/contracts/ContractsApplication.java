@@ -1,20 +1,28 @@
 package com.workup.contracts;
 
-import static com.workup.contracts.tests.InitiateContractTests.initiateContractTest1;
-
-import com.workup.contracts.tests.HandleContractTerminationTests;
-import com.workup.contracts.tests.RequestContractTerminationTests;
+import com.workup.shared.enums.ControllerQueueNames;
 import com.workup.shared.enums.ServiceQueueNames;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.AnonymousQueue;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @SpringBootApplication
+@ComponentScan(basePackages = "com.workup")
+@EnableCaching
+@EnableAsync
 public class ContractsApplication {
 
   public static void main(String[] args) {
@@ -26,20 +34,20 @@ public class ContractsApplication {
     return args -> {
       System.out.println("ApplicationRunner is executing");
 
-      // Use below example function to test sending to the queue.
-      initiateContractTest1(template);
+      // // Use below example function to test sending to the queue.
+      // initiateContractTest1(template);
 
-      RequestContractTerminationTests requestTerminationCommandTests =
-          new RequestContractTerminationTests();
-      requestTerminationCommandTests.contractNotFoundTest(template);
-      requestTerminationCommandTests.unAuthorizedRequestTest(template);
-      requestTerminationCommandTests.requestedBeforeTest(template);
-      requestTerminationCommandTests.sucessTest(template);
+      // RequestContractTerminationTests requestTerminationCommandTests =
+      //     new RequestContractTerminationTests();
+      // requestTerminationCommandTests.contractNotFoundTest(template);
+      // requestTerminationCommandTests.unAuthorizedRequestTest(template);
+      // requestTerminationCommandTests.requestedBeforeTest(template);
+      // requestTerminationCommandTests.sucessTest(template);
 
-      HandleContractTerminationTests handleContractTerminationTests =
-          new HandleContractTerminationTests();
-      handleContractTerminationTests.requestNotFoundTest(template);
-      handleContractTerminationTests.successTest(template);
+      // HandleContractTerminationTests handleContractTerminationTests =
+      //     new HandleContractTerminationTests();
+      // handleContractTerminationTests.requestNotFoundTest(template);
+      // handleContractTerminationTests.successTest(template);
     };
   }
 
@@ -51,5 +59,31 @@ public class ContractsApplication {
   @Bean
   public MessageConverter messageConverter() {
     return new Jackson2JsonMessageConverter();
+  }
+
+  @Bean
+  public Queue controllerQueue() {
+    return new AnonymousQueue();
+  }
+
+  @Bean
+  public FanoutExchange fanout() {
+    return new FanoutExchange(ControllerQueueNames.CONTRACTS);
+  }
+
+  @Bean
+  public Binding fanoutBinding(FanoutExchange fanout, Queue controllerQueue) {
+    return BindingBuilder.bind(controllerQueue).to(fanout);
+  }
+
+  @Bean
+  public ThreadPoolTaskExecutor taskExecutor() {
+    ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+    executor.setCorePoolSize(50);
+    executor.setMaxPoolSize(50);
+    executor.setQueueCapacity(500);
+    executor.setThreadNamePrefix("contracts-");
+    executor.initialize();
+    return executor;
   }
 }

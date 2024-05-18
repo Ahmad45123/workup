@@ -1,5 +1,6 @@
 package com.workup.contracts.commands;
 
+import com.workup.contracts.logger.ContractsLogger;
 import com.workup.contracts.models.Contract;
 import com.workup.contracts.models.ContractMilestone;
 import com.workup.shared.commands.contracts.Milestone;
@@ -56,11 +57,11 @@ public class InitiateContractCommand
     try {
       Contract savedContract = contractRepository.save(contract);
 
-      System.out.println(" [x] Saved Contract '" + savedContract.getJobTitle());
+      ContractsLogger.print(" [x] Saved Contract '" + savedContract.getJobTitle());
 
       contractMilestoneRepository.saveAll(milestonesToAdd);
 
-      System.out.println(" [x] Saved All Milestones '" + savedContract.getJobTitle());
+      ContractsLogger.print(" [x] Saved All Milestones '" + savedContract.getJobTitle());
 
       return InitiateContractResponse.builder()
           .withContractId(savedContract.getContractId().toString())

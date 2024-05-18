@@ -39,6 +39,7 @@ public class MarkMilestoneAsPaidCommand
     try {
       contractMilestoneRepository.save(updatedMilestone);
       System.out.println(" [x] Marked Milestone as Paid '" + updatedMilestone);
+      return MarkPaymentCompletedResponse.builder().withStatusCode(HttpStatusCode.OK).build();
     } catch (Exception e) {
       e.printStackTrace();
       return MarkPaymentCompletedResponse.builder()
@@ -46,8 +47,6 @@ public class MarkMilestoneAsPaidCommand
           .withErrorMessage(e.getMessage())
           .build();
     }
-
-    return null;
   }
 
   private void pay(ContractMilestone milestone) {

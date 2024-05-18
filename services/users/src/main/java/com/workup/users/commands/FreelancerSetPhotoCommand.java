@@ -3,26 +3,31 @@ package com.workup.users.commands;
 import com.workup.shared.commands.users.requests.FreelancerSetPhotoRequest;
 import com.workup.shared.commands.users.responses.FreelancerSetPhotoResponse;
 import com.workup.shared.enums.HttpStatusCode;
-import java.io.ByteArrayInputStream;
-import java.util.Base64;
+import com.workup.users.db.Freelancer;
+import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FreelancerSetPhotoCommand
     extends UserCommand<FreelancerSetPhotoRequest, FreelancerSetPhotoResponse> {
+  private static final Logger logger = LogManager.getLogger(FreelancerSetPhotoCommand.class);
 
   @Override
   public FreelancerSetPhotoResponse Run(FreelancerSetPhotoRequest request) {
+    logger.info("[i] Setting Photo for Freelancer with id: " + request.getUserId());
+    Optional<Freelancer> freelancerOption = freelancerRepository.findById(request.getUserId());
 
-    String name = PHOTO_BUCKET + request.user_id;
-
-    byte[] photo_bytes_arr = Base64.getDecoder().decode(request.photo_encoded);
-
-    try {
-      gridFsTemplate.store(new ByteArrayInputStream(photo_bytes_arr), name);
-    } catch (Exception e) {
-      return FreelancerSetPhotoResponse.builder()
-          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .build();
+    if (!freelancerOption.isPresent()) {
+      logger.error("[x] Freelancer Doesn't Exist");
+      throw new RuntimeException("User not found");
     }
+
+    Freelancer freelancer = freelancerOption.get();
+
+    freelancer.setPhoto_link(request.photoLink);
+
+    freelancerRepository.save(freelancer);
+
     return FreelancerSetPhotoResponse.builder().withStatusCode(HttpStatusCode.OK).build();
   }
 }

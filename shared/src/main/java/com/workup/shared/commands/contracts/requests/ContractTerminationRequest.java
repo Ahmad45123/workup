@@ -2,6 +2,7 @@ package com.workup.shared.commands.contracts.requests;
 
 import com.workup.shared.commands.CommandRequest;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
@@ -17,8 +18,6 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class ContractTerminationRequest extends CommandRequest {
-
-  private final String userId;
-  private final String contractId;
+  @Setter private String contractId;
   private final String reason;
 }

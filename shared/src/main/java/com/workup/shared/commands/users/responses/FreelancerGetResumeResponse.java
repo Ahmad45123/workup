@@ -9,5 +9,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerGetResumeResponse extends CommandResponse {
-  public String resumeEncoded; // Base64 encoded resume
+  public String resumeLink;
 }

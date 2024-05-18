@@ -8,13 +8,16 @@ import com.workup.shared.commands.payments.wallettransaction.requests.GetWalletT
 import com.workup.shared.commands.payments.wallettransaction.responses.GetWalletTransactionsResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetWalletTransactionsCommand
     extends PaymentCommand<GetWalletTransactionsRequest, GetWalletTransactionsResponse> {
+  private static final Logger logger = LogManager.getLogger(GetWalletTransactionsCommand.class);
 
   @Override
   public GetWalletTransactionsResponse Run(GetWalletTransactionsRequest request) {
-    if (getWalletRepository().existsById(request.getFreelancerId())) {
+    if (!getWalletRepository().existsById(request.getFreelancerId())) {
       return GetWalletTransactionsResponse.builder()
           .withStatusCode(HttpStatusCode.BAD_REQUEST)
           .withErrorMessage("Wallet does not exist")
@@ -25,7 +28,7 @@ public class GetWalletTransactionsCommand
     List<WalletTransactionDTO> walletTransactionDTOS =
         WalletTransactionMapper.mapToWalletTransactionDTOs(savedTransactions);
 
-    System.out.println("[x] Wallet transactions fetched : " + walletTransactionDTOS);
+    logger.info("[x] Wallet transactions fetched : " + walletTransactionDTOS);
 
     return GetWalletTransactionsResponse.builder()
         .withStatusCode(HttpStatusCode.OK)

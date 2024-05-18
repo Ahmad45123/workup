@@ -3,38 +3,32 @@ package com.workup.users.commands;
 import com.workup.shared.commands.users.requests.FreelancerGetResumeRequest;
 import com.workup.shared.commands.users.responses.FreelancerGetResumeResponse;
 import com.workup.shared.enums.HttpStatusCode;
-import com.workup.users.db.Client;
-import java.util.Base64;
+import com.workup.users.db.Freelancer;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FreelancerGetResumeCommand
     extends UserCommand<FreelancerGetResumeRequest, FreelancerGetResumeResponse> {
+  private static final Logger logger = LogManager.getLogger(FreelancerGetResumeCommand.class);
 
   @Override
   public FreelancerGetResumeResponse Run(FreelancerGetResumeRequest request) {
-    Optional<Client> clientOptional = clientRepository.findById(request.user_id);
+    logger.info("[i] Getting Resume for Freelancer with id: " + request.getUserId());
+    Optional<Freelancer> freelancerOptional = freelancerRepository.findById(request.getUserId());
 
-    if (!clientOptional.isPresent()) {
-      return FreelancerGetResumeResponse.builder()
-          .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .build();
-    }
-    String name = RESUME_BUCKET + request.user_id;
-
-    byte[] bytesArr;
-    try {
-      bytesArr = gridFsTemplate.getResource(name).getInputStream().readAllBytes();
-    } catch (Exception e) {
+    if (!freelancerOptional.isPresent()) {
+      logger.error("[x] Freelancer Doesn't Exist");
       return FreelancerGetResumeResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .build();
     }
 
-    String base64Encoded = Base64.getEncoder().encodeToString(bytesArr);
+    Freelancer freelancer = freelancerOptional.get();
 
     return FreelancerGetResumeResponse.builder()
         .withStatusCode(HttpStatusCode.OK)
-        .withResumeEncoded(base64Encoded)
+        .withResumeLink(freelancer.getResume_link())
         .build();
   }
 }

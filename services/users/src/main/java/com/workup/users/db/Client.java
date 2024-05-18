@@ -1,5 +1,6 @@
 package com.workup.users.db;
 
+import java.io.Serializable;
 import java.util.Date;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,16 +14,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Setter
 @Document
-public class Client {
+public class Client implements Serializable {
   @Id private ObjectId id;
-  @Indexed private String email;
+
+  @Indexed(unique = true)
+  private String email;
 
   private String password_hash;
   private Date created_at;
   private String client_name;
   private String industry;
   private String city;
-  private String photo_id;
+  private String photo_link;
   private String client_description;
   private Integer employee_count;
 }

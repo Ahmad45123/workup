@@ -9,6 +9,5 @@ import lombok.extern.jackson.Jacksonized;
 @SuperBuilder(setterPrefix = "with")
 @Jacksonized
 public class FreelancerSetPhotoRequest extends CommandRequest {
-  public String user_id;
-  public String photo_encoded; // Base64 encoded photo
+  public String photoLink;
 }

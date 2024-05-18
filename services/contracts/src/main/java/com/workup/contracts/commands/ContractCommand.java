@@ -6,14 +6,20 @@ import com.workup.contracts.repositories.TerminationRequestRepository;
 import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
+import com.workup.shared.redis.RedisService;
 import lombok.Setter;
+import org.springframework.amqp.core.AmqpTemplate;
 
 public abstract class ContractCommand<T extends CommandRequest, Q extends CommandResponse>
     implements Command<T, Q> {
+
+  @Setter AmqpTemplate rabbitTemplate;
 
   @Setter ContractRepository contractRepository;
 
   @Setter ContractMilestoneRepository contractMilestoneRepository;
 
   @Setter TerminationRequestRepository terminationRequestRepository;
+
+  @Setter RedisService redisService;
 }

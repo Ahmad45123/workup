@@ -8,9 +8,12 @@ import com.workup.shared.commands.payments.paymentrequest.requests.GetClientPaym
 import com.workup.shared.commands.payments.paymentrequest.responses.GetClientPaymentRequestsResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class GetClientPaymentRequestsCommand
     extends PaymentCommand<GetClientPaymentRequestsRequest, GetClientPaymentRequestsResponse> {
+  private static final Logger logger = LogManager.getLogger(GetClientPaymentRequestsCommand.class);
 
   @Override
   public GetClientPaymentRequestsResponse Run(GetClientPaymentRequestsRequest request) {
@@ -20,7 +23,7 @@ public class GetClientPaymentRequestsCommand
     List<PaymentRequestDTO> paymentRequestDTOS =
         PaymentRequestMapper.mapToPaymentRequestDTOs(savedRequests);
 
-    System.out.println("[x] Payment requests fetched : " + paymentRequestDTOS);
+    logger.info("[x] Payment requests fetched : " + paymentRequestDTOS);
 
     return GetClientPaymentRequestsResponse.builder()
         .withStatusCode(HttpStatusCode.OK)

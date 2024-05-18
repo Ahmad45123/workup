@@ -1,0 +1,31 @@
+{
+  "name": "media-server",
+  "version": "1.0.0",
+  "description": "Media server for workup",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmed54123/workup.git"
+  },
+  "author": "aboueleyes",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.1",
+    "cron": "^1.7.0",
+    "dotenv": "^7.0.0",
+    "fs-extra": "^7.0.1",
+    "jimp": "^0.6.4",
+    "koa": "^2.7.0",
+    "koa-basic-auth": "^4.0.0",
+    "koa-body": "^4.1.1",
+    "koa-compress": "^3.0.0",
+    "koa-mount": "^4.0.0",
+    "koa-router": "^7.4.0",
+    "koa-sendfile": "^3.0.0",
+    "koa-static": "^5.0.0"
+  }
+}

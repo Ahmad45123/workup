@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  service_jobs:
+    image: workup:service_jobs
+
+  service_payments:
+    image: workup:service_payments
+
+  service_contracts:
+    image: workup:service_contracts
+
+  service_users:
+    image: workup:service_users
+  
+  service_webserver:
+    image: workup:webserver
+
+  service_mediaserver:
+    image: workup:mediaserver
