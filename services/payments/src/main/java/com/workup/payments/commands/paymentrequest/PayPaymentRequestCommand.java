@@ -77,7 +77,8 @@ public class PayPaymentRequestCommand
               .withMilestoneId(paymentRequest.get().getReferenceId())
               .build();
 
-      getAmqpTemplate().convertAndSend(ServiceQueueNames.CONTRACTS, markPaymentCompletedRequest);
+      getAmqpTemplate()
+          .convertSendAndReceive(ServiceQueueNames.CONTRACTS, markPaymentCompletedRequest);
 
       return PayPaymentRequestResponse.builder()
           .withStatusCode(HttpStatusCode.OK)
