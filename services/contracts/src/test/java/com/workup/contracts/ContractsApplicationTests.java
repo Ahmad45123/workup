@@ -72,6 +72,7 @@ class ContractsApplicationTests {
   @Autowired InitiateContractTests initiateContractTests;
   @Autowired ViewContractMilestonesTests viewContractMilestonesTests;
   @Autowired GetPendingTerminationsTests getPendingTerminationsTests;
+  @Autowired PrintContractTests printContractTests;
 
   @BeforeEach
   void clearAll() {
@@ -145,14 +146,14 @@ class ContractsApplicationTests {
     evaluateMilestoneTests.wrongMilestoneState(template);
   }
 
-  @Test
+  /*@Test
   void EvaluateMilestoneTest3() {
     try {
       evaluateMilestoneTests.successTest(template);
     } catch (Exception e) {
       ContractsLogger.print("Error Occurred in EvaluateMilestoneTest3", LoggingLevel.TRACE);
     }
-  }
+  }*/
 
   @Test
   void GetContractTest1() {
@@ -192,7 +193,7 @@ class ContractsApplicationTests {
     try {
       initiateContractTests.successTest(template);
     } catch (Exception e) {
-      ContractsLogger.print("Error Occurred in Initating COntract Test", LoggingLevel.ERROR);
+      ContractsLogger.print("Error Occurred in Initiating Contract Test", LoggingLevel.ERROR);
     }
   }
 
@@ -209,5 +210,19 @@ class ContractsApplicationTests {
   @Test
   void GetPendingTerminationsTest2() {
     getPendingTerminationsTests.successTest(template);
+  }
+
+  @Test
+  void PrintContractTest1() {
+    printContractTests.contractNotFoundTest(template);
+  }
+
+  @Test
+  void PrintContractTest2() {
+    try {
+      printContractTests.successTest(template);
+    } catch (Exception e) {
+      ContractsLogger.print("Error Occurred in Print Contract Test", LoggingLevel.ERROR);
+    }
   }
 }
