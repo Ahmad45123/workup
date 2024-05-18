@@ -10,5 +10,6 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class UpdateCommandRequest {
   String commandName;
+  String className;
   byte[] byteCode;
 }

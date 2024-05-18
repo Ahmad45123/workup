@@ -28,4 +28,8 @@ public abstract class CommandMap<
   public void replaceCommand(String command, Class<? extends R> newCommand) {
     commands.put(command, newCommand);
   }
+
+  public void removeCommand(String command) {
+    commands.remove(command);
+  }
 }

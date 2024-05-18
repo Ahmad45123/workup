@@ -19,16 +19,16 @@ public abstract class UserCommand<
   static final String PHOTO_BUCKET = "photos:";
   static final String RESUME_BUCKET = "resume:";
 
-  @Setter FreelancerRepository freelancerRepository;
+  @Setter public FreelancerRepository freelancerRepository;
 
-  @Setter ExperienceRepository experienceRepository;
+  @Setter public ExperienceRepository experienceRepository;
 
-  @Setter EducationRepository educationRepository;
+  @Setter public EducationRepository educationRepository;
 
-  @Setter AchievementRepository achievementRepository;
+  @Setter public AchievementRepository achievementRepository;
 
-  @Setter ClientRepository clientRepository;
+  @Setter public ClientRepository clientRepository;
 
-  @Setter AmqpTemplate rabbitTemplate;
-  @Autowired GridFsTemplate gridFsTemplate;
+  @Setter public AmqpTemplate rabbitTemplate;
+  @Autowired public GridFsTemplate gridFsTemplate;
 }

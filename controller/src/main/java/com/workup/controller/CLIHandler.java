@@ -3,9 +3,7 @@ package com.workup.controller;
 import asg.cliche.CLIException;
 import asg.cliche.Command;
 import com.workup.shared.commands.controller.*;
-import com.workup.shared.commands.jobs.requests.CreateJobRequest;
 import com.workup.shared.enums.ControllerQueueNames;
-import com.workup.shared.enums.ServiceQueueNames;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,6 +55,11 @@ public class CLIHandler {
     return "Command Sent!";
   }
 
+  @Command(description = "Adds a new command")
+  public String addCommand(String app, String commandName, String className) throws Exception {
+    return updateCommand(app, commandName, className);
+  }
+
   @Command(description = "starts a specific app")
   public String start(String app) {
     app = app.toLowerCase();
@@ -78,12 +81,7 @@ public class CLIHandler {
     return "Command sent";
   }
 
-  @Command(description = "stops a specific app")
-  public String setmq(String app, int appNum) {
-    return "setmq";
-  }
-
-  @Command(description = "stops a specific app")
+  @Command(description = "sets a logging level")
   public String setLoggingLevel(String app, String level) {
     app = app.toLowerCase();
     if (!appQueueMap.containsKey(app)) {
@@ -94,17 +92,6 @@ public class CLIHandler {
     rabbitTemplate.convertAndSend(
         appQueueMap.get(app), "", SetLoggingLevelRequest.builder().withLevel(level).build());
     return "Command sent!!";
-  }
-
-  @Command(description = "test")
-  public void test() {
-    CreateJobRequest request = CreateJobRequest.builder().withTitle("Ziko").build();
-    rabbitTemplate.convertSendAndReceive(ServiceQueueNames.JOBS, request);
-  }
-
-  @Command(description = "Creates a new command")
-  public String addcommand(String app, String commandName, String className) {
-    return "Add command";
   }
 
   @Command(description = "Updates an existing command")
@@ -120,6 +107,7 @@ public class CLIHandler {
           "",
           UpdateCommandRequest.builder()
               .withCommandName(commandName)
+              .withClassName(className)
               .withByteCode(byteArray)
               .build());
     } catch (Exception ex) {
@@ -142,12 +130,13 @@ public class CLIHandler {
   }
 
   @Command(description = "Deletes an existing command")
-  public String deletecommand(String app, String commandName, String className) {
-    return "Delete command";
-  }
-
-  @Command(description = "stops a specific app")
-  public String updateClass(String app, int appNum) {
-    return "update class";
+  public String deleteCommand(String app, String commandName) {
+    app = app.toLowerCase();
+    if (!appQueueMap.containsKey(app)) {
+      return "Error: app can only be jobs, users, contracts or payments!";
+    }
+    rabbitTemplate.convertAndSend(
+        appQueueMap.get(app), "", DeleteCommandRequest.builder().commandName(commandName).build());
+    return "Command sent";
   }
 }
