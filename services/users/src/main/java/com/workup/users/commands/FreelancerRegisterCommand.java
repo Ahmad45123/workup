@@ -30,6 +30,15 @@ public class FreelancerRegisterCommand
           .build();
     }
     try {
+      // check if registered already as client
+      if (clientRepository.findByEmail(request.getEmail()).isPresent()) {
+        logger.error("[x] User with email" + request.getEmail() + " already registered as client");
+        return SignUpAndInResponse.builder()
+            .withStatusCode(HttpStatusCode.BAD_REQUEST)
+            .withSuccess(false)
+            .withErrorMessage("User already registered as client")
+            .build();
+      }
       Freelancer freelancer =
           Freelancer.builder()
               .withEmail(request.getEmail())
@@ -58,6 +67,7 @@ public class FreelancerRegisterCommand
       logger.error("[x] Error Registering Freelancer: " + e.getMessage());
       return SignUpAndInResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .withErrorMessage(e.getMessage())
           .withSuccess(false)
           .build();
     }
