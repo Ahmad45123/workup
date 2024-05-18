@@ -32,6 +32,7 @@ services:
     image: rabbitmq:3.13-management
     ports:
       - "5672:5672" # hacky method.. dont ever do this :(
+      - "15672:15672"
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       interval: 30s
