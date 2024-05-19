@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -107,6 +108,22 @@ public class ControllerMQListener {
     try {
       commandMap.removeCommand(in.getCommandName());
       System.out.println("Deleted command: " + in.getCommandName());
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      e.printStackTrace();
+    }
+  }
+
+  @RabbitHandler
+  public void receive(SetMessageQueueRequest in) throws Exception {
+    try {
+      System.out.println("Setting message queue to: " + in.getHost() + ":" + in.getPort());
+      CachingConnectionFactory connectionFactory = new CachingConnectionFactory(in.getHost());
+      connectionFactory.setPort(in.getPort());
+      connectionFactory.setUsername("guest");
+      connectionFactory.setPassword("guest");
+
+      System.out.println("Message queue set to: " + in.getHost() + ":" + in.getPort());
     } catch (Exception e) {
       System.out.println(e.getMessage());
       e.printStackTrace();

@@ -9,11 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 import javassist.*;
 import org.apache.logging.log4j.Level;
-import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class CLIHandler {
-  @Autowired AmqpTemplate rabbitTemplate;
+  @Autowired RabbitTemplate rabbitTemplate;
   private static final Map<String, String> appQueueMap = new HashMap<>();
 
   static {
@@ -118,10 +119,10 @@ public class CLIHandler {
 
   private byte[] getByteCode(String commandName, String className)
       throws InstantiationException,
-          IllegalAccessException,
-          NotFoundException,
-          IOException,
-          CannotCompileException {
+      IllegalAccessException,
+      NotFoundException,
+      IOException,
+      CannotCompileException {
     ClassPool pool = ClassPool.getDefault();
     pool.insertClassPath(new ClassClassPath(ControllerApplication.class));
     CtClass ctClass = pool.get(className);
@@ -138,5 +139,22 @@ public class CLIHandler {
     rabbitTemplate.convertAndSend(
         appQueueMap.get(app), "", DeleteCommandRequest.builder().commandName(commandName).build());
     return "Command sent";
+  }
+
+  @Command(description = "Change host")
+  public String setMQ(String host, int port) {
+    rabbitTemplate.convertAndSend(
+        ControllerQueueNames.JOBS,
+        "",
+        SetMessageQueueRequest.builder().withHost(host).withPort(port).build());
+    CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host);
+    connectionFactory.setPort(port);
+    connectionFactory.setUsername("guest");
+    connectionFactory.setPassword("guest");
+    rabbitTemplate.setConnectionFactory(connectionFactory);
+    // for(Map.Entry<String, String> entry : appQueueMap.entrySet()){
+    //   rabbitTemplate.convertAndSend(entry.getValue(), "", SetMessageQueueRequest.builder().withHost(host).withPort(port).build());
+    // }
+    return "Host changed";
   }
 }

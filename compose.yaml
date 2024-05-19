@@ -32,6 +32,21 @@ services:
     image: rabbitmq:3.13-management
     ports:
       - "5672:5672" # hacky method.. dont ever do this :(
+      - "15672:15672"  # RabbitMQ management UI port
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    networks:
+      - default
+      - frontend
+  
+  service_mq-1:
+    image: rabbitmq:3.13-management
+    ports:
+      - "5671:5672" # hacky method.. dont ever do this :(
+      - "15671:15672"  # RabbitMQ management UI port
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       interval: 30s
