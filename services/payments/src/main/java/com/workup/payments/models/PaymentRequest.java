@@ -33,8 +33,8 @@ public class PaymentRequest {
   @DecimalMin(value = "0.00", message = "Amount must be greater than 0.00")
   private double amount;
 
-  @Column(name = "description")
-  private String description;
+  @Column(name = "reference_id", nullable = false)
+  private String referenceId;
 
   @Column(name = "status", nullable = false)
   @Enumerated(EnumType.STRING)
@@ -55,7 +55,7 @@ public class PaymentRequest {
       String freelancerId,
       String clientId,
       double amount,
-      String description,
+      String referenceId,
       PaymentRequestStatus status,
       Date createdAt,
       Date updatedAt) {
@@ -63,7 +63,7 @@ public class PaymentRequest {
     this.freelancerId = freelancerId;
     this.clientId = clientId;
     this.amount = amount;
-    this.description = description;
+    this.referenceId = referenceId;
     this.status = PaymentRequestStatus.PENDING;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;

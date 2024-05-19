@@ -69,7 +69,7 @@ public class GetMyProposalsCommand
           .withStatusCode(HttpStatusCode.OK)
           .build();
     } catch (Exception e) {
-      logger.error("[x] An error occurred while fetching proposals", e.getMessage());
+      logger.error("[x] An error occurred while fetching proposals" + e.getMessage());
       return GetMyProposalsResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage("An error occurred while fetching proposals")

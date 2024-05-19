@@ -13,13 +13,13 @@ import org.springframework.amqp.core.AmqpTemplate;
 public abstract class ContractCommand<T extends CommandRequest, Q extends CommandResponse>
     implements Command<T, Q> {
 
-  @Setter AmqpTemplate rabbitTemplate;
+  @Setter public AmqpTemplate rabbitTemplate;
 
-  @Setter ContractRepository contractRepository;
+  @Setter public ContractRepository contractRepository;
 
-  @Setter ContractMilestoneRepository contractMilestoneRepository;
+  @Setter public ContractMilestoneRepository contractMilestoneRepository;
 
-  @Setter TerminationRequestRepository terminationRequestRepository;
+  @Setter public TerminationRequestRepository terminationRequestRepository;
 
-  @Setter RedisService redisService;
+  @Setter public RedisService redisService;
 }

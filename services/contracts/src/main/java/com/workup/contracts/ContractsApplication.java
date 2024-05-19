@@ -6,6 +6,7 @@ import com.workup.contracts.logger.ContractsLogger;
 import com.workup.contracts.logger.LoggingLevel;
 import com.workup.shared.enums.ControllerQueueNames;
 import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.shared.enums.ThreadPoolSize;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.AnonymousQueue;
 import org.springframework.amqp.core.Binding;
@@ -71,8 +72,9 @@ public class ContractsApplication {
   @Bean
   public ThreadPoolTaskExecutor taskExecutor() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-    executor.setCorePoolSize(50);
-    executor.setMaxPoolSize(50);
+    executor.setCorePoolSize(ThreadPoolSize.POOL_SIZE);
+    executor.setMaxPoolSize(ThreadPoolSize.POOL_SIZE);
+    executor.setWaitForTasksToCompleteOnShutdown(true);
     executor.setQueueCapacity(500);
     executor.setThreadNamePrefix("contracts-");
     executor.initialize();

@@ -1,5 +1,6 @@
 package com.workup.contracts;
 
+
 import com.workup.contracts.logger.ContractsLogger;
 import com.workup.contracts.logger.LoggingLevel;
 import com.workup.contracts.repositories.ContractMilestoneRepository;
@@ -20,7 +21,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
+import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @Testcontainers
 @Import(TestConfigBase.class)
@@ -232,3 +233,8 @@ class ContractsApplicationTests {
     }
   }
 }
+
+
+
+
+

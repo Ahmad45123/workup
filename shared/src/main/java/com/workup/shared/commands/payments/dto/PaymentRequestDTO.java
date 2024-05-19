@@ -15,7 +15,7 @@ public class PaymentRequestDTO {
   private String freelancerId;
   private String clientId;
   private double amount;
-  private String description;
+  private String referenceId;
   private Date createdAt;
   private Date updatedAt;
   private PaymentRequestStatus status;

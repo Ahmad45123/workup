@@ -17,6 +17,7 @@ import com.workup.shared.commands.CommandMap;
 import com.workup.shared.commands.CommandRequest;
 import com.workup.shared.commands.CommandResponse;
 import com.workup.shared.redis.RedisService;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,15 +25,12 @@ import org.springframework.stereotype.Component;
 public class PaymentCommandMap
     extends CommandMap<PaymentCommand<? extends CommandRequest, ? extends CommandResponse>> {
 
-  @Autowired private PaymentRequestRepository paymentRequestRepository;
-
-  @Autowired private PaymentTransactionRepository paymentTransactionRepository;
-
-  @Autowired private WalletRepository walletRepository;
-
-  @Autowired private WalletTransactionRepository walletTransactionRepository;
-
-  @Autowired private RedisService redisService;
+  @Autowired public AmqpTemplate amqpTemplate;
+  @Autowired public PaymentRequestRepository paymentRequestRepository;
+  @Autowired public PaymentTransactionRepository paymentTransactionRepository;
+  @Autowired public WalletRepository walletRepository;
+  @Autowired public WalletTransactionRepository walletTransactionRepository;
+  @Autowired public RedisService redisService;
 
   public void registerCommands() {
     /* PaymentRequest commands */
@@ -60,6 +58,7 @@ public class PaymentCommandMap
   @Override
   public void setupCommand(
       PaymentCommand<? extends CommandRequest, ? extends CommandResponse> command) {
+    command.setAmqpTemplate(amqpTemplate);
     command.setPaymentRequestRepository(paymentRequestRepository);
     command.setPaymentTransactionRepository(paymentTransactionRepository);
     command.setWalletRepository(walletRepository);

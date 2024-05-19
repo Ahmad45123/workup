@@ -1,6 +1,7 @@
 package com.workup.jobs.models;
 
 import com.workup.shared.enums.jobs.Experience;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Getter
 @Builder(setterPrefix = "with")
 @Table("jobs")
-public class Job {
+public class Job implements Serializable {
 
   @PrimaryKey private UUID id;
 
@@ -28,6 +29,7 @@ public class Job {
 
   @SASI(indexMode = IndexMode.CONTAINS)
   @Column("search_index")
+  @Setter
   private String searchIndex;
 
   @CassandraType(type = CassandraType.Name.LIST, typeArguments = CassandraType.Name.TEXT)
