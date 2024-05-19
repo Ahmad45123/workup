@@ -13,5 +13,5 @@ public class CreatePaymentRequestRequest extends CommandRequest {
   private final String clientId;
   private final String freelancerId;
   private final double amount;
-  private final String description;
+  private final String referenceId;
 }

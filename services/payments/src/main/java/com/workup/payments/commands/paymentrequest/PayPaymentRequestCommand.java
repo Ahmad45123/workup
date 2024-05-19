@@ -5,9 +5,11 @@ import com.workup.payments.models.PaymentRequest;
 import com.workup.payments.models.PaymentTransaction;
 import com.workup.payments.models.Wallet;
 import com.workup.payments.models.WalletTransaction;
+import com.workup.shared.commands.contracts.requests.MarkPaymentCompletedRequest;
 import com.workup.shared.commands.payments.paymentrequest.requests.PayPaymentRequestRequest;
 import com.workup.shared.commands.payments.paymentrequest.responses.PayPaymentRequestResponse;
 import com.workup.shared.enums.HttpStatusCode;
+import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.payments.PaymentRequestStatus;
 import com.workup.shared.enums.payments.PaymentTransactionStatus;
 import com.workup.shared.enums.payments.WalletTransactionType;
@@ -66,11 +68,18 @@ public class PayPaymentRequestCommand
               .withWalletId(paymentRequest.get().getFreelancerId())
               .withAmount(paymentRequest.get().getAmount())
               .withPaymentTransactionId(savedPaymentTransaction.getId())
-              .withDescription(paymentRequest.get().getDescription())
               .withTransactionType(WalletTransactionType.CREDIT)
               .build();
       WalletTransaction savedWalletTransaction =
           getWalletTransactionRepository().save(walletTransaction);
+
+      MarkPaymentCompletedRequest markPaymentCompletedRequest =
+          MarkPaymentCompletedRequest.builder()
+              .withMilestoneId(paymentRequest.get().getReferenceId())
+              .build();
+
+      getAmqpTemplate()
+          .convertSendAndReceive(ServiceQueueNames.CONTRACTS, markPaymentCompletedRequest);
 
       logger.info("[x] Wallet transaction saved : " + savedWalletTransaction);
       return PayPaymentRequestResponse.builder()
