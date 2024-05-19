@@ -43,7 +43,7 @@
     </Appenders>
 
     <Loggers>
-        <AsyncLogger name="com.workup.contracts" level="TRACE" additivity="false">
+        <AsyncLogger name="com.workup.contracts" level="INFO" additivity="false">
             <AppenderRef ref="Console" level="DEBUG"/>
             <AppenderRef ref="AppLogsFileAppender" />
             <AppenderRef ref="ErrorsLogsFileAppender" level="ERROR"/>
