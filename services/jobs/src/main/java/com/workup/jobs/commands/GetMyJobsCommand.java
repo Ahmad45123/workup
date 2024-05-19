@@ -35,7 +35,7 @@ public class GetMyJobsCommand extends JobCommand<GetMyJobsRequest, GetMyJobsResp
           .withStatusCode(HttpStatusCode.OK)
           .build();
     } catch (Exception e) {
-      logger.error("[x] An error occurred while fetching jobs", e.getMessage());
+      logger.error("[x] An error occurred while fetching jobs" + e.getMessage());
       return GetMyJobsResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage("An error occurred while fetching jobs")

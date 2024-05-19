@@ -37,7 +37,7 @@ public class CreateJobCommand extends JobCommand<CreateJobRequest, CreateJobResp
           .withJobId(savedJob.getId().toString())
           .build();
     } catch (Exception e) {
-      logger.error("[x] An error occurred while saving job", e.getMessage());
+      logger.error("[x] An error occurred while saving job" + e.getMessage());
       return CreateJobResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)
           .withErrorMessage("An error occurred while saving job")

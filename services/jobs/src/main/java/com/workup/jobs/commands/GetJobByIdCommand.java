@@ -29,7 +29,7 @@ public class GetJobByIdCommand extends JobCommand<GetJobByIdRequest, GetJobByIdR
             .withSkills(job.get().getSkills())
             .withExperience(job.get().getExperienceLevel())
             .withClientId(job.get().getClientId())
-            .withIsActive(job.get().isActive())
+            .withActive(job.get().isActive())
             .withBudget(job.get().getBudget())
             .withCreatedAt(job.get().getCreatedAt())
             .withModifiedAt(job.get().getUpdatedAt())
@@ -43,7 +43,7 @@ public class GetJobByIdCommand extends JobCommand<GetJobByIdRequest, GetJobByIdR
             .build();
       }
     } catch (Exception e) {
-      logger.error("[x] An error occurred while fetching job", e.getMessage());
+      logger.error("[x] An error occurred while fetching job" + e.getMessage());
 
       return GetJobByIdResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)

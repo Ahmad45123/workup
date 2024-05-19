@@ -2,6 +2,7 @@ package com.workup.jobs.models;
 
 import com.workup.shared.commands.jobs.proposals.JobDuration;
 import com.workup.shared.commands.jobs.proposals.ProposalStatus;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +21,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Getter
 @Builder(setterPrefix = "with")
 @Table("proposals")
-public class Proposal {
+public class Proposal implements Serializable {
 
   @PrimaryKey private Proposal.ProposalPrimaryKey primaryKey;
 
@@ -51,7 +52,7 @@ public class Proposal {
   @PrimaryKeyClass
   @Builder(setterPrefix = "with")
   @Getter
-  public static class ProposalPrimaryKey {
+  public static class ProposalPrimaryKey implements Serializable {
 
     @PrimaryKeyColumn(name = "job_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     private String jobId;
