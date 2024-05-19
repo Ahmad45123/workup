@@ -155,8 +155,8 @@ public class CLIHandler {
         return digitalOceanClient;
     }
 
-    @Command(description = "Spawns a new droplet instance")
-    public String spawnMachine(String dropletName) {
+    @Command(description = "Spawns a new droplet instance, and sets it to join the swarm with the token and the ip")
+    public String spawnMachine(String dropletName, String swarmToken, String swarmIP) {
         DigitalOceanClient client = setupClient();
 
         try {
@@ -166,6 +166,11 @@ public class CLIHandler {
             newDroplet.setImage(new Image("ubuntu-24-04-x64")); // Replace with actual image ID
             newDroplet.setRegion(new Region("lon1")); // Replace with actual region slug
             newDroplet.setInstallMonitoring(true);
+
+            String gistURL = "https://shorturl.at/ZEU34";
+
+            newDroplet.setUserData(
+                    "#!/bin/bash\nwget -O /tmp/setupmachine.sh " + gistURL + " && cd /tmp && chmod +x setupmachine.sh && ./setupmachine.sh " + swarmToken + " " + swarmIP + " && touch /finished.txt ");
 
             Droplet createdDroplet = client.createDroplet(newDroplet);
 
