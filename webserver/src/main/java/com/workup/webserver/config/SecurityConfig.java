@@ -31,6 +31,8 @@ public class SecurityConfig {
                 authorize
                     .requestMatchers(HttpMethod.OPTIONS)
                     .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/")
+                    .permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/v1/users/login")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/v1/users/clients/register")
