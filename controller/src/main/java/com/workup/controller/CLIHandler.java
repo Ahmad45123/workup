@@ -170,7 +170,7 @@ public class CLIHandler {
             String gistURL = "https://shorturl.at/ZEU34";
 
             newDroplet.setUserData(
-                    "#!/bin/bash\nwget -O /tmp/setupmachine.sh " + gistURL + " && cd /tmp && chmod +x setupmachine.sh && ./setupmachine.sh " + swarmToken + " " + swarmIP + " && touch /finished.txt ");
+                    "#!/bin/bash\nwget -O /tmp/setupmachine.sh " + gistURL + " && cd /tmp && chmod +x setupmachine.sh && yes | ./setupmachine.sh " + swarmToken + " " + swarmIP + " && touch /finished.txt ");
 
             Droplet createdDroplet = client.createDroplet(newDroplet);
 
