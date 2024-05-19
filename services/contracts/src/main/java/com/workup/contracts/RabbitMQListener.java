@@ -198,16 +198,34 @@ public class RabbitMQListener {
   @RabbitHandler
   @Async
   public CompletableFuture<GetMilestoneResponse> receive(GetMilestoneRequest in) throws Exception {
-    return CompletableFuture.completedFuture(
-        ((GetMilestoneCommand) commandMap.getCommand("GetMilestone")).Run(in));
+    try {
+      return CompletableFuture.completedFuture(
+          (GetMilestoneResponse)
+              ((Command<CommandRequest, ?>) commandMap.getCommand("GetMilestone")).Run(in));
+    } catch (Exception ex) {
+      return CompletableFuture.completedFuture(
+          GetMilestoneResponse.builder()
+              .withErrorMessage("Not Implemented.")
+              .withStatusCode(HttpStatusCode.NOT_IMPLEMENTED)
+              .build());
+    }
   }
 
   @RabbitHandler
   @Async
   public CompletableFuture<PrintContractResponse> receive(PrintContractRequest in)
       throws Exception {
-    return CompletableFuture.completedFuture(
-        ((PrintContractCommand) commandMap.getCommand("PrintContract")).Run(in));
+    try {
+      return CompletableFuture.completedFuture(
+          (PrintContractResponse)
+              ((Command<CommandRequest, ?>) commandMap.getCommand("PrintContract")).Run(in));
+    } catch (Exception ex) {
+      return CompletableFuture.completedFuture(
+          PrintContractResponse.builder()
+              .withErrorMessage("Not Implemented.")
+              .withStatusCode(HttpStatusCode.NOT_IMPLEMENTED)
+              .build());
+    }
   }
   // NEW_COMMAND_BOILERPLATE
 
