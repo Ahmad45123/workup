@@ -15,6 +15,7 @@ import org.apache.logging.log4j.core.config.Configurator;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -28,6 +29,7 @@ public class ControllerMQListener {
   @Autowired public ThreadPoolTaskExecutor taskExecutor;
   @Autowired private ApplicationContext context;
   @Autowired private RabbitListenerEndpointRegistry registry;
+  @Autowired private RabbitTemplate rabbitTemplate;
 
   private static final Logger logger = LogManager.getLogger(ControllerMQListener.class);
 
@@ -122,8 +124,12 @@ public class ControllerMQListener {
       connectionFactory.setPort(in.getPort());
       connectionFactory.setUsername("guest");
       connectionFactory.setPassword("guest");
-
-      System.out.println("Message queue set to: " + in.getHost() + ":" + in.getPort());
+      rabbitTemplate.setConnectionFactory(connectionFactory);
+      System.out.println(
+          "Message queue set to: "
+              + rabbitTemplate.getConnectionFactory().getHost()
+              + ":"
+              + rabbitTemplate.getConnectionFactory().getPort());
     } catch (Exception e) {
       System.out.println(e.getMessage());
       e.printStackTrace();
