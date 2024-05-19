@@ -1,12 +1,9 @@
 package com.workup.contracts;
 
 import com.workup.contracts.commands.*;
-
-import com.workup.shared.commands.contracts.requests.*;
-import com.workup.shared.commands.contracts.responses.*;
-
 import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandRequest;
+import com.workup.shared.commands.contracts.requests.*;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.EvaluateMilestoneRequest;
 import com.workup.shared.commands.contracts.requests.GetContractRequest;
@@ -16,6 +13,7 @@ import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
 import com.workup.shared.commands.contracts.requests.MarkPaymentCompletedRequest;
 import com.workup.shared.commands.contracts.requests.ProgressMilestoneRequest;
 import com.workup.shared.commands.contracts.requests.ViewContractMilestonesRequest;
+import com.workup.shared.commands.contracts.responses.*;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.EvaluateMilestoneResponse;
 import com.workup.shared.commands.contracts.responses.GetContractResponse;
@@ -26,7 +24,6 @@ import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedRespon
 import com.workup.shared.commands.contracts.responses.ProgressMilestoneResponse;
 import com.workup.shared.commands.contracts.responses.ViewContractMilestonesResponse;
 import com.workup.shared.enums.HttpStatusCode;
-
 import com.workup.shared.enums.ServiceQueueNames;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
