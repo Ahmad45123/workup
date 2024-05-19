@@ -1,5 +1,8 @@
-package com.workup.contracts.tests;
+package com.workup.contracts;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import com.workup.contracts.repositories.TerminationRequestRepository;
 import com.workup.shared.commands.contracts.Milestone;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
@@ -7,18 +10,23 @@ import com.workup.shared.commands.contracts.responses.ContractTerminationRespons
 import com.workup.shared.commands.contracts.responses.InitiateContractResponse;
 import com.workup.shared.enums.HttpStatusCode;
 import com.workup.shared.enums.ServiceQueueNames;
+import com.workup.shared.enums.contracts.TerminationRequestStatus;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RequestContractTerminationTests {
 
+  @Autowired TerminationRequestRepository terminationRequestRepository;
+
   public void contractNotFoundTest(AmqpTemplate template) {
-    System.out.println("[ ] Running RequestContractTermination ContractNotFoundTest .....");
+
     ContractTerminationRequest request =
         ContractTerminationRequest.builder()
             .withContractId(UUID.randomUUID().toString())
@@ -30,15 +38,12 @@ public class RequestContractTerminationTests {
         (ContractTerminationResponse)
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
 
-    assert response != null;
-    if (response.getErrorMessage().equals("The contract is not valid."))
-      System.out.println(" [x] Contract Not Found Test has Passed");
-    else System.out.println(" [x] Contract Not Found Test has Failed");
-    System.out.println("[x] Finished RequestContractTermination Contract Not Found test .....\n");
+    assertNotNull(response);
+    assertEquals(response.getStatusCode(), HttpStatusCode.BAD_REQUEST);
+    assertEquals(response.getErrorMessage(), "The contract is not valid.");
   }
 
   public void unAuthorizedRequestTest(AmqpTemplate template) throws ParseException {
-    System.out.println("[ ] Running RequestContractTermination UnAuthorizedRequestTest .....");
 
     // create a contract to exist there
     Milestone milestone =
@@ -66,7 +71,8 @@ public class RequestContractTerminationTests {
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
 
     // now the contract is in db craft termination req
-    assert contractResponse != null;
+    assertNotNull(contractResponse);
+
     ContractTerminationRequest request =
         ContractTerminationRequest.builder()
             .withReason("m4 3agebny el 4o8l da")
@@ -76,18 +82,13 @@ public class RequestContractTerminationTests {
     ContractTerminationResponse response =
         (ContractTerminationResponse)
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
-    assert response != null;
-    if (response.getErrorMessage().equals("Unauthorized request"))
-      System.out.println(" [x] UnAuthorized TerminationRequest Test has Passed");
-    else System.out.println(" [x] UnAuthorized TerminationRequest Test has Failed");
-    System.out.println(
-        "[x] Finished RequestContractTermination Unauthorized Termination Request test .....\n");
+    assertNotNull(response);
+    assertEquals(response.getStatusCode(), HttpStatusCode.UNAUTHORIZED);
   }
 
   // TODO: Make a test for the inActive contract (But we don't have a contract status update now)
 
   public void requestedBeforeTest(AmqpTemplate template) throws ParseException {
-    System.out.println("[ ] Running RequestContractTermination Requested Before Test .....");
 
     // create a contract to exist there
     Milestone milestone =
@@ -114,7 +115,7 @@ public class RequestContractTerminationTests {
         (InitiateContractResponse)
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
 
-    assert contractResponse != null;
+    assertNotNull(contractResponse);
 
     ContractTerminationRequest request =
         ContractTerminationRequest.builder()
@@ -126,7 +127,8 @@ public class RequestContractTerminationTests {
     ContractTerminationResponse response =
         (ContractTerminationResponse)
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
-    assert response != null;
+
+    assertNotNull(response);
 
     ContractTerminationRequest duplicateRequest =
         ContractTerminationRequest.builder()
@@ -139,15 +141,12 @@ public class RequestContractTerminationTests {
         (ContractTerminationResponse)
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, duplicateRequest);
 
-    assert duplicateResponse != null;
-    if (duplicateResponse.getErrorMessage().equals("Termination Request already exists"))
-      System.out.println(" [x] RequestedBefore TerminationRequest has Passed");
-    else System.out.println(" [x] RequestedBefore TerminationRequest has Failed");
-    System.out.println("[x] Finished RequestContractTermination Requested Before test .....\n");
+    assertNotNull(duplicateResponse);
+    assertEquals(duplicateResponse.getStatusCode(), HttpStatusCode.BAD_REQUEST);
+    assertEquals(duplicateResponse.getErrorMessage(), "Termination Request already exists");
   }
 
   public void sucessTest(AmqpTemplate template) throws ParseException {
-    System.out.println("[ ] Running RequestContractTermination Success Test .....");
 
     // create a contract to exist there
     Milestone milestone =
@@ -173,7 +172,9 @@ public class RequestContractTerminationTests {
     InitiateContractResponse contractResponse =
         (InitiateContractResponse)
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, initiateContractRequest);
-    assert contractResponse != null;
+
+    assertNotNull(contractResponse);
+
     ContractTerminationRequest request =
         ContractTerminationRequest.builder()
             .withUserId(clientId)
@@ -184,9 +185,14 @@ public class RequestContractTerminationTests {
     ContractTerminationResponse response =
         (ContractTerminationResponse)
             template.convertSendAndReceive(ServiceQueueNames.CONTRACTS, request);
-    if (Objects.requireNonNull(response).getStatusCode().equals(HttpStatusCode.CREATED))
-      System.out.println(" [x] success test has Passed");
-    else System.out.println(" [x] success test has Failed");
-    System.out.println("[x] Finished RequestContractTermination Success Test .....\n");
+
+    assertNotNull(response);
+    assertEquals(response.getStatusCode(), HttpStatusCode.CREATED);
+
+    terminationRequestRepository
+        .findById(UUID.fromString(response.getRequestId()))
+        .ifPresentOrElse(
+            x -> assertEquals(x.getStatus(), TerminationRequestStatus.PENDING),
+            () -> new RuntimeException("Not inserted and test failed"));
   }
 }

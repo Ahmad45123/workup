@@ -1,5 +1,9 @@
 package com.workup.contracts;
 
+import static com.workup.contracts.tests.InitiateContractTests.initiateContractTest1;
+
+import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.shared.enums.ControllerQueueNames;
 import com.workup.shared.enums.ServiceQueueNames;
 import com.workup.shared.enums.ThreadPoolSize;
@@ -33,22 +37,10 @@ public class ContractsApplication {
   @Bean
   public ApplicationRunner runner(AmqpTemplate template) {
     return args -> {
-      System.out.println("ApplicationRunner is executing");
+      ContractsLogger.print("ApplicationRunner is executing", LoggingLevel.TRACE);
 
-      // // Use below example function to test sending to the queue.
-      // initiateContractTest1(template);
-
-      // RequestContractTerminationTests requestTerminationCommandTests =
-      //     new RequestContractTerminationTests();
-      // requestTerminationCommandTests.contractNotFoundTest(template);
-      // requestTerminationCommandTests.unAuthorizedRequestTest(template);
-      // requestTerminationCommandTests.requestedBeforeTest(template);
-      // requestTerminationCommandTests.sucessTest(template);
-
-      // HandleContractTerminationTests handleContractTerminationTests =
-      //     new HandleContractTerminationTests();
-      // handleContractTerminationTests.requestNotFoundTest(template);
-      // handleContractTerminationTests.successTest(template);
+      // Use below example function to test sending to the queue.
+      initiateContractTest1(template);
     };
   }
 

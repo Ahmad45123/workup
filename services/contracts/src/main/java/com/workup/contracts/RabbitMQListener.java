@@ -3,6 +3,7 @@ package com.workup.contracts;
 import com.workup.contracts.commands.*;
 import com.workup.shared.commands.Command;
 import com.workup.shared.commands.CommandRequest;
+import com.workup.shared.commands.contracts.requests.*;
 import com.workup.shared.commands.contracts.requests.ContractTerminationRequest;
 import com.workup.shared.commands.contracts.requests.EvaluateMilestoneRequest;
 import com.workup.shared.commands.contracts.requests.GetContractRequest;
@@ -12,6 +13,7 @@ import com.workup.shared.commands.contracts.requests.InitiateContractRequest;
 import com.workup.shared.commands.contracts.requests.MarkPaymentCompletedRequest;
 import com.workup.shared.commands.contracts.requests.ProgressMilestoneRequest;
 import com.workup.shared.commands.contracts.requests.ViewContractMilestonesRequest;
+import com.workup.shared.commands.contracts.responses.*;
 import com.workup.shared.commands.contracts.responses.ContractTerminationResponse;
 import com.workup.shared.commands.contracts.responses.EvaluateMilestoneResponse;
 import com.workup.shared.commands.contracts.responses.GetContractResponse;
@@ -191,6 +193,21 @@ public class RabbitMQListener {
               .withStatusCode(HttpStatusCode.NOT_IMPLEMENTED)
               .build());
     }
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<GetMilestoneResponse> receive(GetMilestoneRequest in) throws Exception {
+    return CompletableFuture.completedFuture(
+        ((GetMilestoneCommand) commandMap.getCommand("GetMilestone")).Run(in));
+  }
+
+  @RabbitHandler
+  @Async
+  public CompletableFuture<PrintContractResponse> receive(PrintContractRequest in)
+      throws Exception {
+    return CompletableFuture.completedFuture(
+        ((PrintContractCommand) commandMap.getCommand("PrintContract")).Run(in));
   }
   // NEW_COMMAND_BOILERPLATE
 

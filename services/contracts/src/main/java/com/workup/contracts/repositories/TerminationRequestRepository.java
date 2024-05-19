@@ -13,6 +13,10 @@ import org.springframework.stereotype.Repository;
 public interface TerminationRequestRepository
     extends CassandraRepository<TerminationRequest, UUID> {
   @AllowFiltering
+  List<TerminationRequest> findByContractIdAndStatus(
+      String contractId, TerminationRequestStatus status);
+
+  @AllowFiltering
   List<TerminationRequest> findByRequesterIdAndContractIdAndStatus(
       String requesterId, String contractId, TerminationRequestStatus status);
 

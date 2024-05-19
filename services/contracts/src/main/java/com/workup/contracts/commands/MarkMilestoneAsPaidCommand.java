@@ -1,5 +1,7 @@
 package com.workup.contracts.commands;
 
+import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.contracts.models.ContractMilestone;
 import com.workup.shared.commands.contracts.requests.MarkPaymentCompletedRequest;
 import com.workup.shared.commands.contracts.responses.MarkPaymentCompletedResponse;
@@ -38,7 +40,8 @@ public class MarkMilestoneAsPaidCommand
 
     try {
       contractMilestoneRepository.save(updatedMilestone);
-      System.out.println(" [x] Marked Milestone as Paid '" + updatedMilestone);
+      ContractsLogger.print(
+          " [x] Marked Milestone as Paid '" + updatedMilestone, LoggingLevel.TRACE);
       return MarkPaymentCompletedResponse.builder().withStatusCode(HttpStatusCode.OK).build();
     } catch (Exception e) {
       e.printStackTrace();

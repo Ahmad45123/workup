@@ -1,6 +1,7 @@
 package com.workup.contracts.commands;
 
 import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.contracts.models.Contract;
 import com.workup.shared.commands.contracts.requests.GetContractRequest;
 import com.workup.shared.commands.contracts.responses.GetContractResponse;
@@ -18,7 +19,8 @@ public class GetContractCommand extends ContractCommand<GetContractRequest, GetC
           (GetContractResponse) redisService.getValue(cachingKey, GetContractResponse.class);
       if (cachedResponse != null) {
         ContractsLogger.print(
-            "[x] Contract request response fetched from cache: " + cachedResponse.toString());
+            "[x] Contract request response fetched from cache: " + cachedResponse.toString(),
+            LoggingLevel.TRACE);
 
         return cachedResponse;
       }
@@ -51,8 +53,10 @@ public class GetContractCommand extends ContractCommand<GetContractRequest, GetC
 
       redisService.setValue(cachingKey, response);
       return response;
+
     } catch (Exception ex) {
-      ContractsLogger.print("[x] Error occurred while fetching contract: " + ex.getMessage());
+      ContractsLogger.print(
+          "[x] Error occurred while fetching contract: " + ex.getMessage(), LoggingLevel.TRACE);
       ex.printStackTrace();
       return GetContractResponse.builder()
           .withStatusCode(HttpStatusCode.INTERNAL_SERVER_ERROR)

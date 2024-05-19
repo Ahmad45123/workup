@@ -1,6 +1,7 @@
 package com.workup.contracts.commands;
 
 import com.workup.contracts.logger.ContractsLogger;
+import com.workup.contracts.logger.LoggingLevel;
 import com.workup.contracts.models.Contract;
 import com.workup.contracts.models.ContractMilestone;
 import com.workup.shared.commands.contracts.requests.EvaluateMilestoneRequest;
@@ -42,10 +43,10 @@ public class EvaluateMilestoneCommand
 
     try {
       contractMilestoneRepository.save(updatedMilestone);
-      ContractsLogger.print(" [x] Milestone evaluated " + updatedMilestone);
+      ContractsLogger.print(" [x] Milestone evaluated " + updatedMilestone, LoggingLevel.TRACE);
 
       if (request.getEvaluatedState() == MilestoneState.ACCEPTED) {
-        ContractsLogger.print(" [x] Sending payment request ");
+        ContractsLogger.print(" [x] Sending payment request ", LoggingLevel.TRACE);
         // Getting the contract as we need to send the freelancer and client id since they are
         // in the payment request parameters.
         Optional<Contract> contractOptional =
@@ -63,7 +64,7 @@ public class EvaluateMilestoneCommand
                 .withReferenceId(updatedMilestone.getMilestoneId().toString())
                 .build();
         rabbitTemplate.convertSendAndReceive(ServiceQueueNames.PAYMENTS, externalRequest);
-        ContractsLogger.print(" [x] Payment request sent ");
+        ContractsLogger.print(" [x] Payment request sent ", LoggingLevel.TRACE);
       }
 
       return EvaluateMilestoneResponse.builder()
