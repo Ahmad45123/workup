@@ -6,7 +6,33 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
         </Console>
+        <Elasticsearch name="elasticsearch">
+            <IndexName indexName="log4j2-elasticsearch-jest-springboot" />
+            <JacksonJsonLayout/>
+            <AsyncBatchDelivery batchSize="2000" deliveryInterval="1000">
+                <!-- Use 'classpath:BOOT-INF/classes/<template file name>' if template file is in the Spring Boot app resources (yes, it's ugly) -->
+                <!-- Use 'classpath:<template file name>' if template file is provided by one of your dependencies -->
+                <IndexTemplate name="log4j2-elasticsearch-jest-springboot-template" path="classpath:indexTemplate.json"/>
+                <JestHttp serverUris="https://cc6f0a4f0960423c8d709ed4a81458e3.us-central1.gcp.cloud.es.io:443">
+                    <XPackAuth>
+                        <BasicCredentials username="elastic" password="CONTACT_MARSAFY"/>
+                    </XPackAuth>
+                </JestHttp>
+            </AsyncBatchDelivery>
+        </Elasticsearch>
 
+<!--        <Elasticsearch name="Elasticsearch">-->
+<!--            <IndexName indexName="microservices-logs" />-->
+<!--            <JacksonJsonLayout />-->
+<!--            <AsyncBatchDelivery>-->
+<!--                <IndexTemplate name="microservices-logs" path="classpath:indexTemplate.json" />-->
+<!--                <JestHttp serverUris="https://cc6f0a4f0960423c8d709ed4a81458e3.us-central1.gcp.cloud.es.io:443">-->
+<!--                    <XPackAuth>-->
+<!--                        <BasicCredentials username="elastic" password="55kgxiU5U3YINOnvMw44nOLk"/>-->
+<!--                    </XPackAuth>-->
+<!--                </JestHttp>-->
+<!--            </AsyncBatchDelivery>-->
+<!--        </Elasticsearch>-->
         <RollingFile name="AppLogsFileAppender" fileName="${baseDir}/app.log"
                      filePattern="${baseDir}/app/%d{yyyy}/%d{MM}/%d{dd}/%d{HH:mm:ss}.log.gz">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
@@ -43,10 +69,14 @@
     </Appenders>
 
     <Loggers>
+        <AsyncLogger name="elasticsearch">
+            <AppenderRef ref="elasticsearch" />
+        </AsyncLogger>
         <Root level="INFO">
             <AppenderRef ref="Console" level="DEBUG"/>
             <AppenderRef ref="AppLogsFileAppender"/>
             <AppenderRef ref="ErrorsLogsFileAppender" level="ERROR"/>
+<!--            <AppenderRef ref="Elasticsearch"/>-->
         </Root>
     </Loggers>
 </Configuration>
