@@ -1,8 +1,12 @@
 ![Workup](https://i.imgur.com/kMMN6As.png)
 
 # WorkUp: A Scalable Distributed Microservices Application
+![ApacheCassandra](https://img.shields.io/badge/cassandra-%231287B1.svg?style=for-the-badge&logo=apache-cassandra&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 
-Welcome to WorkUp, a scalable distributed microservices application designed to replicate the core functionalities of Upwork. This project leverages a suite of modern technologies to ensure high performance, reliability, and scalability.
+
+Welcome to WorkUp, a scalable distributed microservices application designed to replicate the core functionalities of Upwork. 🚀 This project leverages a suite of modern technologies to ensure blazingly fast performance 🔥, reliability, and scalability. 💪
 
 ## Table of Contents
 
@@ -24,13 +28,18 @@ Welcome to WorkUp, a scalable distributed microservices application designed to 
 
 ## Project Overview
 
-WorkUp is a microservices-based application that allows freelancers and clients to connect, collaborate, and complete projects, similar to Upwork. The system is designed with scalability and resilience in mind, utilizing various technologies to handle high traffic and large data volumes efficiently.
+WorkUp is a microservices-based application that allows freelancers and clients to connect, collaborate, and complete projects, similar to Upwork. 🤝💼 The system is designed with scalability and resilience in mind, utilizing various technologies to handle high traffic and large data volumes efficiently. 🚀📈
 
 ## Architecture
 
-Nasser insert photo xD.
+Nasser insert photo xD4
 
 ## Components
+Swarm on the machines
+
+![image](https://github.com/Ahmad45123/workup/assets/35760882/27bcc9e8-316c-4248-b470-b975a6411962)
+![image](https://github.com/Ahmad45123/workup/assets/35760882/4d2222b6-127d-4fb3-9f04-150b3f495daa)
+
 
 ### Microservices
 
@@ -46,7 +55,7 @@ This microservice handles payment-related requests. Both freelancers and clients
 
 #### Jobs Microservice
 
-This microservice handles jobs and proposals requests. Clients can create jobs, view, and accept proposals for their jobs. Freelancers can browse jobs and search for them using keywords. They can submit a proposal to any job, specifying the milestones that will achieve that job and any extra attachments. When a client accepts a proposal, the contracts service is notified about it to initiate a contract for that job. The used DB for this microservice is Cassandra, as it can be scaled horizontally easily and is highly available and fault-tolerant, thanks to its peer-to-peer decentralized architecture. There is no need to have a relational DB for jobs, since there are not many joins performed, and there is no need for strong consistency and strict schema. However, high availability is critical, as most of the time users will be browsing jobs, which implies high traffic on the DB.
+This microservice handles jobs and proposal requests. Clients can create jobs, and view, and accept proposals for their jobs. Freelancers can browse jobs and search for them using keywords. They can submit a proposal to any job, specifying the milestones that will achieve that job and any extra attachments. When a client accepts a proposal, the contracts service is notified about it to initiate a contract for that job. The used DB for this microservice is Cassandra, as it can be scaled horizontally easily and is highly available and fault-tolerant, thanks to its peer-to-peer decentralized architecture. There is no need to have a relational DB for jobs, since there are not many joins performed, and there is no need for strong consistency and strict schema. However, high availability is critical, as most of the time users will be browsing jobs, which implies high traffic on the DB.
 
 #### Contracts Microservice
 
@@ -65,8 +74,8 @@ The web server is considered the API gateway for the backend of the system. It h
 The controller provides a CLI that is used to broadcast configuration messages to all the running instances of a certain microservice. These messages configure the services in runtime without having to redeploy any instance, to achieve zero downtime updates. Here are the messages sent by the controller:
 
 - `setMaxThreads`: Sets the maximum size of the thread pool used by a microservice.
-- `setMaxDbConnections`: Sets the maximum number of database connections in the connections pool for a microservice. This is used only for the payments microservice, since it is the only one using PostgreSQL, which allows connections pooling.
-- `freeze`: Makes the microservice stop consuming any new messages, and finishes the execution of any messages received by them, then release all resources.
+- `setMaxDbConnections`: Sets the maximum number of database connections in the connections pool for a microservice. This is used only for the payments microservice since it is the only one using PostgreSQL, which allows connection pooling.
+- `freeze`: Makes the microservice stop consuming any new messages, finishes the execution of any messages received by them, then releases all resources.
 - `start`: Restarts a frozen microservice.
 - `deleteCommand`: Deletes a command in a certain microservice in runtime. So the microservice no longer accepts requests of a certain type without having to redeploy all instances.
 - `updateCommand`: Updates the logic performed by a certain command in runtime by byte code manipulation, which allows runtime updates while having zero downtime.
