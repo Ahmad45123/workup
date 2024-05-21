@@ -15,4 +15,6 @@ while true; do
     fi
 done
 
-echo $(jq --compact-output --null-input '$ARGS.positional' --args -- "${inputs[@]}")
+json_output=$(printf "%s\n" "${inputs[@]}" | jq -s '.')
+
+echo "$json_output"

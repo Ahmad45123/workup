@@ -4,18 +4,19 @@ YELLOW='\033[0;33m'
 NC='\033[0m'
 
 pageState="null"
+read -p "query: " query
+read -p "pageLimit: " pageLimit
 
 while true; do
 
-    read -p "query: " query
-    read -p "pageLimit: " pageLimit
+
 
     base_url="http://localhost:80/api/v1/jobs/search"
 
     url="${base_url}?query="$query"&pageLimit=${pageLimit}"
 
-    if [[ "$pagingState" != "null" ]]; then
-        url="${base_url}?query="$query"&pageLimit=${pageLimit}&pageState="$pageState""
+    if [[ "$pageState" != "null" ]]; then
+        url="${base_url}?query="$query"&pageLimit=${pageLimit}&pagingState="$pageState""
     fi
 
     echo -e "${YELLOW}Sending your request to the server...${NC}"
