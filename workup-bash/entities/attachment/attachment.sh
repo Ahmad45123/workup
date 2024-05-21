@@ -15,7 +15,7 @@ bearerToken=$(cat ./token.txt)
 
 filename="${bearerToken}${name}"
 
-status_code=$(curl -o response_body --location 'http://localhost:8080/upload/resume/' \
+status_code=$(curl -o response_body --location 'http://localhost:8080/upload/attachments/' \
 -u "$UPLOAD_USER:$UPLOAD_PASSWORD" \
 --form "resource=@"$path"" \
 --form "filename="$filename"")
