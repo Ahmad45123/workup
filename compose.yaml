@@ -139,6 +139,7 @@ services:
 
   payments_db:
     image: postgres:12.18
+    command: -c 'max_connections=1000'
     environment:
       POSTGRES_PASSWORD: payments_password
       POSTGRES_USER: payments_user
