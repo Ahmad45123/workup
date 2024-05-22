@@ -89,6 +89,210 @@ For this project, RabbitMQ was used for asynchronous communication between diffe
 
 The web server is considered the API gateway for the backend of the system. It has a defined REST endpoint for every command in the four microservices. The web server takes the HTTP requests and converts them to message objects that can be sent and consumed by the designated microservice. After the execution is done, the web server receives the response as a message object, converts it to an HTTP response, and sends it back to the client. The web server handles authentication, as it checks the JWT sent with the request to determine whether the user is currently logged in 🔑. After that, it extracts the user ID from the JWT and attaches it to the message that is sent to the worker queues.
 
+#### API documentation
+##### Introduction
+Welcome to the Workup API documentation. This API provides endpoints for managing jobs, proposals, contracts, payments, and user authentication.
+
+##### Authentication
+All endpoints require authentication using a bearer token. Include the token in the Authorization header of your requests. 
+
+```
+Authorization: Bearer <your_access_token>
+```
+
+#### Get Job
+Description: Retrieves details of a specific job.
+
+- URL: /api/v1/jobs/{job_id}
+- Method: GET
+Request Parameters
+- job_id (path parameter): The ID of the job to retrieve.
+- Example Request
+```
+GET /api/v1/jobs/7ddda13b-8221-4766-983d-9068a6592eba
+Authorization: Bearer <your_access_token>
+```
+
+Response
+- 200 OK: Returns the details of the requested job.
+
+```
+{
+  "id": "7ddda13b-8221-4766-983d-9068a6592eba",
+  "title": "Sample Job",
+  "description": "This is a sample job description.",
+  ...
+}
+```
+- 404 Not Found: If the job with the specified ID does not exist.
+
+#### Get Proposals
+Description: Retrieves all proposals for a specific job.
+- URL: /api/v1/jobs/{job_id}/proposals
+- Method: GET
+
+Request Parameters
+- job_id (path parameter): The ID of the job to retrieve - - - proposals for.
+```
+GET /api/v1/jobs/7ddda13b-8221-4766-983d-9068a6592eba/proposals
+Authorization: Bearer <your_access_token>
+```
+
+Response
+- 200 OK: Returns a list of proposals for the specified job.
+```
+[
+  {
+    "id": "73fb1269-6e05-4756-93cc-947e10dac15e",
+    "job_id": "7ddda13b-8221-4766-983d-9068a6592eba",
+    "cover_letter": "Lorem ipsum dolor sit amet...",
+    ...
+  },
+  ...
+]
+
+```
+- 404 Not Found: If the job with the specified ID does not exist
+
+#### Get Contract
+Description: Retrieves details of a specific contract.
+
+- URL: /api/v1/contracts/{contract_id}
+- Method: GET
+
+Request Parameters
+- contract_id (path parameter): The ID of the contract to retrieve.
+
+
+```
+GET /api/v1/contracts/702a6e9a-343b-4b98-a86b-0565ee6d8ea5
+Authorization: Bearer <your_access_token>
+```
+
+Response
+- 200 OK: Returns the details of the requested contract.
+
+```
+{
+  "id": "702a6e9a-343b-4b98-a86b-0565ee6d8ea5",
+  "client_id": "2d816b8f-592c-48c3-b66f-d7a1a4fd0c3a",
+  ...
+}
+
+```
+
+
+- 404 Not Found: If the contract with the specified ID does not exist.
+
+
+#### Create Proposal
+Description: Creates a new proposal for a specific job.
+
+- URL: /api/v1/jobs/{job_id}/proposals
+- Method: POST
+Request Parameters
+- job_id (path parameter): The ID of the job to create a proposal for.
+
+Request Body
+```
+{
+  "coverLetter": "I am interested in this job...",
+  "jobDuration": "LESS_THAN_A_MONTH",
+  "milestones": [
+    {
+      "description": "First milestone",
+      "amount": 500,
+      "dueDate": "2024-06-01"
+    },
+    ...
+  ]
+}
+
+```
+
+
+Response
+- 201 Created: Returns the newly created proposal.
+
+```
+{
+  "id": "73fb1269-6e05-4756-93cc-947e10dac15e",
+  "job_id": "7ddda13b-8221-4766-983d-9068a6592eba",
+  ...
+}
+
+```
+- 404 Not Found: If the job with the specified ID does not exist.
+
+
+#### Get Proposal
+Description: Retrieves details of a specific proposal.
+
+- URL: /api/v1/proposals/{proposal_id}
+- Method: GET
+
+Request Parameters
+- proposal_id (path parameter): The ID of the proposal to retrieve.
+```
+GET /api/v1/proposals/73fb1269-6e05-4756-93cc-947e10dac15e
+Authorization: Bearer <your_access_token>
+
+```
+
+Response
+- 200 OK: Returns the details of the requested proposal.
+
+```
+{
+  "id": "73fb1269-6e05-4756-93cc-947e10dac15e",
+  "job_id": "7ddda13b-8221-4766-983d-9068a6592eba",
+  ...
+}
+```
+
+
+
+
+- 404 Not Found: If the proposal with the specified ID does not exist.
+
+##### Update Proposal
+Description: Updates an existing proposal.
+
+- URL: /api/v1/proposals/{proposal_id}
+- Method: PUT
+
+Request Parameters
+- proposal_id (path parameter): The ID of the proposal to update.
+
+
+Request Body
+```
+{
+  "coverLetter": "Updated cover letter...",
+  "jobDuration": "ONE_TO_THREE_MONTHS",
+  "milestones": [
+    {
+      "description": "Updated milestone",
+      "amount": 600,
+      "dueDate": "2024-06-15"
+    },
+    ...
+  ]
+}
+
+```
+
+Response
+- 200 OK: Returns the updated proposal.
+```
+{
+  "id": "73fb1269-6e05-4756-93cc-947e10dac15e",
+  "job_id": "7ddda13b-8221-4766-983d-9068a6592eba",
+  ...
+}
+```
+- 404 Not Found: If the proposal with the specified ID does not exist.
+
 ### 🎛️ Controller
 
 
@@ -290,6 +494,16 @@ We used JMeter to load test our app we configured it to simulate thousands of us
 
 #### Get Contracts
 ![get contracts](https://media.discordapp.net/attachments/1210626240986226741/1241803839947145387/image.png?ex=664ed333&is=664d81b3&hm=2ab4e1c58e3224a0c0f6ef8e4eee08330fb8e68e914ef2e3f586bc16f41d0b90&=&format=webp&quality=lossless)
+
+
+
+![locust](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOchmJvYjMucoFZDd2NVX6uLPNci5uEhBzF1vHDJMJ0Q&s)
+
+We alos used python [locust](https://locust.io/) for load testing. check the test file [here](https://github.com/Ahmad45123/workup/blob/main/locustfile.py). Here is the the results of this load test
+
+![requeststats](https://media.discordapp.net/attachments/1210626240986226741/1242789353558769664/image.png?ex=664f1d47&is=664dcbc7&hm=c6838d6f086a3f04688f7189fa042a0f3d07dee9026f389f804ef56fad88be84&=&format=webp&quality=lossless&width=863&height=676)
+
+![charts](https://media.discordapp.net/attachments/1210626240986226741/1242789434923946076/image.png?ex=664f1d5b&is=664dcbdb&hm=d551fd87c5ebc96de32e9119ff41596bf54de326491ce3007f4a6f695865f1fb&=&format=webp&quality=lossless&width=861&height=676)
 
 ## License
 
