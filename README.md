@@ -97,7 +97,7 @@ Welcome to the Workup API documentation. This API provides endpoints for managin
 ##### Authentication
 All endpoints require authentication using a bearer token. Include the token in the Authorization header of your requests. 
 
-```
+```bash
 Authorization: Bearer <your_access_token>
 ```
 
@@ -109,7 +109,7 @@ Description: Retrieves details of a specific job.
 Request Parameters
 - job_id (path parameter): The ID of the job to retrieve.
 - Example Request
-```
+```bash
 GET /api/v1/jobs/7ddda13b-8221-4766-983d-9068a6592eba
 Authorization: Bearer <your_access_token>
 ```
@@ -117,7 +117,7 @@ Authorization: Bearer <your_access_token>
 Response
 - 200 OK: Returns the details of the requested job.
 
-```
+```json
 {
   "id": "7ddda13b-8221-4766-983d-9068a6592eba",
   "title": "Sample Job",
@@ -134,14 +134,14 @@ Description: Retrieves all proposals for a specific job.
 
 Request Parameters
 - job_id (path parameter): The ID of the job to retrieve - - - proposals for.
-```
+```bash
 GET /api/v1/jobs/7ddda13b-8221-4766-983d-9068a6592eba/proposals
 Authorization: Bearer <your_access_token>
 ```
 
 Response
 - 200 OK: Returns a list of proposals for the specified job.
-```
+```json
 [
   {
     "id": "73fb1269-6e05-4756-93cc-947e10dac15e",
@@ -165,7 +165,7 @@ Request Parameters
 - contract_id (path parameter): The ID of the contract to retrieve.
 
 
-```
+```bash
 GET /api/v1/contracts/702a6e9a-343b-4b98-a86b-0565ee6d8ea5
 Authorization: Bearer <your_access_token>
 ```
@@ -173,7 +173,7 @@ Authorization: Bearer <your_access_token>
 Response
 - 200 OK: Returns the details of the requested contract.
 
-```
+```json
 {
   "id": "702a6e9a-343b-4b98-a86b-0565ee6d8ea5",
   "client_id": "2d816b8f-592c-48c3-b66f-d7a1a4fd0c3a",
@@ -195,7 +195,7 @@ Request Parameters
 - job_id (path parameter): The ID of the job to create a proposal for.
 
 Request Body
-```
+```json
 {
   "coverLetter": "I am interested in this job...",
   "jobDuration": "LESS_THAN_A_MONTH",
@@ -215,7 +215,7 @@ Request Body
 Response
 - 201 Created: Returns the newly created proposal.
 
-```
+```json
 {
   "id": "73fb1269-6e05-4756-93cc-947e10dac15e",
   "job_id": "7ddda13b-8221-4766-983d-9068a6592eba",
@@ -234,7 +234,7 @@ Description: Retrieves details of a specific proposal.
 
 Request Parameters
 - proposal_id (path parameter): The ID of the proposal to retrieve.
-```
+```bash
 GET /api/v1/proposals/73fb1269-6e05-4756-93cc-947e10dac15e
 Authorization: Bearer <your_access_token>
 
@@ -243,7 +243,7 @@ Authorization: Bearer <your_access_token>
 Response
 - 200 OK: Returns the details of the requested proposal.
 
-```
+```json
 {
   "id": "73fb1269-6e05-4756-93cc-947e10dac15e",
   "job_id": "7ddda13b-8221-4766-983d-9068a6592eba",
@@ -267,7 +267,7 @@ Request Parameters
 
 
 Request Body
-```
+```json
 {
   "coverLetter": "Updated cover letter...",
   "jobDuration": "ONE_TO_THREE_MONTHS",
@@ -285,7 +285,7 @@ Request Body
 
 Response
 - 200 OK: Returns the updated proposal.
-```
+```json
 {
   "id": "73fb1269-6e05-4756-93cc-947e10dac15e",
   "job_id": "7ddda13b-8221-4766-983d-9068a6592eba",
