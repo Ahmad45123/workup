@@ -23,6 +23,12 @@ handle_jobs_command() {
         accept-proposal)
             bash ./commands/jobs/accept_proposal.sh
             ;;
+        create-proposal)
+            bash ./commands/jobs/create_proposal.sh
+            ;;
+         search-jobs)
+            bash ./commands/jobs/search_jobs.sh
+            ;;
         exit)
             echo -e "${CYAN}Exiting Jobs service.${NC}"
             exit 0

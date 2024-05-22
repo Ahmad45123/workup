@@ -14,4 +14,16 @@ response_body=$(cat response_body)
 
 rm response_body
 
+proposalsArr=$(echo $response_body | jq -r '.proposals')
+
+readarray -t proposals < <(echo $proposalsArr | jq -c '.[]')
+
+i=1
+
+for proposal in ${proposals[@]}; do
+    attachements=$(echo $proposal | jq -r '.attachments')
+    bash ./commands/get_attachments.sh "$attachements" "$i"
+    i=$(($i+1))
+done
+
 bash ./response_formatter.sh "$status_code" "$response_body"

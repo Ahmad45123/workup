@@ -33,7 +33,7 @@ public class GetMyProposalsCommand
             attachments.add(
                 ProposalAttachment.builder()
                     .withName(attachment.getName())
-                    .withName(attachment.getUrl())
+                    .withUrl(attachment.getUrl())
                     .build());
           }
         }
