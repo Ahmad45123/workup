@@ -6,7 +6,12 @@
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-%23FF6600.svg?style=for-the-badge&amp;logo=rabbitmq&amp;logoColor=white)
+
+## Builds
+
 ![build](https://github.com/Ahmad45123/workup/actions/workflows/maven.yml/badge.svg)
+![build](https://github.com/Ahmad45123/workup/actions/workflows/maven-publish.yaml/badge.svg)
+![build](https://github.com/Ahmad45123/workup/actions/workflows/maven-temp.yml/badge.svg)
 
 Welcome to WorkUp, a scalable distributed microservices application designed to replicate the core functionalities of Upwork. 🚀 This project leverages a suite of modern technologies to ensure blazingly fast performance 🔥, reliability, and scalability. 💪
 
