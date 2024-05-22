@@ -32,7 +32,8 @@ WorkUp is a microservices-based application that allows freelancers and clients 
 
 ## Architecture
 
-Nasser insert photo xD4
+![workup_arch](https://github.com/Ahmad45123/workup/assets/37817681/832314bd-b77e-43fb-a75e-7f905e46d55c)
+
 
 ## Components
 Swarm on the machines
