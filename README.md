@@ -23,6 +23,7 @@
 ![build](https://github.com/Ahmad45123/workup/actions/workflows/maven.yml/badge.svg)
 ![build](https://github.com/Ahmad45123/workup/actions/workflows/maven-publish.yaml/badge.svg)
 ![build](https://github.com/Ahmad45123/workup/actions/workflows/maven-temp.yml/badge.svg)
+[![codecov](https://codecov.io/gh/Ahmad45123/workup/graph/badge.svg?token=DICIEAQBM2)](https://codecov.io/gh/Ahmad45123/workup)
 
 Welcome to WorkUp, a scalable distributed microservices application designed to replicate the core functionalities of Upwork. 🚀 This project leverages a suite of modern technologies to ensure blazingly fast performance 🔥, reliability, and scalability.
 
