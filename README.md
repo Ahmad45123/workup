@@ -58,32 +58,58 @@ WorkUp is a microservices-based application that allows freelancers and clients 
 
 
 ## 🧩 Components
-Swarm on the machines
 
-![image](https://github.com/Ahmad45123/workup/assets/35760882/27bcc9e8-316c-4248-b470-b975a6411962)
-![image](https://github.com/Ahmad45123/workup/assets/35760882/4d2222b6-127d-4fb3-9f04-150b3f495daa)
+<details>
+   <summary>
+      Swarm on the machines
+   </summary>
+   
+   ![image](https://github.com/Ahmad45123/workup/assets/35760882/27bcc9e8-316c-4248-b470-b975a6411962)
+   ![image](https://github.com/Ahmad45123/workup/assets/35760882/4d2222b6-127d-4fb3-9f04-150b3f495daa)
+   
+</details>
+
 
 
 ### 🏗️ Microservices
 
-All microservices are implemented using Java Spring Boot ☕. They consume messages from the RabbitMQ message broker 🐰 and respond through RabbitMQ as well. Requests are cached in Redis, so if the same request is sent more than once, there is no need to recompute the response every time as it can be retrieved directly from the cache 🗃️. All the microservices are stateless, as authentication and authorization are handled by the web server 🔐. In some cases, a microservice would have to communicate with another one to complete a certain functionality, which is done through RabbitMQ. Every microservice can be scaled up or down independently of other microservices to adapt to the amount of incoming traffic 📈. Every microservice has its database that is shared by all the instances of the same microservice but cannot be accessed by other microservices. All the microservices have multithreading, where a thread pool is created, and every request is assigned to a thread from that pool to allow asynchronous computation.
+- All microservices are implemented using Java Spring Boot ☕.
+-  They consume messages from the RabbitMQ message broker 🐰 and respond through RabbitMQ as well.
+- Requests are cached in Redis, so if the same request is sent more than once, there is no need to recompute the response every time as it can be retrieved directly from the cache 🗃️.
+- All the microservices are stateless, as authentication and authorization are handled by the web server.
+- In some cases, a microservice would have to communicate with another one to complete a certain functionality, which is done through RabbitMQ. Every microservice can be scaled up or down independently of other microservices to adapt to the amount of incoming traffic.
+- Every microservice has its database that is shared by all the instances of the same microservice but cannot be accessed by other microservices.
 
-#### 👥 Users Microservice
+<details>
+   <summary>
+      👥 Users Microservice
+   </summary>
+   This microservice handles user-related operations, like updating, fetching, deleting, and creating profiles, register & login 👤. In the case of register or login, a JWT is created and returned in the response, which will be used by the client to authorize future communications with the system 🔑. The database used for this microservice is MongoDB 🍃, as it achieves horizontal scalability, is highly available, and provides higher performance for reads and writes than relational databases. MongoDB 4.0 and later supports ACID transactions to some extent, which was enough for the users' microservice use case. 
+</details>
 
-This microservice handles user-related operations, like updating, fetching, deleting, and creating profiles, register & login 👤. In the case of register or login, a JWT is created and returned in the response, which will be used by the client to authorize future communications with the system 🔑. The database used for this microservice is MongoDB 🍃, as it achieves horizontal scalability, is highly available, and provides higher performance for reads and writes than relational databases. MongoDB 4.0 and later supports ACID transactions to some extent, which was enough for the users' microservice use case. 
+<details>
+   <summary>
+      💳 Payments Microservice
+   </summary>
+   This microservice handles payment-related requests 💳. Both freelancers and clients have wallets, which they can add or withdraw money from. Both of them have a history of transactions, and freelancers can issue payment requests that are then paid by the clients, and the money is deposited into the freelancer's wallet. When the payment is completed, the contracts service is notified that the contract associated with this payment should be marked as done. The DB used for this service is PostgreSQL 🐘, as payments require lots of ACID transactions in addition to strict consistency, which is achieved by relational databases.
+</details>
 
-#### 💳 Payments Microservice
+
+<details>
+   <summary>
+       🔧 Jobs Microservice
+   </summary>
+   This microservice handles jobs and proposal requests 📝. Clients can create jobs, and view, and accept proposals for their jobs. Freelancers can browse jobs and search for them using keywords 🔍. They can submit a proposal to any job, specifying the milestones that will achieve that job and any extra attachments. When a client accepts a proposal, the contracts service is notified about it to initiate a contract for that job 📜. The used DB for this microservice is Cassandra, as it can be scaled horizontally easily and is highly available and fault-tolerant, thanks to its peer-to-peer decentralized architecture. There is no need to have a relational DB for jobs, since there are not many joins performed, and there is no need for strong consistency and strict schema. However, high availability is critical, as most of the time users will be browsing jobs, which implies high traffic on the DB.
+</details>
+
+<details>
+   <summary>
+      📜 Contracts Microservice
+   </summary>
+   This microservice is responsible for contract-related logic 📑. It handles the termination and creation of contracts. Freelancers can update their progress in a milestone of their contracts, while clients can add evaluation to every milestone. Cassandra was used as a database for this microservice for the same reasons as the jobs microservice: scalability, high availability, and fault tolerance.
+</details>
 
 
-This microservice handles payment-related requests 💳. Both freelancers and clients have wallets, which they can add or withdraw money from. Both of them have a history of transactions, and freelancers can issue payment requests that are then paid by the clients, and the money is deposited into the freelancer's wallet. When the payment is completed, the contracts service is notified that the contract associated with this payment should be marked as done. The DB used for this service is PostgreSQL 🐘, as payments require lots of ACID transactions in addition to strict consistency, which is achieved by relational databases.
-
-#### 🔧 Jobs Microservice
-
-This microservice handles jobs and proposal requests 📝. Clients can create jobs, and view, and accept proposals for their jobs. Freelancers can browse jobs and search for them using keywords 🔍. They can submit a proposal to any job, specifying the milestones that will achieve that job and any extra attachments. When a client accepts a proposal, the contracts service is notified about it to initiate a contract for that job 📜. The used DB for this microservice is Cassandra, as it can be scaled horizontally easily and is highly available and fault-tolerant, thanks to its peer-to-peer decentralized architecture. There is no need to have a relational DB for jobs, since there are not many joins performed, and there is no need for strong consistency and strict schema. However, high availability is critical, as most of the time users will be browsing jobs, which implies high traffic on the DB.
-
-#### 📜 Contracts Microservice
-
-This microservice is responsible for contract-related logic 📑. It handles the termination and creation of contracts. Freelancers can update their progress in a milestone of their contracts, while clients can add evaluation to every milestone. Cassandra was used as a database for this microservice for the same reasons as the jobs microservice: scalability, high availability, and fault tolerance.
 
 ### 📬 Message Queues
 
@@ -104,14 +130,19 @@ All endpoints require authentication using a bearer token. Include the token in 
 Authorization: Bearer <your_access_token>
 ```
 
-#### Get Job
+<details>
+   <summary>
+      Get Job
+   </summary>
 Description: Retrieves details of a specific job.
 
 - URL: /api/v1/jobs/{job_id}
 - Method: GET
+
 Request Parameters
 - job_id (path parameter): The ID of the job to retrieve.
 - Example Request
+
 ```bash
 GET /api/v1/jobs/7ddda13b-8221-4766-983d-9068a6592eba
 Authorization: Bearer <your_access_token>
@@ -130,7 +161,14 @@ Response
 ```
 - 404 Not Found: If the job with the specified ID does not exist.
 
-#### Get Proposals
+</details>
+
+<details>
+   <summary>
+      Get Proposals
+   </summary>
+   
+ 
 Description: Retrieves all proposals for a specific job.
 - URL: /api/v1/jobs/{job_id}/proposals
 - Method: GET
@@ -157,8 +195,12 @@ Response
 
 ```
 - 404 Not Found: If the job with the specified ID does not exist
-
-#### Get Contract
+</details>
+<details>
+   <summary>
+       Get Contract
+   </summary>
+   
 Description: Retrieves details of a specific contract.
 
 - URL: /api/v1/contracts/{contract_id}
@@ -187,9 +229,14 @@ Response
 
 
 - 404 Not Found: If the contract with the specified ID does not exist.
+</details>
 
-
-#### Create Proposal
+<details>
+   <summary>
+      Create Proposal
+   </summary>
+   
+ 
 Description: Creates a new proposal for a specific job.
 
 - URL: /api/v1/jobs/{job_id}/proposals
@@ -227,9 +274,13 @@ Response
 
 ```
 - 404 Not Found: If the job with the specified ID does not exist.
+</details>
 
-
-#### Get Proposal
+<details>
+   <summary>
+       Get Proposal
+   </summary>
+   
 Description: Retrieves details of a specific proposal.
 
 - URL: /api/v1/proposals/{proposal_id}
@@ -254,12 +305,14 @@ Response
 }
 ```
 
-
-
-
 - 404 Not Found: If the proposal with the specified ID does not exist.
+  </details>
 
-##### Update Proposal
+<details>
+   <summary>
+      Update Proposal
+   </summary>
+   
 Description: Updates an existing proposal.
 
 - URL: /api/v1/proposals/{proposal_id}
@@ -296,6 +349,7 @@ Response
 }
 ```
 - 404 Not Found: If the proposal with the specified ID does not exist.
+</details>
 
 ### 🎛️ Controller
 
@@ -326,6 +380,12 @@ A media server that serves static resources.
 
 For all static resources, this server will attempt to return a relevant resource 📁, or else if the resource does not exist, it will return a default 'placeholder' resource 🖼️. This prevents clients from having no resource to display at all; clients can make use of this media server's 'describe' endpoint to learn about what resources are available 📋.
 
+<details>
+   <summary>
+      Get resource
+   </summary>
+   
+
 #### `GET` /static/icons/:icon.png
 
 Returns an icon based on the filename.
@@ -352,7 +412,13 @@ curl --request GET \
   --url http://path_to_server/static/resume/resume.pdf
 ```
 
+</details>
 
+<details>
+   <summary>
+      Available groups
+   </summary>
+   
 #### Describe
 
 #### `GET` /describe
@@ -395,10 +461,15 @@ curl --request GET \
   "files": []
 }
 ```
+</details>
 
-#### Upload
+<details>
+   <summary>
+      Upload
+   </summary>
+   
 
-Upload and convert media to any of the given static resource group.
+Upload and convert media to any of the given static resource groups.
 
 All upload routes are protected by basic HTTP auth. The credentials are defined by ENV variables `UPLOAD_USER` and `UPLOAD_PASSWORD`.
 
@@ -418,17 +489,19 @@ curl --location 'http://path-to-server/upload/resume/' \
 ```json
 {
   "success": true,
-  "path": "/static/resume/aboueleyes-reume-2.pdf"
+  "path": "/static/resume/aboueleyes-resume-2.pdf"
 }
 ```
 
 A resource at `http://path_to_server/static/resume/aboueleyes-reume-2.pdf` will now be available.
 
+</details>
+
 ## 🚀 Deployment
 
 ![Digital Ocean](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfQxeW7i7mdvQqs7IdiokF0IIaenP9OvqO7NZLVNca&s)
 
-We were able to setup a tenant on [Digital ocean](https://try.digitalocean.com/cloud/?utm_campaign=emea_brand_kw_en_cpc&utm_adgroup=Misspellings&_keyword=digitalocean%27&_device=c&_adposition=&utm_content=conversion&utm_medium=cpc&utm_source=google&gad_source=1&gclid=CjwKCAjwr7ayBhAPEiwA6EIGxFUoqeEw6G9c-Vh1FvlsGCa6kaL7uDHwQMuVojoNVrMNXKcXnJ906BoCFVwQAvD_BwE) 🌐 Where we can create new intance(Droplet) 💧  from the Controller as explained above and feeding scripts in the startup of this instance to join docker swarm 🐳 of other machines. 
+We were able to set up a tenant on [Digital ocean](https://try.digitalocean.com/cloud/?utm_campaign=emea_brand_kw_en_cpc&utm_adgroup=Misspellings&_keyword=digitalocean%27&_device=c&_adposition=&utm_content=conversion&utm_medium=cpc&utm_source=google&gad_source=1&gclid=CjwKCAjwr7ayBhAPEiwA6EIGxFUoqeEw6G9c-Vh1FvlsGCa6kaL7uDHwQMuVojoNVrMNXKcXnJ906BoCFVwQAvD_BwE) 🌐 Where we can create new instance (Droplet) 💧  from the Controller as explained above and feeding scripts in the startup of this instance to join docker swarm 🐳 of other machines. 
 
 
 We can monitor the performance of each running container on each instance using [Portainer](https://www.portainer.io/)  📊 where we can manually run more containers of the same service, and configure it to auto-scale when the load is above the threshold. 
@@ -462,12 +535,19 @@ deploy:
       cpus: '0.50'
 ```
 
-## Configuration
+<details>
+   <summary>
+      Configuration
+   </summary>
+   
+ 
 | Setting | Value | Description |
 | --- | --- | --- |
 | `swarm.autoscaler` | `true` | Required. This enables autoscaling for a service. Anything other than `true` will not enable it |
 | `swarm.autoscaler.minimum` | Integer | Optional. This is the minimum number of replicas wanted for a service. The autoscaler will not downscale below this number |
 | `swarm.autoscaler.maximum` | Integer | Optional. This is the maximum number of replicas wanted for a service. The autoscaler will not scale up past this number | 
+
+</details>
 
 ## Load Balancing
 
@@ -479,35 +559,72 @@ We used a round-robin-based load balancing 🔄 that is handled by Docker in the
 
 To test our app functionality we created functional testing for each service on its own to test functionality in isolation as well as testing its functionality in integration with other services for example [here](services\payments\src\test\java\com\workup\payments\PaymentsApplicationTests.java) is the tests implemented for Payments service.🧪🔧
 
+
 ### ⚖️ Load Balancing
 
+<details>
+   <summary>
+      Jmeter
+   </summary>
+   
 ![jmeter](https://i0.wp.com/cdn-images-1.medium.com/max/800/1*KeuQ7uNalz2l4rBOyPAUpg.png?w=1180&ssl=1)
 
 We used JMeter to load test our app we configured it to simulate thousands of users' requests and the number grew gradually over the span of 10 seconds. here are some results for different endpoints. Here are a few examples of endpoint performance.
+</details>
 
-#### Login Performance
+<details>
+   <summary>
+      Login Performance
+   </summary>
+    
 ![login command](https://media.discordapp.net/attachments/1210626240986226741/1241779393614057562/image.png?ex=664ebc6e&is=664d6aee&hm=f33b046fa5bb5117cf1b75dd70d34f3b6bbcb2e11f6e639e3dc1bf3802ff7b79&=&format=webp&quality=lossless)
 
-#### Create Job
+</details>
 
-![Create Job](https://media.discordapp.net/attachments/1210626240986226741/1241782178824716339/image.png?ex=664ebf06&is=664d6d86&hm=673ee8ac6d1d218aa49aa0491e96f11dd3f536a8f69d6fb69d8e47bf14863a84&=&format=webp&quality=lossless)
+<details>
+   <summary>
+       Create Job
+   </summary>
+   
+   ![Create Job](https://media.discordapp.net/attachments/1210626240986226741/1241782178824716339/image.png?ex=664ebf06&is=664d6d86&hm=673ee8ac6d1d218aa49aa0491e96f11dd3f536a8f69d6fb69d8e47bf14863a84&=&format=webp&quality=lossless)
+   
+</details>
 
-#### Get Jobs
 
+<details>
+   <summary>
+      Get Jobs
+   </summary>
+   
 ![get jobs](https://media.discordapp.net/attachments/1210626240986226741/1241787039603490858/image.png?ex=664ec38d&is=664d720d&hm=61b2c43df718b627191b90be4c24ff6d870e44b86294546b73da0f566015cdcc&=&format=webp&quality=lossless)
 
-#### Get Contracts
+</details>
+<details>
+   <summary>
+       Get Contracts
+   </summary>
+   
 ![get contracts](https://media.discordapp.net/attachments/1210626240986226741/1241803839947145387/image.png?ex=664ed333&is=664d81b3&hm=2ab4e1c58e3224a0c0f6ef8e4eee08330fb8e68e914ef2e3f586bc16f41d0b90&=&format=webp&quality=lossless)
 
+</details>
 
+<details>
+   <summary>
+      Locust
+   </summary>
 
+   
 ![locust](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOchmJvYjMucoFZDd2NVX6uLPNci5uEhBzF1vHDJMJ0Q&s)
 
-We alos used python [locust](https://locust.io/) for load testing. check the test file [here](https://github.com/Ahmad45123/workup/blob/main/locustfile.py). Here is the the results of this load test
+We also used `Python` [locust](https://locust.io/) for load testing. check the test file [here](https://github.com/Ahmad45123/workup/blob/main/locustfile.py). Here are the results of this load test
 
 ![requeststats](https://media.discordapp.net/attachments/1210626240986226741/1242789353558769664/image.png?ex=664f1d47&is=664dcbc7&hm=c6838d6f086a3f04688f7189fa042a0f3d07dee9026f389f804ef56fad88be84&=&format=webp&quality=lossless&width=863&height=676)
 
 ![charts](https://media.discordapp.net/attachments/1210626240986226741/1242789434923946076/image.png?ex=664f1d5b&is=664dcbdb&hm=d551fd87c5ebc96de32e9119ff41596bf54de326491ce3007f4a6f695865f1fb&=&format=webp&quality=lossless&width=861&height=676)
+
+</details>
+
+
 
 ## License
 
